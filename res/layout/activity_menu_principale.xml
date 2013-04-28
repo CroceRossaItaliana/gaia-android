@@ -56,6 +56,14 @@
             android:drawableLeft="@drawable/ic_launcher"
             android:text="Scanner dei volontari" />
 
+        <Button
+            android:id="@+id/button3"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Attivita" />
+
     </LinearLayout>
 
 </RelativeLayout>

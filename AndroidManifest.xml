@@ -29,6 +29,10 @@
             android:name="it.gaiacri.mobile.MenuPrincipale"
             android:label="Menù di Gaia" >
         </activity>
+        <activity
+            android:name="it.gaiacri.mobile.ElencoAttivita"
+            android:label="@string/title_activity_elenco_attivita" >
+        </activity>
     </application>
 
 </manifest>

@@ -60,6 +60,14 @@ import android.widget.Toast;
             public void onClick(View v) {
         		IntentIntegrator.initiateScan(attivita);
             }
+        });      
+        
+        final Button adAttivita = (Button) findViewById(R.id.button3);
+        adAttivita.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getBaseContext(), ElencoAttivita.class);
+                startActivity(myIntent);
+            }
         });
 
 

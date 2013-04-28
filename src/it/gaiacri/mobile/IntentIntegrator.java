@@ -79,10 +79,10 @@ public final class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
 
-  public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
+  public static final String DEFAULT_TITLE = "Installare lo scanner?";
   public static final String DEFAULT_MESSAGE =
-      "This application requires Barcode Scanner. Would you like to install it?";
-  public static final String DEFAULT_YES = "Yes";
+      "Gaia Mobile deve installare lo scanner per i codici a barre, farlo ora?";
+  public static final String DEFAULT_YES = "Sì";
   public static final String DEFAULT_NO = "No";
 
   // supported barcode formats

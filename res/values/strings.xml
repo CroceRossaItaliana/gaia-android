@@ -5,5 +5,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_menu_principale">MenuPrincipale</string>
+    <string name="title_activity_elenco_attivita">ElencoAttivita</string>
 
 </resources>
