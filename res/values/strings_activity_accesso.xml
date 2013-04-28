@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_register"><b>Accedi</b> a Gaia</string>
+    <string name="action_sign_in_short">Accedi</string>
+    <string name="menu_forgot_password">Password dimenticata</string>
+    <string name="login_progress_signing_in">Accesso in corso&#8230;</string>
+    <string name="error_invalid_email">Email non valida</string>
+    <string name="error_invalid_password">Password troppo corta</string>
+    <string name="error_incorrect_password">Email o password non valida</string>
+    <string name="error_field_required">Campo obbligatorio</string>
+
+</resources>
