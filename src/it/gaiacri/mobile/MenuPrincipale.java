@@ -135,7 +135,7 @@ import android.widget.Toast;
 			try {
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(attivita);
-		        builder.setMessage("<strong>" + risposta.getString("nomeCompleto")+ "</strong>\n" + risposta.getString("comitato"))
+		        builder.setMessage(risposta.getString("nomeCompleto")+ "\n" + risposta.getString("comitato"))
 		               .setPositiveButton("Qualcosa", new DialogInterface.OnClickListener() {
 		                   public void onClick(DialogInterface dialog, int id) {
 		                       // FIRE ZE MISSILES!
