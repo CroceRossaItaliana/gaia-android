@@ -55,7 +55,7 @@ public class Accesso extends Activity {
     
     public SharedPreferences sharedPref;
     
-    
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +219,7 @@ public class Accesso extends Activity {
 			    	SharedPreferences.Editor editor = sharedPref.edit();
 			    	editor.putString("sid", getSid());
 			    	editor.commit();
+			    	showProgress(false);
 	                Intent myIntent = new Intent(contesto, MenuPrincipale.class);
 	                myIntent.putExtra("sid", getSid());
 	                startActivity(myIntent);
@@ -279,6 +280,8 @@ public class Accesso extends Activity {
     		Log.e("Errore", "Generico");
     	}
     }
+    
+    
     /**
      * Shows the progress UI and hides the login form.
      */

@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class Richiesta extends AsyncTask<String, String, String> {
     
     public String metodo() { return "welcome"; }
 
+
+	
     /**
      * background
      */
