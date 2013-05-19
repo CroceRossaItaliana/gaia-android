@@ -1,7 +1,14 @@
 ## gaia-android (aka Gaia Mobile)
 
-
 Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad unire le capacità delle API di Gaia e le potenzialità dei dispositivi mobili Android.
+
+
+### Collaborare
+
+** SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE È BENVENUTA! **
+
+Contattami a `alfioemanuele.fresta@cricatania.it`.
+
 
 ### Il progetto Gaia
 
@@ -12,7 +19,3 @@ Maggiori informazioni riguardo **il progetto Gaia in Croce Rossa Italiana** sono
 
 Il codice è rilasciato con licenza [GPLv3](https://github.com/AlfioEmanueleFresta/gaia-android/LICENSE.txt).
 
-### Collaborare
-
-Ogni tipo di collaborazione è benvenuta.
-Contattami a `alfioemanuele.fresta@cricatania.it`.
