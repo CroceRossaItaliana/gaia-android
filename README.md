@@ -15,6 +15,11 @@ Contattami a `alfioemanuele.fresta@cricatania.it`.
 Maggiori informazioni riguardo **il progetto Gaia in Croce Rossa Italiana** sono disponibili sulla [relativa pagina GitHub](http://github.com/CroceRossaCatania/gaia).
 
 
+## Stato attuale
+
+[Scarica app allo stato alpha](https://github.com/AlfioEmanueleFresta/gaia-android/blob/master/bin/GaiaAndroid.apk?raw=true)
+
+
 ### La licenza 
 
 Il codice è rilasciato con licenza [GPLv3](https://github.com/AlfioEmanueleFresta/gaia-android/LICENSE.txt).
