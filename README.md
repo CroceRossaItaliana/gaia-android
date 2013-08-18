@@ -5,9 +5,9 @@ Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad
 
 ### Collaborare
 
-** SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE È BENVENUTA! **
+**SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE È BENVENUTA!**
 
-Contattami a `alfioemanuele.fresta@cricatania.it`.
+Contattami a `alfio.emanuele.f@gmail.com`.
 
 
 ### Il progetto Gaia
