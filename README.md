@@ -7,7 +7,7 @@ Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad
 
 **SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE È BENVENUTA!**
 
-Contattami a `alfio.emanuele.f@gmail.com`.
+Contattaci a `info@gaiacri.it`.
 
 
 ### Il progetto Gaia
