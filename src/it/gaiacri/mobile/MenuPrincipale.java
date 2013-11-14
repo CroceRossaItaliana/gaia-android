@@ -5,13 +5,10 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,7 +111,9 @@ import android.widget.Toast;
 				comitato.setText(((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome"));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+				//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
+				comitato.setText("Nessun Comitato");
 			}
 			 
 
@@ -129,6 +127,8 @@ import android.widget.Toast;
 		public String metodo() { return "logout"; }
 		protected void onPostExecute(String ris) {
 			setResult(Activity.RESULT_OK);
+			Intent myIntent = new Intent(MenuPrincipale.this, Accesso.class);
+			startActivity(myIntent);
 			finish();
 		}
 	}	
