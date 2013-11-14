@@ -127,6 +127,8 @@ import android.widget.Toast;
 		public String metodo() { return "logout"; }
 		protected void onPostExecute(String ris) {
 			setResult(Activity.RESULT_OK);
+			Intent myIntent = new Intent(MenuPrincipale.this, Accesso.class);
+			startActivity(myIntent);
 			finish();
 		}
 	}	
