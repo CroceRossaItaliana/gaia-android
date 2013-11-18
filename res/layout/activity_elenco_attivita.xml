@@ -4,10 +4,55 @@
     android:layout_height="match_parent"
     tools:context=".ElencoAttivita" >
 
+    <RelativeLayout
+        android:id="@+id/top_attivita"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/attivita_title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/attivita_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/textView1"
+            android:text="7-14 Dicembre"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </RelativeLayout>
+
     <ListView
-    android:id="@+id/listElenco"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
-</ListView>
-    
+        android:id="@+id/listElenco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_attivita" >
+
+    </ListView>
+
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/listElenco"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="P" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="N" />
+    </RelativeLayout>
+
 </RelativeLayout>
