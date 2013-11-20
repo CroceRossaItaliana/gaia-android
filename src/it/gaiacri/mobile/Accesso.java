@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -92,22 +91,10 @@ public class Accesso extends Activity {
                 
         
         sharedPref = this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
-    	String sid;
-
-        try {
-            sid = sharedPref.getString("sid", null);
-        } catch (Exception e) {
-        	sid = "";
-        }
-        
     	HashMap<String, String> data = new HashMap<String, String>();
-		data.put("sid", sid);
+		//data.put("sid", sid);
     	RichiestaWelcome hello = new RichiestaWelcome(data);
     	hello.execute();
-
-    	
-
-
     	
 
         mLoginFormView = findViewById(R.id.login_form);
@@ -223,6 +210,7 @@ public class Accesso extends Activity {
 	                Intent myIntent = new Intent(contesto, MenuPrincipale.class);
 	                myIntent.putExtra("sid", getSid());
 	                startActivity(myIntent);
+	                finish();
 	                
 				} else {
 					Log.i("Login", "Fallito");
@@ -243,6 +231,7 @@ public class Accesso extends Activity {
     	
 		public RichiestaWelcome(HashMap<String, String> data) {
 			super(data);
+			setSid(sharedPref.getString("sid", ""));
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -259,6 +248,7 @@ public class Accesso extends Activity {
 	            Intent myIntent = new Intent(contesto, MenuPrincipale.class);
 	            myIntent.putExtra("sid", getSid());
 	            startActivity(myIntent);
+	            finish();
 	    	} else {
 	            Log.e("Login", "Non gia Identificato");
 
@@ -266,7 +256,7 @@ public class Accesso extends Activity {
 		}
     	
     }
-    
+       
     
     public void erroreLogin() {
     	try {
@@ -321,6 +311,5 @@ public class Accesso extends Activity {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
    
 }
