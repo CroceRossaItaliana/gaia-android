@@ -17,7 +17,7 @@ Maggiori informazioni riguardo **il progetto Gaia in Croce Rossa Italiana** sono
 
 ## Stato attuale
 
-[Scarica app allo stato alpha](https://github.com/AlfioEmanueleFresta/gaia-android/blob/master/bin/GaiaAndroid.apk?raw=true)
+[Scarica app allo stato alpha](https://github.com/CroceRossaItaliana/gaia-android/blob/master/GaiaAndroidV1.0.0.apk?raw=true)
 
 
 ### La licenza 
