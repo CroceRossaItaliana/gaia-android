@@ -17,10 +17,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -289,7 +289,7 @@ public class ElencoAttivita extends Activity {
 					if(a!=null && a.size()!=0){
 						String col=a.get(position).getTurni().get(0).getColor();
 						Log.d("Colore Elab:", col);
-						((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(col));
+						((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.BLACK);
 					}
 					return row;
 

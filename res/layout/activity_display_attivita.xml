@@ -30,15 +30,6 @@
             android:text="Caricamento in corso."
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#CC0000" />
-        <TextView
-            android:id="@+id/CordinateAttivita"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingBottom="@dimen/venti2"
-            android:text="Caricamento in corso."
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#CC0000" />
     </LinearLayout>
     <ListView
         android:id="@+id/listElenco"

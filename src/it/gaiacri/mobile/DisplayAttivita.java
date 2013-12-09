@@ -38,11 +38,14 @@ public class DisplayAttivita extends Activity {
 	public String id;
 	
 	private static ListView listView ;
-
+	private TextView tv_via;
 	private RichiestaDettagli richiesta;
 	private Context context;
 	private double lat,lon;
+	private String att_luogo,att_title;
 	private ArrayList<Turno> turni;
+	
+	
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -99,18 +102,22 @@ public class DisplayAttivita extends Activity {
 			else{
 				try {
 					String TAG="Risposta: ";
-					Log.d(TAG+"nome",risposta.getString("nome"));
-					Log.d(TAG+"luogo",risposta.getString("luogo"));
+					att_title=risposta.getString("nome");
+					att_luogo=risposta.getString("luogo");
+					//Log.d(TAG+"nome",att_title);
+					//Log.d(TAG+"luogo",risposta.getString("luogo"));
+					//Log.d(TAG+"luogo",risposta.getString("luogo"));
 					((TextView) findViewById(R.id.NomeAttivita)).setText(risposta.getString("nome"));
-					((TextView) findViewById(R.id.LuogoAttivita)).setText(risposta.getString("luogo"));
+					tv_via=(TextView) findViewById(R.id.LuogoAttivita);
+					tv_via.setText(risposta.getString("luogo"));
 					Object obj=risposta.get("coordinate");
-					Log.d(TAG+"coordinate", obj+"");
+					//Log.d(TAG+"coordinate", obj+"");
 					String [] a=obj.toString().split("\"");
 					lat=Double.parseDouble(a[1]);
 					lon=Double.parseDouble(a[3]);
-					TextView tv=(TextView) findViewById(R.id.CordinateAttivita);
-					tv.setText(lat + " " +lon);
-					tv.setOnClickListener(new View.OnClickListener() {
+					//TextView tv=(TextView) findViewById(R.id.CordinateAttivita);
+					//tv.setText(lat + " " +lon);
+					tv_via.setOnClickListener(new View.OnClickListener() {
 					    public void onClick(View v) {
 					    	
 					    	String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", lat, lon);
@@ -173,7 +180,7 @@ public class DisplayAttivita extends Activity {
 			for(int i=0;i<turni.size();i++){
 				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 				tur=turni.get(i);
-				ServiceMap.put("attivita_title", tur.getId() + tur.getDesc());
+				ServiceMap.put("attivita_title", tur.getDesc());
 				ServiceMap.put("attivita_url", tur.getStart() +" - " +tur.getEnd());
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
