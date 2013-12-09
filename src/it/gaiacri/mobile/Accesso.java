@@ -63,7 +63,6 @@ public class Accesso extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setTitle("Entra in Gaia");
 		setContentView(R.layout.activity_accesso);
 
 		context = this.getApplicationContext();

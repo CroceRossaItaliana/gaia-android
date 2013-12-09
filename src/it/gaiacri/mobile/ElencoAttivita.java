@@ -50,7 +50,6 @@ public class ElencoAttivita extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_elenco_attivita);
-		setTitle("Prossime attività");
 		((Button) this.findViewById(R.id.button1)).setText("<");
 		((Button) this.findViewById(R.id.button2)).setText(">");
 

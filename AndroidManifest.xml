@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Accesso"
-            android:label="Gaia Mobile"
+            android:label="@string/title_activity_login_user"
             android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,8 +27,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="it.gaiacri.mobile.MenuPrincipale"
-            android:label="Menù di Gaia" >
+            android:name=".MenuPrincipale"
+            android:label="@string/title_activity_menu_principale" >
         </activity>
         <activity
             android:name=".ElencoAttivita"
@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".DisplayAttivita"
-            android:label="Visualizzazione turni d iGaia" >
+            android:label="@string/title_activity_display_attivita" >
         </activity>
     </application>
 
