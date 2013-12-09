@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuPrincipale" >
+
+   <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:id="@+id/top_attivita" >
+        <TextView
+            android:id="@+id/NomeAttivita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/venti2"
+            android:text="Caricamento in corso."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#CC0000" />
+        <TextView
+            android:id="@+id/LuogoAttivita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/venti2"
+            android:text="Caricamento in corso."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#CC0000" />
+        <TextView
+            android:id="@+id/CordinateAttivita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/venti2"
+            android:text="Caricamento in corso."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#CC0000" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/listElenco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_attivita" >
+
+    </ListView>
+
+</RelativeLayout>
