@@ -126,6 +126,7 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 		      mTaskFragment = new TaskFragment();
 		      fm.beginTransaction().add(mTaskFragment, "task").commit();
 		}
+		
 	}
 
 	private void startSplash() {

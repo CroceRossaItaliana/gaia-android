@@ -7,6 +7,7 @@
 	<RelativeLayout
 	    android:id="@+id/splash"
 	    android:layout_width="fill_parent"
+	    android:visibility="gone"
 	    android:layout_height="fill_parent" >
 
 	    <ImageView
@@ -48,7 +49,6 @@
 
 	<RelativeLayout
 	    android:id="@+id/menu_principale"
-	    android:visibility="gone"
     	android:layout_width="match_parent"
     	android:layout_height="match_parent" >
 
