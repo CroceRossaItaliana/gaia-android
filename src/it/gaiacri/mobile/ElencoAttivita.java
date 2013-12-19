@@ -262,7 +262,7 @@ public class ElencoAttivita extends Activity {
 				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 				att=a.get(i);
 				ServiceMap.put("attivita_title", att.getTitle());
-				ServiceMap.put("attivita_url", att.getTurni().get(0).getUrl());
+				ServiceMap.put("attivita_url", this.getString(R.string.attivita_comitato)+"");
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
 
@@ -272,11 +272,11 @@ public class ElencoAttivita extends Activity {
 
 			//costruzione dell adapter
 			SimpleAdapter adapter=new SimpleAdapter(
-					getApplicationContext(),
+					context,
 					data,//sorgente dati
 					R.layout.riga_attivita, //layout contenente gli id di "to"
 					from,
-					to){
+					to);/*{
 				//con questo metodo riesco a inserire il colore nel testo delle attivita
 				@Override
 				public View getView(int position, View convertView, ViewGroup parent) {
@@ -293,7 +293,7 @@ public class ElencoAttivita extends Activity {
 					return row;
 
 				}
-			};
+			};*/
 
 			//utilizzo dell'adapter
 			ElencoAttivita.listView.setAdapter(adapter);

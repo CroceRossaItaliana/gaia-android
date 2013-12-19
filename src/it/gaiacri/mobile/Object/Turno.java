@@ -8,6 +8,9 @@ public class Turno {
 	private String url;
 	private String color;
 	
+	
+	private int y,m,d,h,i;
+	
 	private boolean pieno;
 	private boolean futuro;
 	private boolean scoperto;
@@ -29,7 +32,7 @@ public class Turno {
 	
 	public Turno(String desc, String id, String start, String end, String url,
 			String color, boolean pieno, boolean futuro, boolean scoperto,
-			boolean puoPartecipare, boolean partecipa, String partecipazione) {
+			boolean puoPartecipare, boolean partecipa, String partecipazione,int y,int m,int d, int h, int i) {
 		super();
 		this.desc = desc;
 		this.id = id;
@@ -43,6 +46,11 @@ public class Turno {
 		this.puoPartecipare = puoPartecipare;
 		this.partecipa = partecipa;
 		this.partecipazione = partecipazione;
+		this.y=y;
+		this.m=m;
+		this.d=d;
+		this.h=h;
+		this.i=i;
 	}
 
 
@@ -70,5 +78,19 @@ public class Turno {
 	public String getColor() {
 		return color;
 	}
-	
+	public String getDurata(){
+		//doMagic
+		String durata="";
+		if(y!=0)
+			durata=durata.concat(y + " anni ");
+		if(m!=0)
+			durata=durata.concat(m + " mesi ");
+		if(d!=0)
+			durata=durata.concat(d + " giorni ");
+		if(h!=0)
+			durata=durata.concat(h + " ore ");
+		if(i!=0)
+			durata=durata.concat(i + " min ");
+		return durata.trim();
+	}
 }

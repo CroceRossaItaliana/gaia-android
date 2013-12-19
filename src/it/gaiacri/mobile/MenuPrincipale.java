@@ -1,16 +1,20 @@
 package it.gaiacri.mobile;
 
+
 import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -18,7 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MenuPrincipale extends Activity {
+public class MenuPrincipale extends android.support.v4.app.FragmentActivity implements TaskFragment.TaskCallbacks {
 
 	public String sid = "";
 	public MenuPrincipale attivita;
@@ -29,40 +33,68 @@ public class MenuPrincipale extends Activity {
 	public static String user_nome;
 	public static String user_comitato;
 
-	private RichiestaChiSono richiesta;
 	private Context context;
 
-	@SuppressWarnings("deprecation")
+	/** 
+	 * splash screen
+	 */
+
+	private View mSplashView;
+	private View mMenuView;
+
+	private TaskFragment mTaskFragment;
+
+	private FragmentManager fm;
+
+
+	@SuppressLint("HandlerLeak")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu_principale);
+		Log.d("screen", this.getRequestedOrientation() +"");
 		attivita = this;
+		
+		
+		fm = getSupportFragmentManager();
+	    mTaskFragment = (TaskFragment) fm.findFragmentByTag("task");
+	 
+	    // If the Fragment is non-null, then it is currently being
+	    // retained across a configuration change.
+	    
 
-		nome = (TextView) findViewById(R.id.textView1);
-		comitato = (TextView) findViewById(R.id.textView2);
+		mSplashView=findViewById(R.id.splash);
+		mMenuView=findViewById(R.id.menu_principale);
+
+		nome = (TextView) findViewById(R.id.tv_nome);
+		comitato = (TextView) findViewById(R.id.tv_comitato);
 
 		context=this.getApplicationContext();
 
-		sid = getIntent().getExtras().getString("sid");
-
-		richiesta=(RichiestaChiSono)getLastNonConfigurationInstance();
-
-		if(user_nome == null && user_comitato==null && richiesta==null){
-			//caso in cui l'utente abbia appena effettuato il login
-			HashMap<String, String> data = new HashMap<String, String>();
-			richiesta = new RichiestaChiSono(data);
-			richiesta.execute();
-		}else{//in questo caso l'utente ha ruotato lo schemo oppure e arrivato da un activity successiva e io ricarico i dati scaricati precedentemente
-			if(user_nome != null && user_comitato != null){
-				nome.setText(user_nome);
-				comitato.setText(user_comitato);
+		Intent i=getIntent();
+		Bundle b=i.getExtras();
+		if(b!= null){
+			sid = b.getString("sid");
+			richiestaDati();
+		}else{
+			if(user_nome==null && user_comitato==null){
+				//splash
+				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				startSplash();
+			}else{
+				//in questo caso l'utente ha ruotato lo schemo oppure e arrivato da un activity successiva e io ricarico i dati scaricati precedentemente
+				if(user_nome != null && user_comitato != null){
+					nome.setText(user_nome);
+					comitato.setText(user_comitato);
+					mSplashView.setVisibility(View.GONE);
+					mMenuView.setVisibility(View.VISIBLE);
+				}
 			}
+
+			Log.i("sid", sid);
+
+
 		}
-
-		Log.i("sid", sid);
-
-
 		final Button logout = (Button) findViewById(R.id.button1);
 		logout.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -87,12 +119,24 @@ public class MenuPrincipale extends Activity {
 			}
 		});
 
-
 	}
 
-	@Override
-	public Object onRetainNonConfigurationInstance() {	    
-		return(richiesta);
+	private void richiestaDati() {
+		if (mTaskFragment == null) {
+		      mTaskFragment = new TaskFragment();
+		      fm.beginTransaction().add(mTaskFragment, "task").commit();
+		}
+	}
+
+	private void startSplash() {
+
+		mSplashView.setVisibility(View.VISIBLE);
+		mMenuView.setVisibility(View.GONE);
+		if (mTaskFragment == null) {
+			  ((TextView) this.findViewById(R.id.Loading)).setText(this.getString(R.string.login_sessione));
+		      mTaskFragment = new TaskFragment();
+		      fm.beginTransaction().add(mTaskFragment, "task").commit();
+		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -123,33 +167,6 @@ public class MenuPrincipale extends Activity {
 		getMenuInflater().inflate(R.menu.activity_menu_principale, menu);
 		return true;
 	}
-
-	class RichiestaChiSono extends Richiesta {
-		public RichiestaChiSono(HashMap<String, String> data) {
-			super(data,MenuPrincipale.this.context);
-		}
-
-		public String metodo() { return "me"; }
-
-		protected void onPostExecute(String ris) {
-			if(ris.equals("Errore Internet"))
-				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-			else{
-				try {
-					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
-					nome.setText(user_nome);
-					user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
-					comitato.setText(user_comitato);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
-					comitato.setText("Nessun Comitato");
-				}
-			}
-
-		}
-	}	
 
 	class RichiestaLogout extends Richiesta {
 		public RichiestaLogout(HashMap<String, String> data) {
@@ -211,12 +228,72 @@ public class MenuPrincipale extends Activity {
 		user_nome=null;
 		user_comitato=null;
 	}
+	
+	
 
 	@Override
 	public void onBackPressed() {
 		//se l'utente preme indietro automaticamente vengono invalidati i campi
 		annulla();
 		super.onBackPressed();
+	}
+
+	public void AssenzaInternet(){
+		Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
+	}
+	
+	@Override
+	public void onPostExecuteW(String ret) {
+		// TODO Auto-generated method stub
+		if(ret.equals("Errore Internet"))
+			AssenzaInternet();
+		else{
+			//mHandler.sendEmptyMessage(FINISH_LOAD);
+			Intent myIntent = new Intent(context, Accesso.class);
+			//myIntent.putExtra("sid", getSid());
+			startActivity(myIntent);
+			finish();
+		}
+			
+		
+	}
+
+	@Override
+	public void onPostExecuteC_1() {
+		if(user_nome != null && user_comitato != null){
+			nome.setText(user_nome);
+			comitato.setText(user_comitato);
+		}
+		
+	}
+
+	@Override
+	public void onPostExecuteC_2(String ris,JSONObject risposta) {
+		if(ris.equals("Errore Internet"))
+			AssenzaInternet();
+		else{
+			try {
+				user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
+				nome.setText(user_nome);
+				user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
+				comitato.setText(user_comitato);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
+				comitato.setText("Nessun Comitato");
+			}
+		}
+		mSplashView.setVisibility(View.GONE);
+		mMenuView.setVisibility(View.VISIBLE);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+		
+	}
+
+	@Override
+	public void onPostUpdate() {
+		((TextView) this.findViewById(R.id.Loading)).setText(this.getString(R.string.login_download_dati));
+		
 	}
 
 

@@ -40,7 +40,7 @@ public class Accesso extends Activity {
 	//private Richiesta rLogin = null;
 	//private Richiesta hello = null;
 
-	private RichiestaWelcome hello = null;
+	//private RichiestaWelcome hello = null;
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -96,12 +96,12 @@ public class Accesso extends Activity {
 		sharedPref = this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 		HashMap<String, String> data = new HashMap<String, String>();
 		//data.put("sid", sid);
-		hello=(RichiestaWelcome)getLastNonConfigurationInstance();
+		/*hello=(RichiestaWelcome)getLastNonConfigurationInstance();
 		if(hello==null){
 			hello = new RichiestaWelcome(data);
 			hello.execute();
 		}
-
+*/
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
@@ -122,10 +122,10 @@ public class Accesso extends Activity {
 		});
 	}
 
-	@Override
+	/*@Override
 	public Object onRetainNonConfigurationInstance() {	    
 		return(hello);
-	}
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,7 +239,7 @@ public class Accesso extends Activity {
 		}
 
 	}
-	public class RichiestaWelcome extends Richiesta {
+	/*public class RichiestaWelcome extends Richiesta {
 
 		public String metodo() { return "welcome"; }
 
@@ -273,7 +273,7 @@ public class Accesso extends Activity {
 			}
 		}
 
-	}
+	}*/
 
 
 	public void erroreLogin() {
