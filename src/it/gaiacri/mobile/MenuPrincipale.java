@@ -131,6 +131,7 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 
 	private void startSplash() {
 
+		
 		mSplashView.setVisibility(View.VISIBLE);
 		mMenuView.setVisibility(View.GONE);
 		if (mTaskFragment == null) {

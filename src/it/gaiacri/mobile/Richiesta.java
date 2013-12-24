@@ -1,37 +1,21 @@
 package it.gaiacri.mobile;
 
-import it.gaiacri.mobile.SSL.SimpleSSLSocketFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,8 +60,8 @@ public class Richiesta extends AsyncTask<String, String, String> {
 		if(isDeviceConnected()){
 			byte[] result = null;			
 			
-			HttpClient client = //new DefaultHttpClient();
-					getClient(20);//new DefaultHttpClient();
+			HttpClient client = new DefaultHttpClient();
+					//getClient(20);//new DefaultHttpClient();
 
 			//TODO parte che andra commentata
 			/*String string="";
@@ -200,7 +184,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	 * Autenticazione che ignora il certificato
 	 * soluzione temporanea di test
 	 */
-	public static DefaultHttpClient getClient(int timeout) {
+	/*public static DefaultHttpClient getClient(int timeout) {
 		
 		// Log.i(TAG,"getClient()");
 		DefaultHttpClient ret = null;
@@ -244,7 +228,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 			e.printStackTrace();
 		}
 		return ret;
-	}
+	}*/
 	
 	
 	
@@ -276,42 +260,3 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	}
 
 }
-
-/*
-class MyHttpClient extends DefaultHttpClient {
-
-    private Resources _resources;
-
-    public MyHttpClient(Resources resources) {
-        _resources = resources;
-    }
-
-    @Override
-    protected ClientConnectionManager createClientConnectionManager() {
-        SchemeRegistry registry = new SchemeRegistry();
-        registry.register(new Scheme("http", PlainSocketFactory
-            .getSocketFactory(), 80));
-        if (_resources != null) {
-            registry.register(new Scheme("https", newSslSocketFactory(), 443));
-        } else {
-            registry.register(new Scheme("https", SSLSocketFactory
-                .getSocketFactory(), 443));
-        }
-        return new SingleClientConnManager(getParams(), registry);
-    }
-
-    private SSLSocketFactory newSslSocketFactory() {
-        try {
-            KeyStore trusted = KeyStore.getInstance("BKS");
-            InputStream in = _resources.openRawResource(R.raw.mystore);
-            try {
-                trusted.load(in, "pwd".toCharArray());
-            } finally {
-                in.close();
-            }
-            return new SSLSocketFactory(trusted);
-        } catch (Exception e) {
-            throw new AssertionError(e);
-        }
-    }
-}*/
