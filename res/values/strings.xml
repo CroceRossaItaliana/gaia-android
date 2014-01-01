@@ -21,7 +21,9 @@
 	<string name="login_download_dati">Caricamento Dati</string>
 	
 	<string name="turni_navigazione">Navigazione con Maps</string>
-	
+	<string name="turni_partecipa">Partecipa</string>
+	<string name="turni_cancella">Cancellati</string> 
+	<string name="turni_pieno">Pieno</string>
 	
 	<string name="error_internet">Internet non attivo! L\'Applicazione necessita di internet per funzionare!!</string>
 </resources>

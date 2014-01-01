@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -37,15 +38,15 @@ public class DisplayAttivita extends Activity {
 	public TextView comitato;
 
 	public String id;
-	
+
 	private static ListView listView ;
 	private RichiestaDettagli richiesta;
 	private Context context;
 	private static double lat=0,lon=0;
 	private static String att_luogo,att_title;
 	private static ArrayList<Turno> turni;
-	
-	
+
+
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -53,8 +54,8 @@ public class DisplayAttivita extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_attivita);
 		attivita = this;
-		
-		
+
+
 
 		id= (String) this.getIntent().getExtras().get("id");
 		nome = (TextView) findViewById(R.id.textView1);
@@ -95,21 +96,21 @@ public class DisplayAttivita extends Activity {
 		getMenuInflater().inflate(R.menu.activity_display_attivita, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.turni_maps:
-	        	if(lat!=0 && lon!=0){
-	        		String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", lat, lon);
-	        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-	        		startActivity(intent);
-	        	}
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.turni_maps:
+			if(lat!=0 && lon!=0){
+				String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", lat, lon);
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+				startActivity(intent);
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	class RichiestaDettagli extends Richiesta {
@@ -137,7 +138,7 @@ public class DisplayAttivita extends Activity {
 					String [] a=obj.toString().split("\"");
 					lat=Double.parseDouble(a[1]);
 					lon=Double.parseDouble(a[3]);
-					
+
 					turni=new ArrayList<Turno>();
 					JSONArray js=risposta.getJSONArray("turni");
 					for(int i=0;i<js.length();i++){
@@ -184,8 +185,8 @@ public class DisplayAttivita extends Activity {
 
 		}
 	}	
-	
-	
+
+
 	private void aggiornalist() {
 
 		if(turni!=null){
@@ -199,19 +200,11 @@ public class DisplayAttivita extends Activity {
 				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 				tur=turni.get(i);
 				ServiceMap.put("turno_title", tur.getDesc());
-				/*String [] appoggio1=tur.getStart().split(" ");
-				String [] appoggio2=tur.getEnd().split(" ");
-				String date="";
-				if(appoggio1[0].equals(appoggio2[0]))
-					date= tur.getStart() + "/" +appoggio2[1];
-				else
-					date= tur.getStart() + " - "+ tur.getEnd();
-				*/
 				String date=tur.getStart()+" (" +tur.getDurata()+")";
 				ServiceMap.put("turno_data",date);
 				//TODO da aggiungere estrazione partecipanti
 				ServiceMap.put("turno_iscritti","");
-				
+
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
 
@@ -242,6 +235,34 @@ public class DisplayAttivita extends Activity {
 					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
+
+					final int pos=position;
+					Log.d("posizione",position + " ");
+					//Log.d("num elementi",turni.size() + " tot");
+					int num=turni.get(position).getPartecipa();
+					Log.d("num",num +" ");
+					switch(num){
+					case 0://caso in cui l'utente si puo iscrivere
+						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
+						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
+						break;
+					case 1://caso in cui l'utente risulta gia essere iscritto
+						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_cancella);
+						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
+						break;
+					case 2://caso in cui il turno e pieno
+						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_pieno);
+						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						break;
+					case 3:
+						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						break;
+					}
+					((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							iscrivi_cancella(pos);
+						}
+					}); 
 					return row;
 
 				}
@@ -249,15 +270,74 @@ public class DisplayAttivita extends Activity {
 
 			//utilizzo dell'adapter
 			DisplayAttivita.listView.setAdapter(adapter);
+			
+			
+			/*for(int i=0;i<turni.size();i++){
+				int wantedPosition = i; // Whatever position you're looking for
+				int firstPosition = DisplayAttivita.listView.getFirstVisiblePosition() - DisplayAttivita.listView.getHeaderViewsCount(); // This is the same as child #0
+				int wantedChild = wantedPosition - firstPosition;
+				// Say, first visible position is 8, you want position 10, wantedChild will now be 2
+				// So that means your view is child #2 in the ViewGroup:
+				Log.d("ciao", DisplayAttivita.listView.getChildCount()+" ");
+				if (wantedChild < 0 || wantedChild >= listView.getChildCount()) {
+					//Log.w(TAG, "Unable to get view for desired position, because it's not being displayed on screen.");
+					return;
+				}
+				// Could also check if wantedPosition is between listView.getFirstVisiblePosition() and listView.getLastVisiblePosition() instead.
+				View row = DisplayAttivita.listView.getChildAt(wantedChild);
+				final int pos=i;
+				Log.d("posizione",i + " ");
+				//Log.d("num elementi",turni.size() + " tot");
+				int num=turni.get(i).getPartecipa();
+				switch(num){
+				case 0://caso in cui l'utente si puo iscrivere
+					((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
+					break;
+				case 1://caso in cui l'utente risulta gia essere iscritto
+					((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_cancella);
+					break;
+				case 2://caso in cui l'utente non si possa iscrivere
+					((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+				}
+				((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						iscrivi_cancella(pos);
+					}
+				}); 
+			}*/
+			//listView.invalidate();
+
+			
 		}else{
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_turno, R.id.textViewNome,new String[]{"Caricamento.."});
 			DisplayAttivita.listView.setAdapter(arrayAdapter);
 		}
 	}
 
-	
-	
-	
-	
-	
+	public void iscrivi_cancella(int posizione){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaIscrizione asd = new RichiestaIscrizione(data);
+		asd.execute();
+	}
+
+	class RichiestaIscrizione extends Richiesta {
+		public RichiestaIscrizione(HashMap<String, String> data) {
+			super(data,DisplayAttivita.this.context);
+		}
+		public String metodo() { return "iscrivi"; }
+		protected void onPostExecute(String ris) {
+
+			if(ris.equals("Errore Internet"))
+				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
+			else{
+				//TODO elabora risposta
+				//TODO aggiorna tabella turni della view
+
+			}
+
+		}
+	}
+
+
+
 }

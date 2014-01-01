@@ -93,4 +93,25 @@ public class Turno {
 			durata=durata.concat(i + " min ");
 		return durata.trim();
 	}
+	public int getPartecipa(){
+		//vari if che ritornano diversi numeri in base allo stato delle variabili
+		
+		if((pieno == false) && (futuro == true) && (scoperto == true) && (puoPartecipare==true) && (partecipa == false) ){//&& (partecipazione == false)){
+			return 0;
+		}else{
+			if((futuro == true) && (partecipa == true) ){//&& (partecipazione == true)){
+				return 1;
+			}else{
+				if((pieno == true) && (scoperto == false) && (puoPartecipare==true) && (futuro == true)){ //&& (partecipazione == false)){
+					return 2;
+				}else{
+					if((scoperto == false) || (puoPartecipare==false)){
+						return 3;
+					}
+				}
+			}
+				
+		}
+		return 2;
+	}
 }
