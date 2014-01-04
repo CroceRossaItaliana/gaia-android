@@ -166,7 +166,7 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_menu_principale, menu);
+		//getMenuInflater().inflate(R.menu.activity_menu_principale, menu);
 		return true;
 	}
 

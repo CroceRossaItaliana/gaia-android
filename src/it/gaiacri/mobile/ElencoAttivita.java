@@ -15,12 +15,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -145,7 +142,7 @@ public class ElencoAttivita extends Activity {
 		ProgressDialogShow();
 
 		HashMap<String, String> data1 = new HashMap<String, String>();
-		c.add(Calendar.DATE, -c.get(Calendar.DAY_OF_WEEK));
+		c.add(Calendar.DATE, (-c.get(Calendar.DAY_OF_WEEK))+2);
 		c.add(Calendar.DATE, offset);
 
 		String date1=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"00:00:00.000Z";
@@ -154,8 +151,7 @@ public class ElencoAttivita extends Activity {
 		c.add(Calendar.DATE, 6);
 		String date2=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"23:59:00.000Z";
 		Log.d("Date fine:",date2);
-		c.add(Calendar.DATE, 1);
-
+		c.add(Calendar.DATE, -6);
 		data1.put("inizio", date1);
 		data1.put("fine", date2);
 		hello1 = new RichiestaAttivita(this,data1);
