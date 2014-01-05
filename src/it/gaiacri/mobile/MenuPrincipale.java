@@ -88,6 +88,10 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 					comitato.setText(user_comitato);
 					mSplashView.setVisibility(View.GONE);
 					mMenuView.setVisibility(View.VISIBLE);
+					//se l'utente non ha comitato al momento disabilito la possibilita'di fargli vedere le attivita
+					if(user_comitato.equals(getString(R.string.menu_no_comitato))){
+						((Button)attivita.findViewById(R.id.button3)).setEnabled(false);
+					}
 				}
 			}
 
@@ -283,7 +287,10 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
-				comitato.setText("Nessun Comitato");
+				
+				user_comitato=getString(R.string.menu_no_comitato);
+				comitato.setText(user_comitato);
+				((Button)attivita.findViewById(R.id.button3)).setEnabled(false);
 			}
 		}
 		mSplashView.setVisibility(View.GONE);

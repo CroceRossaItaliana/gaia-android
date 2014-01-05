@@ -77,12 +77,12 @@ import android.net.Uri;
  */
 public final class IntentIntegrator {
 
-  public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
+  public static final int REQUEST_CODE = 0xc0de; // get it?
 
   public static final String DEFAULT_TITLE = "Installare lo scanner?";
   public static final String DEFAULT_MESSAGE =
       "Gaia Mobile deve installare lo scanner per i codici a barre, farlo ora?";
-  public static final String DEFAULT_YES = "SÃ¬";
+  public static final String DEFAULT_YES = "Sí";
   public static final String DEFAULT_NO = "No";
 
   // supported barcode formats
