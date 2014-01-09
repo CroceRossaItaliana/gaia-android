@@ -3,19 +3,15 @@ package it.gaiacri.mobile;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,9 +27,11 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	private HashMap<String, String> mData = null;// post data
 
 	private static String sid = "";
-	public static String base = "https://gaia.cri.it/api.php?a=";
+	//public static String base = "https://gaia.cri.it/api.php?a=";
+	public static String base = "https://gaia.cri.it/api.php";
 	public Context context;
 	public JSONObject risposta = null;
+	public JSONObject sessione = null;
 	public JSONObject utente   = null;
 	public JSONArray attivita= null;
 
@@ -46,9 +44,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	}
 
 
-	public String metodo() { return "welcome"; }
-
-
+	public String metodo() { return "ciao"; }
 
 	/**
 	 * background
@@ -61,33 +57,39 @@ public class Richiesta extends AsyncTask<String, String, String> {
 			byte[] result = null;			
 			
 			HttpClient client = new DefaultHttpClient();
-					//getClient(20);//new DefaultHttpClient();
-
-			//TODO parte che andra commentata
-			/*String string="";
-
-			string="&sid="+sid;
-			Iterator<String> it = getmData().keySet().iterator();
-			while (it.hasNext()) {
-				String key = it.next();
-				string=string.concat("&"+key+"="+getmData().get(key));
-			}
-			HttpPost post = new HttpPost(base + metodo() +string);// in this case, params[0] is URL
-			//TODO fine parte che andra commentata
-			*/
-			HttpPost post = new HttpPost(base + metodo());
-
+			//HttpPost post = new HttpPost(base+metodo());
+			HttpPost post = new HttpPost(base);
 			try {
-				//inizio parte da decommentare
 				// set up post data
-				List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+				
+				JSONObject object = new JSONObject();
+				object.put("metodo", metodo());
+				object.put("sid", getSid());
+				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3");
+				Iterator<String> ita = mData.keySet().iterator();
+            	while (ita.hasNext()) {
+                	String key = ita.next();
+                	object.put(key, mData.get(key));
+                }
+            	//Log.d("json", json);
+				StringEntity se = new StringEntity(object.toString());
+				//sets the post request as the resulting string
+    			post.setEntity(se);
+    			//sets a request header so the page receving the request
+    			//will know what to do with it
+    			post.setHeader("Accept", "application/json");
+    			post.setHeader("Content-type", "application/json");
+				
+				
+				
+				/*List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
 				nameValuePair.add(new BasicNameValuePair("sid", getSid()));
 				Iterator<String> it = mData.keySet().iterator();
             	while (it.hasNext()) {
                 	String key = it.next();
                 	nameValuePair.add(new BasicNameValuePair(key, mData.get(key)));
             	}
-				post.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));
+				post.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));*/
 				//Log.d("request",string+" ");
 				HttpResponse response = client.execute(post);
 				StatusLine statusLine = response.getStatusLine();
@@ -102,7 +104,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				errore=2;
 			}
 			catch (Exception e) {
-				Log.e("Gaia", "probabilmente non c'è internet");
+				Log.e("Gaia", "probabilmente non c'e internet");
 				Log.e("Error", e.getMessage());
 				errore=3;
 			}
@@ -117,8 +119,8 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				if(errore==0){
 					//TODO va gestito errore in caso di JSON malformattato 
 					try {
-						Log.e("Gaia", risposta.getJSONObject("session").getString("id"));
-						setSid(risposta.getJSONObject("session").getString("id"));
+						Log.e("Gaia", risposta.getJSONObject("sessione").getString("id"));
+						setSid(risposta.getJSONObject("sessione").getString("id"));
 
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -128,11 +130,12 @@ public class Richiesta extends AsyncTask<String, String, String> {
 					if(errore==0){
 						Log.i("Gaia", str);
 						try {
-							utente	 = risposta.getJSONObject("session").optJSONObject("user");
+							utente	 = risposta.getJSONObject("sessione").optJSONObject("utente");
+							sessione=risposta.getJSONObject("sessione");
 							if(metodo().equals("attivita"))
-								attivita=risposta.getJSONArray("response");
+								attivita=risposta.getJSONArray("risposta");
 							else
-								risposta = risposta.getJSONObject("response");
+								risposta = risposta.getJSONObject("risposta");
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -180,60 +183,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
 		return true;
 	}
 	
-	/*
-	 * Autenticazione che ignora il certificato
-	 * soluzione temporanea di test
-	 */
-	/*public static DefaultHttpClient getClient(int timeout) {
-		
-		// Log.i(TAG,"getClient()");
-		DefaultHttpClient ret = null;
-
-		//versione 1.1
-
-		try {
-			SSLSocketFactory sslFactory = new SimpleSSLSocketFactory(null);
-			sslFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-			// Enable HTTP parameters
-			HttpParams params = new BasicHttpParams();
-			HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-			HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-			//gestione timeout
-			//HttpConnectionParams.setConnectionTimeout(params, timeout);
-			//HttpConnectionParams.setSoTimeout(params, timeout*1000);
-			
-			
-			// Register the HTTP and HTTPS Protocols. For HTTPS, register our custom SSL Factory object.
-			SchemeRegistry registry = new SchemeRegistry();
-			registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-			registry.register(new Scheme("https", sslFactory, 443));
-
-			// Create a new connection manager using the newly created registry and then create a new HTTP client
-			// using this connection manager
-			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-			ret = new DefaultHttpClient(ccm, params);
-
-		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnrecoverableKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return ret;
-	}*/
-	
-	
-	
-	
-
 	/**
 	 * on getting result
 	 */
@@ -258,5 +207,4 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	public void setmData(HashMap<String, String> mData) {
 		this.mData = mData;
 	}
-
 }

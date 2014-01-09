@@ -78,7 +78,7 @@ public class TaskFragment extends Fragment {
 
 	public class RichiestaWelcome extends Richiesta {
 
-		public String metodo() { return "welcome"; }
+		public String metodo() { return "ciao"; }
 
 		public RichiestaWelcome(HashMap<String, String> data) {
 			super(data,TaskFragment.this.context);
@@ -131,7 +131,7 @@ public class TaskFragment extends Fragment {
 			super(data,TaskFragment.this.context);
 		}
 
-		public String metodo() { return "me"; }
+		public String metodo() { return "io"; }
 
 		protected void onPostExecute(String ris) {
 			if(mCallbacks!=null){

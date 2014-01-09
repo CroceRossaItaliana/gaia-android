@@ -102,7 +102,7 @@ public class Turno {
 			if((futuro == true) && (partecipa == true) ){//&& (partecipazione == true)){
 				return 1;
 			}else{
-				if((pieno == true) && (scoperto == false) && (puoPartecipare==true) && (futuro == true)){ //&& (partecipazione == false)){
+				if((pieno == true) && (scoperto == false) && (puoPartecipare==false) && (futuro == true)){ //&& (partecipazione == false)){
 					return 2;
 				}else{
 					if((scoperto == false) || (puoPartecipare==false)){

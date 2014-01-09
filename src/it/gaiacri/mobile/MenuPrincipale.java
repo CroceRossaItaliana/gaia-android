@@ -301,8 +301,7 @@ public class MenuPrincipale extends android.support.v4.app.FragmentActivity impl
 
 	@Override
 	public void onPostUpdate() {
-		((TextView) this.findViewById(R.id.Loading)).setText(this.getString(R.string.login_download_dati));
-		
+		((TextView) this.findViewById(R.id.Loading)).setText(this.getString(R.string.login_download_dati));	
 	}
 
 

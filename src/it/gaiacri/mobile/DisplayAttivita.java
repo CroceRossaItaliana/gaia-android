@@ -118,7 +118,7 @@ public class DisplayAttivita extends Activity {
 			super(data,DisplayAttivita.this.context);
 		}
 
-		public String metodo() { return "dettagliAttivita"; }
+		public String metodo() { return "attivita_dettagli"; }
 
 		protected void onPostExecute(String ris) {
 			if(ris.equals("Errore Internet"))
@@ -270,44 +270,6 @@ public class DisplayAttivita extends Activity {
 
 			//utilizzo dell'adapter
 			DisplayAttivita.listView.setAdapter(adapter);
-			
-			
-			/*for(int i=0;i<turni.size();i++){
-				int wantedPosition = i; // Whatever position you're looking for
-				int firstPosition = DisplayAttivita.listView.getFirstVisiblePosition() - DisplayAttivita.listView.getHeaderViewsCount(); // This is the same as child #0
-				int wantedChild = wantedPosition - firstPosition;
-				// Say, first visible position is 8, you want position 10, wantedChild will now be 2
-				// So that means your view is child #2 in the ViewGroup:
-				Log.d("ciao", DisplayAttivita.listView.getChildCount()+" ");
-				if (wantedChild < 0 || wantedChild >= listView.getChildCount()) {
-					//Log.w(TAG, "Unable to get view for desired position, because it's not being displayed on screen.");
-					return;
-				}
-				// Could also check if wantedPosition is between listView.getFirstVisiblePosition() and listView.getLastVisiblePosition() instead.
-				View row = DisplayAttivita.listView.getChildAt(wantedChild);
-				final int pos=i;
-				Log.d("posizione",i + " ");
-				//Log.d("num elementi",turni.size() + " tot");
-				int num=turni.get(i).getPartecipa();
-				switch(num){
-				case 0://caso in cui l'utente si puo iscrivere
-					((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
-					break;
-				case 1://caso in cui l'utente risulta gia essere iscritto
-					((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_cancella);
-					break;
-				case 2://caso in cui l'utente non si possa iscrivere
-					((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
-				}
-				((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						iscrivi_cancella(pos);
-					}
-				}); 
-			}*/
-			//listView.invalidate();
-
-			
 		}else{
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_turno, R.id.textViewNome,new String[]{"Caricamento.."});
 			DisplayAttivita.listView.setAdapter(arrayAdapter);
