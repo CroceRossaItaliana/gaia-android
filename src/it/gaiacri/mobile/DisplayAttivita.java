@@ -146,6 +146,7 @@ public class DisplayAttivita extends Activity {
 						//manca descrizione e url
 						//descrizione mi interessa
 						String tur_id=risposta.getString("id");
+						String tur_titolo=risposta.getString("nome");
 						String tur_start=(risposta.getJSONObject("inizio")).getString("date");
 						String tur_end=(risposta.getJSONObject("fine")).getString("date");
 						//TODO bisogna inserire la politica per la scelta del colore
@@ -168,7 +169,7 @@ public class DisplayAttivita extends Activity {
 						//Log.d(TAG+"puoRichiedere",risposta.getBoolean("puoRichiedere")+"");
 						//Log.d(TAG+"partecipa",risposta.getBoolean("partecipa")+"");
 						//Log.d(TAG+"partecipazione",risposta.getString("partecipazione")+"");
-						Turno t=new Turno("desc ", tur_id, tur_start, tur_end, "",
+						Turno t=new Turno(tur_titolo, tur_id, tur_start, tur_end, "",
 								tur_color, tur_pieno, tur_futuro,tur_scoperto,
 								tur_puoRichiedere, tur_partecipa, tur_partecipazione,
 								tur_y,tur_m,tur_d,tur_h,tur_i);		
