@@ -12,8 +12,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -39,17 +42,24 @@ public class Accesso extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+	    requestWindowFeature(Window.FEATURE_PROGRESS);
 		sharedPref=this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 		//setContentView(R.layout.activity_accesso);
 		context = this.getApplicationContext();
 		if(webview == null){
+			Log.i("create","webview");
 			webview = new WebView(this);
 			webview.getSettings().setJavaScriptEnabled(true);
 
 			final Activity activity = this;
 			webview.setWebChromeClient(new WebChromeClient() {
 				public void onProgressChanged(WebView view, int progress) {
-					activity.setProgress(progress * 1000);
+					setProgress(progress * 100);
+		              if(progress == 100) {
+		                 setProgressBarIndeterminateVisibility(false);
+		                 setProgressBarVisibility(false);
+		              }//activity.setProgress(progress * 1000);
 				}
 			});
 			webview.setWebViewClient(new WebViewClient() {
@@ -83,6 +93,8 @@ public class Accesso extends Activity {
 			HashMap<String, String> data = new HashMap<String, String>();
 			login = new RichiestaLogin(data);
 			login.execute();
+			setProgressBarIndeterminateVisibility(true);
+			setProgressBarVisibility(true);
 		}
 		setContentView(webview);
 		// Let's display the progress in the activity title bar, like the
@@ -90,6 +102,9 @@ public class Accesso extends Activity {
 		//getWindow().requestFeature(Window.FEATURE_PROGRESS);
 
 	}
+
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,6 +187,35 @@ public class Accesso extends Activity {
 
 	}
 	
-	
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_SEARCH) {
+        	Log.i("down","home");
+        	Log.i("down","search");
+        	//webview=null;
+        	webview=null;
+        	finish();
+        	return true;
+        }
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+        	Log.i("down","back");
+        	if(webview.canGoBack() == true){
+                webview.goBack();
+                return true;
+            }else{
+            	webview=null;
+            }
+        	
+        }
+         return super.onKeyDown(keyCode, event);
+    }
+    
+
+    @Override
+    public void onAttachedToWindow()
+    { 
+        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
+        super.onAttachedToWindow(); 
+    }
 
 }

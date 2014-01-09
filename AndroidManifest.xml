@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.gaiacri.mobile"
     android:versionCode="1"
-    android:versionName="0.4.5" >
+    android:versionName="0.4.6" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -19,6 +19,7 @@
         <activity
             android:name=".Accesso"
             android:label="@string/title_activity_login_user"
+            android:configChanges="orientation|keyboardHidden|keyboard"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:launchMode= "singleInstance" >
         </activity>
