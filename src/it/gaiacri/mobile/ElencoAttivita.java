@@ -2,7 +2,6 @@ package it.gaiacri.mobile;
 
 
 import it.gaiacri.mobile.Object.Attivita;
-import it.gaiacri.mobile.Object.Turno;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,12 +14,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -145,7 +141,7 @@ public class ElencoAttivita extends Activity {
 		ProgressDialogShow();
 
 		HashMap<String, String> data1 = new HashMap<String, String>();
-		c.add(Calendar.DATE, -c.get(Calendar.DAY_OF_WEEK));
+		c.add(Calendar.DATE, (-c.get(Calendar.DAY_OF_WEEK))+2);
 		c.add(Calendar.DATE, offset);
 
 		String date1=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"00:00:00.000Z";
@@ -154,8 +150,7 @@ public class ElencoAttivita extends Activity {
 		c.add(Calendar.DATE, 6);
 		String date2=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"23:59:00.000Z";
 		Log.d("Date fine:",date2);
-		c.add(Calendar.DATE, 1);
-
+		c.add(Calendar.DATE, -6);
 		data1.put("inizio", date1);
 		data1.put("fine", date2);
 		hello1 = new RichiestaAttivita(this,data1);
@@ -205,23 +200,25 @@ public class ElencoAttivita extends Activity {
 				a=new ArrayList<Attivita>();
 				for(int i=0;i<attivita.length();i++){
 					js=(JSONObject)attivita.get(i);
-					String att_title=js.getString("title");
-					String tur_desc=att_title.substring(att_title.indexOf(',')+1);
-					att_title=att_title.substring(0,att_title.indexOf(','));
-					String att_id=js.getString("attivita");
-					String tur_url=js.getString("url");
-					String tur_id=js.getString("id");
-					String tur_start=js.getString("start");
-					String tur_end=js.getString("end");
-					String tur_color=js.getString("color");
+					
+					String att_title=js.getJSONObject("attivita").getString("nome");//js.getString("title");
+					//String tur_desc=att_title.substring(att_title.indexOf(',')+1);
+					//att_title=att_title.substring(0,att_title.indexOf(','));
+					String att_id=js.getJSONObject("attivita").getString("id");//js.getString("attivita");
+					//String tur_url=js.getString("url");
+					//String tur_id=js.getString("id");
+					String att_organizzatore=js.getJSONObject("organizzatore").getString("nome");
+					//String tur_start=js.getString("start");
+					//String tur_end=js.getString("end");
+					//String tur_color=js.getString("color");
 					//se a contiene l'attivita allora aggiunto un turno
 					//altrimenti creo una nuova attivita e gli aggiunto il turno
 					int indice=contiene(att_id);
 					if(indice==-1){
-						a.add(new Attivita(att_title,att_id));
+						a.add(new Attivita(att_title,att_id,att_organizzatore));
 						indice=a.size()-1;
 					}
-					a.get(indice).addTurno(new Turno(tur_desc,tur_id,tur_start,tur_end,tur_url,tur_color));
+					//a.get(indice).addTurno(new Turno(tur_desc,tur_id,tur_start,tur_end,tur_url,tur_color));
 				}
 				aggiornalist();
 				ElencoAttivita.pd.dismiss();
@@ -262,7 +259,7 @@ public class ElencoAttivita extends Activity {
 				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 				att=a.get(i);
 				ServiceMap.put("attivita_title", att.getTitle());
-				ServiceMap.put("attivita_url", att.getTurni().get(0).getUrl());
+				ServiceMap.put("attivita_url", att.getOrganizzatore());
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
 
@@ -272,11 +269,11 @@ public class ElencoAttivita extends Activity {
 
 			//costruzione dell adapter
 			SimpleAdapter adapter=new SimpleAdapter(
-					getApplicationContext(),
+					context,
 					data,//sorgente dati
 					R.layout.riga_attivita, //layout contenente gli id di "to"
 					from,
-					to){
+					to);/*{
 				//con questo metodo riesco a inserire il colore nel testo delle attivita
 				@Override
 				public View getView(int position, View convertView, ViewGroup parent) {
@@ -293,7 +290,7 @@ public class ElencoAttivita extends Activity {
 					return row;
 
 				}
-			};
+			};*/
 
 			//utilizzo dell'adapter
 			ElencoAttivita.listView.setAdapter(adapter);

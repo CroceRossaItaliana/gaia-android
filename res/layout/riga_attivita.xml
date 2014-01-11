@@ -9,14 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:textSize="22dip" />
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/textViewListUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:textSize="10dip"/>
+        android:textSize="12sp"/>
     
-
 </LinearLayout>

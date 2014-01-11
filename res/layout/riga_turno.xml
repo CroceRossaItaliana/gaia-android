@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:text="prova"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textViewData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewNome"
+        android:layout_marginLeft="10dip"
+        android:text="prova"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewIscritti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewData"
+        android:layout_below="@+id/textViewData"
+        android:text="prova"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewIscritti"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/textViewNome" >
+
+        <Button
+            android:id="@+id/buttonPartecipa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:enabled="false"
+            android:text="Partecipa" />
+
+    </RelativeLayout>
+    
+</RelativeLayout>
