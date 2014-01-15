@@ -6,17 +6,27 @@ public class Attivita {
 	private String title;
 	private String id;
 	private String organizzatore;
+	private String color;
 	private ArrayList<Turno> turni;
 	
-	public Attivita(String title,String id, String att_organizzatore) {
+	public Attivita(String title,String id, String att_organizzatore, String tur_color) {
 		super();
 		this.title = title;
 		this.id=id;
+		this.color=tur_color;
 		this.organizzatore=att_organizzatore;
 		this.turni=new ArrayList<Turno>();
 	}
 	
 	
+	
+	
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
 	public String getOrganizzatore() {
 		return organizzatore;
 	}

@@ -79,18 +79,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
     			//will know what to do with it
     			post.setHeader("Accept", "application/json");
     			post.setHeader("Content-type", "application/json");
-				
-				
-				
-				/*List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
-				nameValuePair.add(new BasicNameValuePair("sid", getSid()));
-				Iterator<String> it = mData.keySet().iterator();
-            	while (it.hasNext()) {
-                	String key = it.next();
-                	nameValuePair.add(new BasicNameValuePair(key, mData.get(key)));
-            	}
-				post.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));*/
-				//Log.d("request",string+" ");
 				HttpResponse response = client.execute(post);
 				StatusLine statusLine = response.getStatusLine();
 				if(statusLine.getStatusCode() == HttpURLConnection.HTTP_OK){
@@ -119,7 +107,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				if(errore==0){
 					//TODO va gestito errore in caso di JSON malformattato 
 					try {
-						Log.e("Gaia", risposta.getJSONObject("sessione").getString("id"));
+						//Log.e("Gaia", risposta.getJSONObject("sessione").getString("id"));
 						setSid(risposta.getJSONObject("sessione").getString("id"));
 
 					} catch (JSONException e) {

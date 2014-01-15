@@ -96,7 +96,7 @@ public class Turno {
 	public int getPartecipa(){
 		//vari if che ritornano diversi numeri in base allo stato delle variabili
 		
-		if((pieno == false) && (futuro == true) && (scoperto == true) && (puoPartecipare==true) && (partecipa == false) ){//&& (partecipazione == false)){
+		if((pieno == false) && (futuro == true) && (puoPartecipare==true) && (partecipa == false) ){//&& (partecipazione == false)){
 			return 0;
 		}else{
 			if((futuro == true) && (partecipa == true) ){//&& (partecipazione == true)){

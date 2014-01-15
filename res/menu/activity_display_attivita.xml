@@ -6,5 +6,8 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/turni_navigazione"/>
+    <item android:id="@+id/turni_passati" 
+         android:title="@string/turni_passati" 
+         android:checkable="true" />
 
 </menu>
