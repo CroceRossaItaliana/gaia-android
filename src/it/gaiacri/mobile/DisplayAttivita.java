@@ -1,8 +1,10 @@
 package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Turno;
+import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -27,12 +29,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DisplayAttivita extends Activity {
 
 	public String sid = "";
-	public DisplayAttivita attivita;
 
 	public TextView nome;
 	public TextView comitato;
@@ -40,20 +40,18 @@ public class DisplayAttivita extends Activity {
 	public String id;
 
 	private static ListView listView ;
-	private RichiestaDettagli richiesta;
 	private Context context;
-	private static double lat=0,lon=0;
-	private static String att_luogo,att_title;
-	private static ArrayList<Turno> turni;
+	private double lat=0,lon=0;
+	private String att_luogo,att_title;
+	private ArrayList<Turno> turni;
+	private boolean passati;
 
 
-
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_attivita);
-		attivita = this;
+		passati=false;
 
 
 
@@ -63,37 +61,18 @@ public class DisplayAttivita extends Activity {
 
 		context=this.getApplicationContext();
 		listView = (ListView)findViewById(R.id.listElenco);
-		//sid = getIntent().getExtras().getString("sid");
 
-		richiesta=(RichiestaDettagli)getLastNonConfigurationInstance();
-		if(richiesta==null){
-			HashMap<String, String> data = new HashMap<String, String>();
-			data.put("id", id);
-			richiesta=new RichiestaDettagli(data);
-			richiesta.execute();
-		}else{
-
-			((TextView) findViewById(R.id.NomeAttivita)).setText(att_title);
-			((TextView) findViewById(R.id.LuogoAttivita)).setText(att_luogo);
-			aggiornalist();
-		}
-
-		//Log.i("sid", sid);
-		Log.i("id",id);
-
-
-
-	}
-
-	@Override
-	public Object onRetainNonConfigurationInstance() {	    
-		return(richiesta);
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("id", id);
+		RichiestaDettagli richiesta=new RichiestaDettagli(data);
+		richiesta.execute();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_display_attivita, menu);
+		menu.findItem(R.id.turni_passati).setChecked(passati);
 		return true;
 	}
 
@@ -108,6 +87,16 @@ public class DisplayAttivita extends Activity {
 				startActivity(intent);
 			}
 			return true;
+		case R.id.turni_passati:
+			if (item.isChecked()){
+				item.setChecked(false);
+				passati=false;
+			}else{ 
+				item.setChecked(true);
+				passati=true;
+			}
+			aggiornalist();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -121,9 +110,7 @@ public class DisplayAttivita extends Activity {
 		public String metodo() { return "attivita_dettagli"; }
 
 		protected void onPostExecute(String ris) {
-			if(ris.equals("Errore Internet"))
-				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-			else{
+			if(ErrorJson.Controllo(ris,DisplayAttivita.this)==0){
 				try {
 					//String TAG="Risposta: ";
 					att_title=risposta.getString("nome");
@@ -200,13 +187,25 @@ public class DisplayAttivita extends Activity {
 			for(int i=0;i<turni.size();i++){
 				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 				tur=turni.get(i);
+
 				ServiceMap.put("turno_title", tur.getDesc());
 				String date=tur.getStart()+" (" +tur.getDurata()+")";
 				ServiceMap.put("turno_data",date);
 				//TODO da aggiungere estrazione partecipanti
 				ServiceMap.put("turno_iscritti","");
+				if(passati==true){
+					data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
+				}else{
+					//tur.getStart()
+					Calendar c=Calendar.getInstance();
+					String date2=c.get(Calendar.YEAR)+"-"+Number(c.get(Calendar.MONTH)+ 1)+"-"+c.get(Calendar.DAY_OF_MONTH);
+					Log.d("Data", date2);
+					Log.d("Data","" + date2.compareTo(tur.getStart()));
 
-				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
+					if(date2.compareTo(tur.getStart())<=0){
+						data.add(ServiceMap);						
+					}
+				}
 			}
 
 
@@ -233,7 +232,7 @@ public class DisplayAttivita extends Activity {
 						Log.d("Colore Elab:", col);
 						((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(col));
 					}*/
-					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor("#000000"));
+					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(turni.get(position).getColor()));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
 
@@ -270,11 +269,18 @@ public class DisplayAttivita extends Activity {
 			};
 
 			//utilizzo dell'adapter
-			DisplayAttivita.listView.setAdapter(adapter);
+			listView.setAdapter(adapter);
 		}else{
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_turno, R.id.textViewNome,new String[]{"Caricamento.."});
-			DisplayAttivita.listView.setAdapter(arrayAdapter);
+			listView.setAdapter(arrayAdapter);
 		}
+	}
+
+	private String Number(int num){
+		if(num<10)
+			return "0"+num;
+		else
+			return ""+num;
 	}
 
 	public void iscrivi_cancella(int posizione){
@@ -290,9 +296,7 @@ public class DisplayAttivita extends Activity {
 		public String metodo() { return "iscrivi"; }
 		protected void onPostExecute(String ris) {
 
-			if(ris.equals("Errore Internet"))
-				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-			else{
+			if(ErrorJson.Controllo(ris,DisplayAttivita.this)==0){
 				//TODO elabora risposta
 				//TODO aggiorna tabella turni della view
 

@@ -24,8 +24,33 @@
 	<string name="turni_partecipa">Partecipa</string>
 	<string name="turni_cancella">Cancellati</string> 
 	<string name="turni_pieno">Pieno</string>
+	<string name="turni_passati">Turni Passati</string>
 	
 	<string name="menu_no_comitato">Nessun Comitato</string>
 	
+	<string name="day_sunday">Dom</string>
+	<string name="day_monday">Lun</string>
+	<string name="day_tuesday">Mar</string>
+	<string name="day_wednesday">Mer</string>
+	<string name="day_thursday">Gio</string>	
+	<string name="day_friday">Ven</string>
+	<string name="day_saturday">Sab</string>
+	
+	<string name="month_jan">Gen</string>
+	<string name="month_feb">Feb</string>
+	<string name="month_mar">Mar</string>
+	<string name="month_apr">Apr</string>
+	<string name="month_may">Mag</string>	
+	<string name="month_jun">Giu</string>
+	<string name="month_jul">Lug</string>
+	<string name="month_aug">Ago</string>
+	<string name="month_sep">Set</string>
+	<string name="month_opt">Ott</string>
+	<string name="month_nov">Nov</string>
+	<string name="month_dec">Dic</string>
+	
 	<string name="error_internet">Internet non attivo! L\'Applicazione necessita di internet per funzionare!!</string>
+	<string name="error_internet_si">Riprova</string>
+	<string name="error_internet_no">Esci</string>
+	
 </resources>

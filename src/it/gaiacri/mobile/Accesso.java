@@ -1,6 +1,8 @@
 package it.gaiacri.mobile;
 
 
+import it.gaiacri.mobile.Utils.ErrorJson;
+
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -13,7 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebChromeClient;
@@ -45,7 +46,24 @@ public class Accesso extends Activity {
 		requestWindowFeature(Window.FEATURE_PROGRESS);
 		sharedPref=this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 		//setContentView(R.layout.activity_accesso);
-		loadWebView();
+
+
+		// Check to see if it has been saved and restore it if true
+		if(savedInstanceState != null)
+		{
+			if (savedInstanceState.isEmpty())
+				Log.i("prova", "Can't restore state because bundle is empty.");
+			else
+			{
+				if (webview.restoreState(savedInstanceState) == null)
+					Log.i("prova" , "Restoring state FAILED!");      
+				else
+					Log.i("prova", "Restoring state succeeded.");      
+			}
+
+		}else{		
+			loadWebView();
+		}
 		// Let's display the progress in the activity title bar, like the
 		// browser app does.
 		//getWindow().requestFeature(Window.FEATURE_PROGRESS);
@@ -53,13 +71,13 @@ public class Accesso extends Activity {
 	}
 
 
-
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.activity_accesso, menu);
-		return true;
+	public void onSaveInstanceState(Bundle outState)
+	{
+		if(webview.saveState(outState) == null)
+			Log.i("prova","Saving state FAILED!");
+		else
+			Log.i("prova", "Saving state succeeded.");      
 	}
 
 	@Override
@@ -167,9 +185,7 @@ public class Accesso extends Activity {
 		public String metodo() { return "login"; }
 		protected void onPostExecute(String ris) {
 
-			if(ris.equals("Errore Internet"))
-				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-			else{
+			if(ErrorJson.Controllo(ris,Accesso.this)==0){
 				if(risposta==null){
 					//TODO
 					finish();
@@ -184,7 +200,11 @@ public class Accesso extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				webview.loadUrl(url_login);
+				//per gestire errore crash
+				if(webview == null)
+					loadWebView();
+				else
+					webview.loadUrl(url_login);
 			}
 
 		}
@@ -201,9 +221,7 @@ public class Accesso extends Activity {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(str.equals("Errore Internet")){
-				Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-			}else{
+			if(ErrorJson.Controllo(str,Accesso.this)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();
@@ -218,17 +236,10 @@ public class Accesso extends Activity {
 				}
 			}
 		}
-
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ( keyCode == KeyEvent.KEYCODE_SEARCH) {
-			Log.i("down","search");
-			webview=null;
-			finish();
-			return true;
-		}
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			Log.i("down","back");
 			if(webview.canGoBack() == true){
@@ -237,9 +248,7 @@ public class Accesso extends Activity {
 			}else{
 				webview=null;
 			}
-
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
 }

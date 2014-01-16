@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.gaiacri.mobile"
     android:versionCode="1"
-    android:versionName="0.4.8" >
+    android:versionName="0.5.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -19,13 +19,14 @@
         <activity
             android:name=".Accesso"
             android:label="@string/title_activity_login_user"
-            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:launchMode= "singleInstance" >
         </activity>
         <activity
             android:name=".MenuPrincipale"
-            android:label="@string/title_activity_login_user" >
+            android:label="@string/title_activity_login_user"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,8 +38,14 @@
             android:label="@string/title_activity_elenco_attivita" >
         </activity>
         <activity
+            android:name=".ElencoAttivita"
+            android:label="@string/title_activity_elenco_attivita"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+        <activity
             android:name=".DisplayAttivita"
-            android:label="@string/title_activity_display_attivita" >
+            android:label="@string/title_activity_display_attivita"
+            android:configChanges="orientation|keyboardHidden|screenSize"  >
         </activity>
     </application>
 
