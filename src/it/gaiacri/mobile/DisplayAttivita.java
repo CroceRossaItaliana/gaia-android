@@ -193,6 +193,7 @@ public class DisplayAttivita extends Activity {
 				ServiceMap.put("turno_data",date);
 				//TODO da aggiungere estrazione partecipanti
 				ServiceMap.put("turno_iscritti","");
+				ServiceMap.put("turno_id", tur.getId());
 				if(passati==true){
 					data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 				}else{
@@ -209,8 +210,8 @@ public class DisplayAttivita extends Activity {
 			}
 
 
-			String[] from={"turno_title","turno_data","turno_iscritti"}; //dai valori contenuti in queste chiavi
-			int[] to={R.id.textViewNome,R.id.textViewData,R.id.textViewIscritti};//agli id delle view
+			String[] from={"turno_title","turno_data","turno_iscritti","turno_id"}; //dai valori contenuti in queste chiavi
+			int[] to={R.id.textViewNome,R.id.textViewData,R.id.textViewIscritti,R.id.textViewId};//agli id delle view
 
 			//costruzione dell adapter
 			SimpleAdapter adapter=new SimpleAdapter(
@@ -232,14 +233,16 @@ public class DisplayAttivita extends Activity {
 						Log.d("Colore Elab:", col);
 						((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(col));
 					}*/
-					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(turni.get(position).getColor()));
+					String id=(String) ((TextView)row.findViewById(R.id.textViewId)).getText();
+					final Turno t=getTurno(id,position);
+					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(t.getColor()));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
 
-					final int pos=position;
+					//final int pos=position;
 					Log.d("posizione",position + " ");
 					//Log.d("num elementi",turni.size() + " tot");
-					int num=turni.get(position).getPartecipa();
+					int num=t.getPartecipa();
 					Log.d("num",num +" ");
 					switch(num){
 					case 0://caso in cui l'utente si puo iscrivere
@@ -260,7 +263,7 @@ public class DisplayAttivita extends Activity {
 					}
 					((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							iscrivi_cancella(pos);
+							iscrivi_cancella(t.getId());
 						}
 					}); 
 					return row;
@@ -275,6 +278,15 @@ public class DisplayAttivita extends Activity {
 			listView.setAdapter(arrayAdapter);
 		}
 	}
+	
+	private Turno getTurno(String id,int position){
+		for(int i=0;i<turni.size();i++){
+			if(id.equals(turni.get(i).getId())){
+				return turni.get(i);
+			}
+		}
+		return turni.get(position);
+	}
 
 	private String Number(int num){
 		if(num<10)
@@ -283,8 +295,9 @@ public class DisplayAttivita extends Activity {
 			return ""+num;
 	}
 
-	public void iscrivi_cancella(int posizione){
+	public void iscrivi_cancella(String id){
 		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("id", id);
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
 		asd.execute();
 	}
@@ -293,7 +306,7 @@ public class DisplayAttivita extends Activity {
 		public RichiestaIscrizione(HashMap<String, String> data) {
 			super(data,DisplayAttivita.this.context);
 		}
-		public String metodo() { return "iscrivi"; }
+		public String metodo() { return "turno_partecipa"; }
 		protected void onPostExecute(String ris) {
 
 			if(ErrorJson.Controllo(ris,DisplayAttivita.this)==0){

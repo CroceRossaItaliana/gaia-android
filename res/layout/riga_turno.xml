@@ -33,6 +33,11 @@
         android:layout_below="@+id/textViewData"
         android:text="prova"
         android:textSize="16sp" />
+    <TextView
+        android:id="@+id/textViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
