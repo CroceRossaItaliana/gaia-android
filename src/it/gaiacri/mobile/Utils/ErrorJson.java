@@ -19,6 +19,11 @@ public class ErrorJson {
 			if( ris.equals("Errore")){
 				//errore generico
 				return 2;
+			}else{
+				if(ris.startsWith("Errore ")){
+					ProblemaApi(ris.substring(7),context);
+					return 3;
+				}
 			}
 		}
 		return 0;
@@ -46,5 +51,25 @@ public class ErrorJson {
 		AlertDialog alert = miaAlert.create();
 		alert.show();
 	}
+	
+	public static void ProblemaApi(String errore,final Activity context){
+		//Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
+		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
+		miaAlert.setTitle(R.string.api_error);
+		miaAlert.setMessage(errore);
+
+		miaAlert.setCancelable(false);
+		    	
+		miaAlert.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int id) {
+			  context.setResult(100);
+			  context.finish();
+		  }
+		});
+		AlertDialog alert = miaAlert.create();
+		alert.show();
+	}
+	
+	
 }
 

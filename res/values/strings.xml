@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
+    <string name="close">Chiudi</string>
     <string name="title_activity_menu_principale">Menu Principale</string>
     <string name="title_activity_elenco_attivita">Elenco Attivita</string>
     <string name="title_activity_display_attivita">Visualizzazione Turni</string>
@@ -22,11 +23,16 @@
 	
 	<string name="turni_navigazione">Navigazione con Maps</string>
 	<string name="turni_partecipa">Partecipa</string>
-	<string name="turni_cancella">Cancellati</string> 
+	<string name="turni_cancella">Ritirati</string> 
 	<string name="turni_pieno">Pieno</string>
 	<string name="turni_passati">Turni Passati</string>
 	
+	<string name="display_info">Ulteriori Informazioni:</string>
+	
 	<string name="menu_no_comitato">Nessun Comitato</string>
+	
+	<string name="api_error">Errore Api</string>
+	
 	
 	<string name="day_sunday">Dom</string>
 	<string name="day_monday">Lun</string>

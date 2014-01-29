@@ -27,10 +27,10 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	private HashMap<String, String> mData = null;// post data
 
 	private static String sid = "";
-	//public static String base = "https://gaia.cri.it/api.php?a=";
 	public static String base = "https://gaia.cri.it/api.php";
 	public Context context;
 	public JSONObject risposta = null;
+	public JSONObject richiesta = null;
 	public JSONObject sessione = null;
 	public JSONObject utente   = null;
 	public JSONArray attivita= null;
@@ -65,7 +65,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				JSONObject object = new JSONObject();
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
-				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3");
+				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
 				Iterator<String> ita = mData.keySet().iterator();
             	while (ita.hasNext()) {
                 	String key = ita.next();
@@ -107,6 +107,10 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				if(errore==0){
 					//TODO va gestito errore in caso di JSON malformattato 
 					try {
+						if(risposta.getJSONObject("risposta").has("errore")){
+							errore=7;
+							return "Errore "+risposta.getJSONObject("risposta").getJSONObject("errore").getString("log");
+						}
 						//Log.e("Gaia", risposta.getJSONObject("sessione").getString("id"));
 						setSid(risposta.getJSONObject("sessione").getString("id"));
 
@@ -120,6 +124,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 						try {
 							utente	 = risposta.getJSONObject("sessione").optJSONObject("utente");
 							sessione=risposta.getJSONObject("sessione");
+							richiesta=risposta.getJSONObject("richiesta");
 							if(metodo().equals("attivita"))
 								attivita=risposta.getJSONArray("risposta");
 							else
