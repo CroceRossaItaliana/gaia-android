@@ -1,13 +1,17 @@
 package it.gaiacri.mobile.Utils;
 
+import org.json.JSONObject;
+
 import it.gaiacri.mobile.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 
 public class ErrorJson {
 
-	public static int Controllo(String ris,Activity context){
+	public static int Controllo(String ris,Activity context,JSONObject json){
 		if(ris.equals("Errore Internet")){
 			AssenzaInternet(context);
 			return 1;
@@ -17,7 +21,7 @@ public class ErrorJson {
 				return 2;
 			}else{
 				if(ris.startsWith("Errore ")){
-					ProblemaApi(ris.substring(7),context);
+					ProblemaApi(ris.substring(7),context,json);
 					return 3;
 				}
 			}
@@ -48,15 +52,25 @@ public class ErrorJson {
 		alert.show();
 	}
 	
-	public static void ProblemaApi(String errore,final Activity context){
-		//Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
+	public static void ProblemaApi(String errore,final Activity context,final JSONObject json){
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
 		miaAlert.setTitle(R.string.api_error);
 		miaAlert.setMessage(errore);
 
 		miaAlert.setCancelable(false);
-		    	
-		miaAlert.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+		miaAlert.setPositiveButton(R.string.api_email, new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int id) {
+				  //da aggiungere il codice per la mail
+				  Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+				            "mailto","android@gaia.cri.it", null));
+				  emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Errore Android Api");
+				  emailIntent.putExtra(Intent.EXTRA_TEXT, "Errore Generato \n"+json);
+				  context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+				  context.setResult(100);
+				  context.finish();
+			  }
+			});
+		miaAlert.setNegativeButton(R.string.api_close, new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 			  context.setResult(100);
 			  context.finish();
