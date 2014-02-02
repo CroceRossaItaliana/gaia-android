@@ -27,8 +27,8 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	private HashMap<String, String> mData = null;// post data
 
 	private static String sid = "";
-	//public static String base = "https://gaia.cri.it/api.php";
-	public static String base = "http://192.168.1.125/gaia//api.php";
+	public static String base = "https://gaia.cri.it/api.php";
+	//public static String base = "http://192.168.1.125/gaia/api.php";
 	public Context context;
 	public JSONObject risposta = null;
 	public JSONObject richiesta = null;
@@ -66,8 +66,8 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				JSONObject object = new JSONObject();
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
-				//object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
-				object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server gaia.cri.it
+				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
+				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server gaia.cri.it
 				Iterator<String> ita = mData.keySet().iterator();
             	while (ita.hasNext()) {
                 	String key = ita.next();
