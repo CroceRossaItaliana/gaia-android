@@ -114,4 +114,11 @@ public class Turno {
 		}
 		return 2;
 	}
+	
+	public boolean getPart(){
+		return this.partecipa;
+	}
+	public void setPart(boolean value){
+		this.partecipa=value;
+	}
 }

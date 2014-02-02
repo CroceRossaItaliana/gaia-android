@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="10dp"
     tools:context=".MenuPrincipale" >
 
    <LinearLayout
@@ -33,6 +34,23 @@
             android:text="@string/caricamento"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000" />
+        <TextView
+            android:id="@+id/UlterioriAttivita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="@dimen/venti2"
+            android:text="@string/display_info"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000" />
+        <WebView
+            android:id="@+id/InfoAttivita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/venti2"
+            android:visibility="gone" />
     </LinearLayout>
     <ListView
         android:id="@+id/listElenco"

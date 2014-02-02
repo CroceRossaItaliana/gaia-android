@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,11 +26,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DisplayAttivita extends ActionBarActivity {
 
@@ -45,6 +49,7 @@ public class DisplayAttivita extends ActionBarActivity {
 	private String att_luogo,att_title;
 	private ArrayList<Turno> turni;
 	private boolean passati;
+	private ProgressDialog pd;
 
 
 	@Override
@@ -109,17 +114,43 @@ public class DisplayAttivita extends ActionBarActivity {
 
 		public String metodo() { return "attivita_dettagli"; }
 
+		@SuppressLint("SetJavaScriptEnabled")
 		protected void onPostExecute(String ris) {
 			if(ErrorJson.Controllo(ris,DisplayAttivita.this,risposta)==0){
 				try {
 					//String TAG="Risposta: ";
 					att_title=risposta.getString("nome");
 					att_luogo=risposta.getString("luogo");
+					String att_info=risposta.getString("descrizione");
+					String att_referente=risposta.getString("referente");
+					String att_referentenum=risposta.getString("referentenum");
+					String att_referenteemail=risposta.getString("referenteemail");
+					
+					//String html = "<html><body>Referente: "+att_referente+"<br>Num: "+att_referentenum+"<br>Email: email@example.it"+att_referenteemail+"<br>"+att_info+"</body></html>";
+					String html = "<html><body><b>Referente:</b> Mario Rossi<br>Num: "+att_referentenum+"<br>Email: email@example.it<br>"+att_info+"</body></html>";
+					String mime = "text/html";
+					String encoding = "utf-8";
 					//Log.d(TAG+"nome",att_title);
 					//Log.d(TAG+"luogo",risposta.getString("luogo"));
 					//Log.d(TAG+"luogo",risposta.getString("luogo"));
 					((TextView) findViewById(R.id.NomeAttivita)).setText(att_title);
 					((TextView) findViewById(R.id.LuogoAttivita)).setText(att_luogo);
+					((TextView)findViewById(R.id.LuogoAttivita)).setTextColor(Color.parseColor(getString(R.color.gaia_maps)));
+					((WebView) findViewById(R.id.InfoAttivita)).getSettings().setJavaScriptEnabled(true);
+					((WebView) findViewById(R.id.InfoAttivita)).loadDataWithBaseURL(null, html, mime, encoding, null);
+					((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0 , 0, R.drawable.ic_btn_round_more_disabled_down, 0);
+					((TextView) findViewById(R.id.UlterioriAttivita)).setOnClickListener(new View.OnClickListener() {
+					    public void onClick(View v) {
+					    	//TODO va cambiata la scritta di ulteriori info :D
+					    	if(((WebView) findViewById(R.id.InfoAttivita)).getVisibility()==View.GONE){
+					    		((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.VISIBLE);
+					    		((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_up, 0);
+					    	}else{
+					    		((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.GONE);
+					    		((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_down, 0);
+					    	}
+					    }
+					});
 					Object obj=risposta.get("coordinate");
 					//Log.d(TAG+"coordinate", obj+"");
 					String [] a=obj.toString().split("\"");
@@ -200,8 +231,8 @@ public class DisplayAttivita extends ActionBarActivity {
 					//tur.getStart()
 					Calendar c=Calendar.getInstance();
 					String date2=c.get(Calendar.YEAR)+"-"+Number(c.get(Calendar.MONTH)+ 1)+"-"+c.get(Calendar.DAY_OF_MONTH);
-					Log.d("Data", date2);
-					Log.d("Data","" + date2.compareTo(tur.getStart()));
+					//Log.d("Data", date2);
+					//Log.d("Data","" + date2.compareTo(tur.getStart()));
 
 					if(date2.compareTo(tur.getStart())<=0){
 						data.add(ServiceMap);						
@@ -235,23 +266,38 @@ public class DisplayAttivita extends ActionBarActivity {
 					}*/
 					String id=(String) ((TextView)row.findViewById(R.id.textViewId)).getText();
 					final Turno t=getTurno(id,position);
-					((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(t.getColor()));
+					//((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(t.getColor()));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
 
-					//final int pos=position;
-					Log.d("posizione",position + " ");
 					//Log.d("num elementi",turni.size() + " tot");
 					int num=t.getPartecipa();
-					Log.d("num",num +" ");
+					//Log.d("posizione",position + " " +num);
 					switch(num){
 					case 0://caso in cui l'utente si puo iscrivere
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_vuoto)));
 						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
 						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
+						((Button)row.findViewById(R.id.buttonPartecipa)).setTag(t.getId());
+						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+							public void onClick(View v) {
+								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
+								iscrivi_cancella(id);
+							}
+						}); 
 						break;
 					case 1://caso in cui l'utente risulta gia essere iscritto
+						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+							public void onClick(View v) {
+								//String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
+								Toast.makeText(context, "rimuovi richiesta", Toast.LENGTH_SHORT).show();
+							}
+						}); 
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_pieno)));
 						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_cancella);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
+						//((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					case 2://caso in cui il turno e pieno
 						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_pieno);
@@ -261,11 +307,6 @@ public class DisplayAttivita extends ActionBarActivity {
 						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					}
-					((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
-						public void onClick(View v) {
-							iscrivi_cancella(t.getId());
-						}
-					}); 
 					return row;
 
 				}
@@ -287,6 +328,15 @@ public class DisplayAttivita extends ActionBarActivity {
 		}
 		return turni.get(position);
 	}
+	
+	private int getTurno(String id){
+		for(int i=0;i<turni.size();i++){
+			if(id.equals(turni.get(i).getId())){
+				return i;
+			}
+		}
+		return 0;
+	}
 
 	private String Number(int num){
 		if(num<10)
@@ -296,6 +346,10 @@ public class DisplayAttivita extends ActionBarActivity {
 	}
 
 	public void iscrivi_cancella(String id){
+		pd=new ProgressDialog(this);
+		pd.setCancelable(false);
+		pd.setMessage("Iscrizione in corso");
+		pd.show();
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("id", id);
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
@@ -308,16 +362,23 @@ public class DisplayAttivita extends ActionBarActivity {
 		}
 		public String metodo() { return "turno_partecipa"; }
 		protected void onPostExecute(String ris) {
-
+			pd.dismiss();
+			pd.cancel();
 			if(ErrorJson.Controllo(ris,DisplayAttivita.this,risposta)==0){
-				//TODO elabora risposta
-				//TODO aggiorna tabella turni della view
-
+				//modifica turni(con il tuo id) in base all'esito della chiamata
+				//controllo se iscritto cancella altrimnti iscrivi
+				try {
+					String id=richiesta.getJSONObject("parametri").getString("id");
+					String result=risposta.getString("ok");
+					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//aggiorna tabella turni della view
+				aggiornalist();
 			}
 
 		}
 	}
-
-
-
 }
