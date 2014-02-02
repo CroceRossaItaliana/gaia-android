@@ -109,10 +109,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				if(errore==0){
 					//TODO va gestito errore in caso di JSON malformattato 
 					try {
-						/*if(risposta.getJSONObject("risposta").has("errore")){
-							errore=7;
-							return "Errore "+risposta.getJSONObject("risposta").getJSONObject("errore").getString("log");
-						}*/
 						//Log.e("Gaia", risposta.getJSONObject("sessione").getString("id"));
 						setSid(risposta.getJSONObject("sessione").getString("id"));
 
@@ -127,10 +123,15 @@ public class Richiesta extends AsyncTask<String, String, String> {
 							utente	 = risposta.getJSONObject("sessione").optJSONObject("utente");
 							sessione=risposta.getJSONObject("sessione");
 							richiesta=risposta.getJSONObject("richiesta");
-							if(metodo().equals("attivita"))
+							if(metodo().equals("attivita")){
 								attivita=risposta.getJSONArray("risposta");
-							else
+							}else{
 								risposta = risposta.getJSONObject("risposta");
+								if(risposta.has("errore")){
+									errore=7;
+									return "Errore "+risposta.getJSONObject("errore").getString("messaggio");
+								}
+							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
