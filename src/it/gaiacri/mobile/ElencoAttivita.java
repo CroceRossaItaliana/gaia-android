@@ -244,7 +244,7 @@ public class ElencoAttivita extends FragmentActivity {
 			protected void onPostExecute(String str) {
 				//Log.d("Log","Ciao");
 				
-				if(ErrorJson.Controllo(str,getActivity())==0){
+				if(ErrorJson.Controllo(str,getActivity(),risposta)==0){
 					try{
 						JSONObject js=null;
 						a=new ArrayList<Attivita>();

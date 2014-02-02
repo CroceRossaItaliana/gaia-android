@@ -178,7 +178,7 @@ public class MenuPrincipale extends Activity {
 		}
 		public String metodo() { return "logout"; }
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,MenuPrincipale.this)==0){
+			if(ErrorJson.Controllo(ris,MenuPrincipale.this,risposta)==0){
 				setResult(Activity.RESULT_OK);
 				annulla();
 				Intent myIntent = new Intent(MenuPrincipale.this, Accesso.class);
@@ -195,7 +195,7 @@ public class MenuPrincipale extends Activity {
 		public String metodo() { return "scansione"; }
 		protected void onPostExecute(String ris) {
 
-			if(ErrorJson.Controllo(ris,MenuPrincipale.this)==0){
+			if(ErrorJson.Controllo(ris,MenuPrincipale.this,risposta)==0){
 				try {
 
 					AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipale.this);
@@ -247,7 +247,7 @@ public class MenuPrincipale extends Activity {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(ErrorJson.Controllo(str, MenuPrincipale.this)==0){
+			if(ErrorJson.Controllo(str, MenuPrincipale.this,risposta)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();
@@ -282,7 +282,7 @@ public class MenuPrincipale extends Activity {
 		public String metodo() { return "io"; }
 
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris, MenuPrincipale.this)==0){
+			if(ErrorJson.Controllo(ris, MenuPrincipale.this,risposta)==0){
 				try {
 					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
 					nome.setText(user_nome);

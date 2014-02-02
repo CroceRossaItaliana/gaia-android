@@ -185,7 +185,7 @@ public class Accesso extends Activity {
 		public String metodo() { return "login"; }
 		protected void onPostExecute(String ris) {
 
-			if(ErrorJson.Controllo(ris,Accesso.this)==0){
+			if(ErrorJson.Controllo(ris,Accesso.this,risposta)==0){
 				if(risposta==null){
 					//TODO
 					finish();
@@ -221,7 +221,7 @@ public class Accesso extends Activity {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(ErrorJson.Controllo(str,Accesso.this)==0){
+			if(ErrorJson.Controllo(str,Accesso.this,risposta)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();

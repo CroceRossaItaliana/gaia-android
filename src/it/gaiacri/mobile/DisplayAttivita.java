@@ -110,7 +110,7 @@ public class DisplayAttivita extends Activity {
 		public String metodo() { return "attivita_dettagli"; }
 
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,DisplayAttivita.this)==0){
+			if(ErrorJson.Controllo(ris,DisplayAttivita.this,risposta)==0){
 				try {
 					//String TAG="Risposta: ";
 					att_title=risposta.getString("nome");
@@ -309,7 +309,7 @@ public class DisplayAttivita extends Activity {
 		public String metodo() { return "turno_partecipa"; }
 		protected void onPostExecute(String ris) {
 
-			if(ErrorJson.Controllo(ris,DisplayAttivita.this)==0){
+			if(ErrorJson.Controllo(ris,DisplayAttivita.this,risposta)==0){
 				//TODO elabora risposta
 				//TODO aggiorna tabella turni della view
 
