@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import android.widget.Toast;
  * well.
  */
 @SuppressLint("SetJavaScriptEnabled")
-public class Accesso extends Activity {
+public class Accesso extends ActionBarActivity {
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -41,9 +42,11 @@ public class Accesso extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_PROGRESS);
+		//requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		//requestWindowFeature(Window.FEATURE_PROGRESS);
+        super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_PROGRESS);
 		sharedPref=this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 		//setContentView(R.layout.activity_accesso);
 
@@ -106,6 +109,7 @@ public class Accesso extends Activity {
 
 
 	private void loadWebView() {
+		getSupportActionBar();
 		context = this.getApplicationContext();
 		if(webview == null){
 			Log.i("create","webview");
@@ -115,10 +119,10 @@ public class Accesso extends Activity {
 			final Activity activity = this;
 			webview.setWebChromeClient(new WebChromeClient() {
 				public void onProgressChanged(WebView view, int progress) {
-					setProgress(progress * 100);
+					setSupportProgress(progress * 100);
 					if(progress == 100) {
-						setProgressBarIndeterminateVisibility(false);
-						setProgressBarVisibility(false);
+						setSupportProgressBarIndeterminateVisibility(false);
+						setSupportProgressBarVisibility(false);
 					}//activity.setProgress(progress * 1000);
 				}
 			});
@@ -153,10 +157,12 @@ public class Accesso extends Activity {
 			HashMap<String, String> data = new HashMap<String, String>();
 			login = new RichiestaLogin(data);
 			login.execute();
-			setProgressBarIndeterminateVisibility(true);
-			setProgressBarVisibility(true);
+			//setProgressBarIndeterminateVisibility(true);
+			//setProgressBarVisibility(true);
 		}
 		setContentView(webview);
+		setSupportProgressBarVisibility(true);
+		setSupportProgressBarIndeterminateVisibility(true);
 
 	}
 
