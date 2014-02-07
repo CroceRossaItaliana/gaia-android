@@ -230,7 +230,7 @@ public class DisplayAttivita extends ActionBarActivity {
 				}else{
 					//tur.getStart()
 					Calendar c=Calendar.getInstance();
-					String date2=c.get(Calendar.YEAR)+"-"+Number(c.get(Calendar.MONTH)+ 1)+"-"+c.get(Calendar.DAY_OF_MONTH);
+					String date2=c.get(Calendar.YEAR)+"-"+Number(c.get(Calendar.MONTH)+ 1)+"-"+Number(c.get(Calendar.DAY_OF_MONTH));
 					//Log.d("Data", date2);
 					//Log.d("Data","" + date2.compareTo(tur.getStart()));
 
