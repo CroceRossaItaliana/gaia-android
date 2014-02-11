@@ -7,7 +7,7 @@ Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad
 
 **SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE È BENVENUTA!**
 
-Contattaci a `info@gaia.cri.it`.
+Contattaci a `android@gaia.cri.it`.
 
 
 ### Il progetto Gaia
@@ -17,7 +17,7 @@ Maggiori informazioni riguardo **il progetto Gaia di Croce Rossa Italiana** sono
 
 ## Stato attuale
 
-[Scarica app allo stato alpha](https://github.com/CroceRossaItaliana/gaia-android/blob/master/GaiaAndroidV1.0.0.apk?raw=true)
+[Scarica app allo stato alpha](https://github.com/CroceRossaItaliana/gaia-android/blob/master/GaiaAndroidV0.6.4.apk?raw=true)
 
 
 ### La licenza 
