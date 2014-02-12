@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -52,11 +53,11 @@ public class MainActivity extends ActionBarActivity {
 		_initMenu();
 		mDrawerToggle = new CustomActionBarDrawerToggle(this, mDrawer);
 		mDrawer.setDrawerListener(mDrawerToggle);
-		
+
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		mDrawerToggle.setDrawerIndicatorEnabled(false);
-		
-		
+
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 		.replace(R.id.content_frame, new MenuPrincipale()).commit();
@@ -233,22 +234,43 @@ public class MainActivity extends ActionBarActivity {
 			// update selected item and title, then close the drawer			
 			Fragment test=null;
 			mDrawerList.setItemChecked(position, true);
+			//Rubrica Delegati
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_delegati))){
 				title=getString(R.string.title_activity_rubrica_delegati);
 				test = new RubricaDelegati();
-				
+
 			}
+			//Elenco Attivita
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_attivita_elenco))){
 				title=getString(R.string.title_activity_elenco_attivita);
 				test = new ElencoAttivita();
 			}
+
 			//Logout
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_logout))){
 				HashMap<String, String> data = new HashMap<String, String>();
 				RichiestaLogout asd = new RichiestaLogout(data);
 				asd.execute();
 			}
-			
+			//Supporto
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_feedback_supporto))){
+				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+						"mailto","android@gaia.cri.it", null));
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Supporto Gaia Android");
+				startActivity(Intent.createChooser(emailIntent, "Send email..."));
+			}
+			//Giudizi
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_feedback_giudizi))){
+				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+						"mailto","giudizi.android@gaia.cri.it", null));
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Giudizi Gaia Android");
+				startActivity(Intent.createChooser(emailIntent, "Send email..."));
+			}
+
+
+
+
+
 			if (test != null) {
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				fragmentManager.beginTransaction()
@@ -277,11 +299,11 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 	}
-	
+
 	public static void enable(){
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
 	}
-	
-	
+
+
 }
