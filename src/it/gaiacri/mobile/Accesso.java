@@ -234,7 +234,7 @@ public class Accesso extends ActionBarActivity {
 
 				if ( utente != null ) {
 					Log.e("Login", "Gia Identificato");
-					Intent i= new Intent(Accesso.this,MenuPrincipale.class);
+					Intent i= new Intent(Accesso.this,MainActivity.class);
 					i.putExtra("sid", sid);		   
 					startActivity(i);
 					webview=null;

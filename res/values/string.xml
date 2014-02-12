@@ -63,4 +63,21 @@
 	<string name="error_internet_si">Riprova</string>
 	<string name="error_internet_no">Esci</string>
 	
+	<string name="drawer_open">Menu</string>
+	<string name="drawer_close">chiudi</string>
+	
+	<string name="ns_menu_main_header_attivita">Attivita</string>
+	<string name="ns_menu_main_header_rubrica">Rubrica</string>
+	<string name="ns_menu_main_header_feedback">Feedback</string>
+	<string name="ns_menu_main_header_setting">Impostazioni</string>
+	
+	
+	<string name="ns_menu_attivita_elenco">Elenco Attivita</string>
+    <string name="ns_menu_attivita_miei">Miei Turni</string>
+    <string name="ns_menu_rubrica_delegati">Delegati</string>
+    <string name="ns_menu_rubrica_volontari">Volontari</string>
+    <string name="ns_menu_feedback_supporto">Supporto</string>
+    <string name="ns_menu_feedback_giudizi">Giudizi</string>
+    <string name="ns_menu_setting_logout">Logout</string>
+	
 </resources>

@@ -9,23 +9,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MenuPrincipale extends ActionBarActivity {
+public class MenuPrincipale extends Fragment {
+
 
 	public String sid = "";
 
@@ -37,6 +37,8 @@ public class MenuPrincipale extends ActionBarActivity {
 
 	private Context context;
 	public SharedPreferences sharedPref;
+	private FragmentActivity activity;
+	private RelativeLayout v;
 	/** 
 	 * splash screen
 	 */
@@ -45,27 +47,24 @@ public class MenuPrincipale extends ActionBarActivity {
 	private View mMenuView;
 
 
-	@SuppressLint("HandlerLeak")
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_menu_principale);
-		Log.d("screen", this.getRequestedOrientation() +"");
+	
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		v= (RelativeLayout)inflater.inflate(R.layout.activity_menu_principale, container, false);
+		context=super.getActivity().getApplicationContext();
+		Log.d("screen", super.getActivity().getRequestedOrientation() +"");
+		
+		mSplashView=v.findViewById(R.id.splash);
+		mMenuView=v.findViewById(R.id.menu_principale);
 
-		// If the Fragment is non-null, then it is currently being
-		// retained across a configuration change.
+		nome = (TextView) v.findViewById(R.id.tv_nome);
+		comitato = (TextView) v.findViewById(R.id.tv_comitato);
 
+		context=super.getActivity();
+		activity=super.getActivity();
+		sharedPref = context.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 
-		mSplashView=findViewById(R.id.splash);
-		mMenuView=findViewById(R.id.menu_principale);
-
-		nome = (TextView) findViewById(R.id.tv_nome);
-		comitato = (TextView) findViewById(R.id.tv_comitato);
-
-		context=this.getApplicationContext();
-		sharedPref = this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
-
-		Intent i=getIntent();
+		Intent i=activity.getIntent();
 		Bundle b=i.getExtras();
 		if(b!= null){
 			sid = b.getString("sid");
@@ -73,7 +72,7 @@ public class MenuPrincipale extends ActionBarActivity {
 		}else{
 			if(user_nome==null && user_comitato==null){
 				//splash
-				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				startSplash();
 			}else{
 				//in questo caso l'utente ha ruotato lo schemo oppure e arrivato da un activity successiva e io ricarico i dati scaricati precedentemente
@@ -89,49 +88,32 @@ public class MenuPrincipale extends ActionBarActivity {
 				}*/
 				Log.d("impossible", "qualcosa non va");
 			}
-
 			Log.i("sid", sid);
-
-
 		}
-		final Button logout = (Button) findViewById(R.id.button1);
-		logout.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				HashMap<String, String> data = new HashMap<String, String>();
-				RichiestaLogout asd = new RichiestaLogout(data);
-				asd.execute();
-			}
-		});        
+		return v;
+		}	
 
-		final Button scansione = (Button) findViewById(R.id.button2);
-		scansione.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				IntentIntegrator.initiateScan(MenuPrincipale.this);
-			}
-		});      
+	/*private void _initMenu() {
+	       NsMenuAdapter mAdapter = new NsMenuAdapter(this);
 
-		final Button adAttivita = (Button) findViewById(R.id.button3);
-		adAttivita.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent myIntent = new Intent(getBaseContext(), ElencoAttivita.class);
-				startActivityForResult(myIntent,50);
-			}
-		});
-		final Button adRubricaDelegati = (Button) findViewById(R.id.button4);
-		adRubricaDelegati.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent myIntent = new Intent(getBaseContext(), RubricaDelegati.class);
-				startActivityForResult(myIntent,50);
-			}
-		});
+	        // Add Header
+	        mAdapter.addHeader(R.string.ns_menu_main_header);
+	        .....
+	        mAdapter.addItem(mItem);
 
-	}
+
+	        mDrawerList = (ListView) findViewById(R.id.drawer);
+	        if (mDrawerList != null)
+	            mDrawerList.setAdapter(mAdapter);
+
+	  }*/
+
 
 	private void richiestaDati() {
 		//avviare download "io"
 		HashMap<String, String> data = new HashMap<String, String>();
-        RichiestaChiSono richiesta = new RichiestaChiSono(data);
-        richiesta.execute();
+		RichiestaChiSono richiesta = new RichiestaChiSono(data);
+		richiesta.execute();
 	}
 
 	private void startSplash() {
@@ -139,7 +121,8 @@ public class MenuPrincipale extends ActionBarActivity {
 
 		mSplashView.setVisibility(View.VISIBLE);
 		mMenuView.setVisibility(View.GONE);
-		((TextView) this.findViewById(R.id.Loading)).setText(this.getString(R.string.login_sessione));
+		TextView t=((TextView) v.findViewById(R.id.Loading));
+		t.setText(this.getString(R.string.login_sessione));
 		//avviare download "ciao"
 		//TODO
 		// Create and execute the background task.
@@ -148,7 +131,7 @@ public class MenuPrincipale extends ActionBarActivity {
 		welcome.execute();
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	/*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode==50 && resultCode==100)
 			finish();
@@ -171,42 +154,20 @@ public class MenuPrincipale extends ActionBarActivity {
 			break;
 		}
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.activity_menu_principale, menu);
-		return true;
-	}
-
-	class RichiestaLogout extends Richiesta {
-		public RichiestaLogout(HashMap<String, String> data) {
-			super(data,MenuPrincipale.this.context);
-		}
-		public String metodo() { return "logout"; }
-		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,MenuPrincipale.this,risposta)==0){
-				setResult(Activity.RESULT_OK);
-				annulla();
-				Intent myIntent = new Intent(MenuPrincipale.this, Accesso.class);
-				startActivity(myIntent);
-				finish();
-			}
-		}
-	}	
+	}*/
+/*
 
 	class RichiestaScansione extends Richiesta {
 		public RichiestaScansione(HashMap<String, String> data) {
-			super(data,MenuPrincipale.this.context);
+			super(data,MenuPrincipale_1.this.context);
 		}
 		public String metodo() { return "scansione"; }
 		protected void onPostExecute(String ris) {
 
-			if(ErrorJson.Controllo(ris,MenuPrincipale.this,risposta)==0){
+			if(ErrorJson.Controllo(ris,MenuPrincipale_1.this,risposta)==0){
 				try {
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipale.this);
+					AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipale_1.this);
 					builder.setMessage(risposta.getString("nomeCompleto")+ "\n" + risposta.getString("comitato"))
 					.setPositiveButton("Qualcosa", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
@@ -229,20 +190,21 @@ public class MenuPrincipale extends ActionBarActivity {
 			}
 
 		}
-	}
+	}*/
+	
 	public void annulla(){
 		user_nome=null;
 		user_comitato=null;
 	}
 
 
-
+/*
 	@Override
 	public void onBackPressed() {
 		//se l'utente preme indietro automaticamente vengono invalidati i campi
 		annulla();
 		super.onBackPressed();
-	}
+	}*/
 
 	public class RichiestaWelcome extends Richiesta {
 
@@ -255,7 +217,7 @@ public class MenuPrincipale extends ActionBarActivity {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(ErrorJson.Controllo(str, MenuPrincipale.this,risposta)==0){
+			if(ErrorJson.Controllo(str, activity,risposta)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();
@@ -265,7 +227,7 @@ public class MenuPrincipale extends ActionBarActivity {
 
 					//mCallbacks.onPostUpdate();
 					//aggiorna scritta su display
-					((TextView) findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
+					((TextView) activity.findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
 					richiestaDati();
 
 
@@ -276,7 +238,7 @@ public class MenuPrincipale extends ActionBarActivity {
 					Intent myIntent = new Intent(context, Accesso.class);
 					//myIntent.putExtra("sid", getSid());
 					startActivity(myIntent);
-					finish();
+					activity.finish();
 				}
 			}
 		}
@@ -290,7 +252,7 @@ public class MenuPrincipale extends ActionBarActivity {
 		public String metodo() { return "io"; }
 
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris, MenuPrincipale.this,risposta)==0){
+			if(ErrorJson.Controllo(ris, activity,risposta)==0){
 				try {
 					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
 					nome.setText(user_nome);
@@ -301,11 +263,12 @@ public class MenuPrincipale extends ActionBarActivity {
 
 					user_comitato=getString(R.string.menu_no_comitato);
 					comitato.setText(user_comitato);
-					((Button)findViewById(R.id.button3)).setEnabled(false);
+					((Button)activity.findViewById(R.id.button3)).setEnabled(false);
 				}
 				mSplashView.setVisibility(View.GONE);
 				mMenuView.setVisibility(View.VISIBLE);
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+				MainActivity.enable();
 			}
 		}
 	}

@@ -6,11 +6,7 @@ import it.gaiacri.mobile.Utils.ErrorJson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
 import org.json.JSONObject;
-
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,11 +15,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ElencoAttivita extends ActionBarActivity {
+public class ElencoAttivita extends Fragment {
 
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	private static int giorni=120;
@@ -47,78 +40,21 @@ public class ElencoAttivita extends ActionBarActivity {
 
 	static ViewPager mViewPager;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_view);
-		// Create the adapter that will return a fragment for each of the three primary sections
-		// of the apps
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-		context=this.getApplicationContext();
-
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		ViewPager v= (ViewPager)inflater.inflate(R.layout.activity_view, container, false);
+		context=super.getActivity().getApplicationContext();
+		mSectionsPagerAdapter = new SectionsPagerAdapter(super.getActivity().getSupportFragmentManager());
+		
 		// Set up the ViewPager with the sections adapter.
 		c=Calendar.getInstance();
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager = (ViewPager) v.findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);		
 		mViewPager.setCurrentItem(giorni/2);
-
-
-	}
-	
-	
-
-	@Override
-	protected void onResume() {
-		Log.d("pause", "restore");
-		super.onResume();
-	}
-
-
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		/*MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.activity_elenco, menu);*/
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		/*switch (item.getItemId()) {
-		case R.id.item2:
-			if (item.isChecked()) 
-				item.setChecked(false);
-            else 
-            	item.setChecked(true);
-            return true;
-		 */
-		/*switch (item.getItemId()) {
-		case R.id.cpy:
-			// Toast.makeText(getApplicationContext(), "Copy",Toast.LENGTH_SHORT).show();
-			//URL=(String) mViewPager.
-			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-			if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB){
-				android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
-				ClipData clip = ClipData.newPlainText("label", IUrl);
-				clipboard.setPrimaryClip(clip); 
-			} else{
-				android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
-				clipboard.setText(IUrl);
-			}
-			Toast.makeText(getApplicationContext(), "Text copied to clipboard", Toast.LENGTH_SHORT).show();
-			return true;
-		case R.id.save:
-			Toast.makeText(getApplicationContext(), "Save",Toast.LENGTH_SHORT).show();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}*/
-		return true;
-	}
-
-
+		return v;
+		
+		
+		}	
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
@@ -351,18 +287,6 @@ public class ElencoAttivita extends ActionBarActivity {
 					}
 				});
 			}
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(resultCode == 100)
-		{
-			setResult(100);
-			this.finish();
 		}
 	}
 	

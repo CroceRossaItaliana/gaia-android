@@ -25,7 +25,7 @@
             android:launchMode= "singleInstance" >
         </activity>
         <activity
-            android:name=".MenuPrincipale"
+            android:name=".MainActivity"
             android:label="@string/title_activity_login_user"
             android:configChanges="orientation|keyboardHidden|screenSize" >
 			<intent-filter>
