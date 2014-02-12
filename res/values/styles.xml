@@ -24,4 +24,8 @@
         <item name="android:padding">16dp</item>
     </style>
 
+    <style name="AppTheme.Widget" >
+       <item name="android:minHeight">24dp</item>
+    </style>
+    
 </resources>

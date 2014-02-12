@@ -1,124 +1,119 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".MenuPrincipale" >
+    tools:context=".MainActivity" >
 
-	<RelativeLayout
-	    android:id="@+id/splash"
-	    android:layout_width="fill_parent"
-	    android:visibility="gone"
-	    android:layout_height="fill_parent" >
+    <RelativeLayout
+        android:id="@+id/splash"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" >
 
-	    <ImageView
-	        android:id="@+id/imageView1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_above="@+id/linearLayout1"
-	        android:layout_alignParentLeft="true"
-	        android:layout_alignParentRight="true"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginLeft="20dip"
-	        android:layout_marginRight="20dip"
-	        android:src="@drawable/splash_2" />
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linearLayout1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:src="@drawable/splash_2" />
 
-	    <LinearLayout
-	        android:id="@+id/linearLayout1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginBottom="22dp" >
-			<ProgressBar
-	        	android:id="@+id/progressBar1"
-	       		android:layout_width="wrap_content"
-	        	android:layout_height="wrap_content" />
-			<RelativeLayout
-	        android:layout_width="wrap_content"
-	        android:layout_height="fill_parent">
-	        	<TextView
-	            	android:id="@+id/Loading"
-	            	android:layout_width="wrap_content"
-	            	android:layout_height="wrap_content"
-	            	android:layout_centerVertical="true"
-	            	android:text="Caricamento.."
-	            	android:textAppearance="?android:attr/textAppearanceLarge" />
-	    	</RelativeLayout>
-	    </LinearLayout>
-	</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="22dp" >
 
-	<RelativeLayout
-	    android:id="@+id/menu_principale"
-    	android:layout_width="match_parent"
-    	android:layout_height="match_parent" >
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    	<LinearLayout
-     	   android:layout_width="wrap_content"
-     	   android:layout_height="wrap_content"
-     	   android:layout_alignParentBottom="true"
-    	   android:layout_alignParentLeft="true"
-    	   android:layout_alignParentRight="true"
-     	   android:layout_alignParentTop="true"
-     	   android:orientation="vertical" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent" >
 
-     	<LinearLayout
-    		android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/Loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Caricamento.."
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </RelativeLayout>
         </LinearLayout>
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/button1"
-            style="?android:attr/buttonStyleSmall"
+    <RelativeLayout
+        android:id="@+id/menu_principale"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Esci" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/tv_nome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="@dimen/venti2"
-            android:text="Attendere..."
-            android:textAlignment="center"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_comitato"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingBottom="@dimen/venti2"
-            android:text="Caricamento in corso."
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#CC0000" />
+            <Button
+                android:id="@+id/button1"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Esci" />
 
-        <Button
-            android:id="@+id/button2"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:text="Scanner dei volontari" />
+            <TextView
+                android:id="@+id/tv_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/venti2"
+                android:text="Attendere..."
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:id="@+id/button3"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Attivita" />
-        <Button
-            android:id="@+id/button4"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Rubrica" />
+            <TextView
+                android:id="@+id/tv_comitato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="@dimen/venti2"
+                android:text="Caricamento in corso."
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#CC0000" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/button2"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_launcher"
+                android:text="Scanner dei volontari" />
+
+            <Button
+                android:id="@+id/button3"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Attivita" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
-</merge>
