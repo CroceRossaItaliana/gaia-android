@@ -9,6 +9,7 @@
     <string name="title_activity_elenco_attivita">Elenco Attivita</string>
     <string name="title_activity_display_attivita">Visualizzazione Turni</string>
     <string name="title_activity_login_user">Gaia Mobile</string>
+    <string name="title_activity_rubrica_delegati">Rubrica Delegati</string>
     
     
     <string name="attivita_title">Da:</string>
@@ -25,6 +26,8 @@
 	<string name="turni_cancella">Ritirati</string> 
 	<string name="turni_pieno">Pieno</string>
 	<string name="turni_passati">Turni Passati</string>
+	<string name="turni_chiama">Chiama Referente</string>
+	<string name="turni_email">Email Referente</string>
 	
 	<string name="display_info">Ulteriori Informazioni:</string>
 	

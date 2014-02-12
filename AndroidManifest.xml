@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -36,6 +37,11 @@
         <activity
             android:name=".ElencoAttivita"
             android:label="@string/title_activity_elenco_attivita"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+        <activity
+            android:name=".RubricaDelegati"
+            android:label="@string/title_activity_rubrica_delegati"
             android:configChanges="orientation|keyboardHidden|screenSize" >
         </activity>
         <activity

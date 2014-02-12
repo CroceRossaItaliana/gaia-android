@@ -9,5 +9,4 @@
     <item android:id="@+id/turni_passati" 
          android:title="@string/turni_passati" 
          android:checkable="true" />
-
 </menu>

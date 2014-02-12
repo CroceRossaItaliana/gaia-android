@@ -117,6 +117,13 @@ public class MenuPrincipale extends ActionBarActivity {
 				startActivityForResult(myIntent,50);
 			}
 		});
+		final Button adRubricaDelegati = (Button) findViewById(R.id.button4);
+		adRubricaDelegati.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(getBaseContext(), RubricaDelegati.class);
+				startActivityForResult(myIntent,50);
+			}
+		});
 
 	}
 

@@ -51,7 +51,6 @@ public class DisplayAttivita extends ActionBarActivity {
 	private boolean passati;
 	private ProgressDialog pd;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,13 +120,13 @@ public class DisplayAttivita extends ActionBarActivity {
 					//String TAG="Risposta: ";
 					att_title=risposta.getString("nome");
 					att_luogo=risposta.getString("luogo");
-					String att_info=risposta.getString("descrizione");
-					String att_referente=risposta.getString("referente");
-					String att_referentenum=risposta.getString("referentenum");
-					String att_referenteemail=risposta.getString("referenteemail");
-					
+					//String att_info=risposta.getString("descrizione");
+					//String att_referente=risposta.getString("referente");
+					//String att_referentenum=risposta.getString("referentenum");
+					//String att_referenteemail=risposta.getString("referenteemail");
+
 					//String html = "<html><body>Referente: "+att_referente+"<br>Num: "+att_referentenum+"<br>Email: email@example.it"+att_referenteemail+"<br>"+att_info+"</body></html>";
-					String html = "<html><body><b>Referente:</b> Mario Rossi<br>Num: "+att_referentenum+"<br>Email: email@example.it<br>"+att_info+"</body></html>";
+					String html = "<html><body><b>Referente:</b> Mario Rossi<br>Telefono: <a href=\"tel:3474975206\">3414477852</a><br>Email: <A HREF=\"mailto:ciopper90@gmail.com\">email@example.it</a><br>desc</body></html>";
 					String mime = "text/html";
 					String encoding = "utf-8";
 					//Log.d(TAG+"nome",att_title);
@@ -140,16 +139,16 @@ public class DisplayAttivita extends ActionBarActivity {
 					((WebView) findViewById(R.id.InfoAttivita)).loadDataWithBaseURL(null, html, mime, encoding, null);
 					((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0 , 0, R.drawable.ic_btn_round_more_disabled_down, 0);
 					((TextView) findViewById(R.id.UlterioriAttivita)).setOnClickListener(new View.OnClickListener() {
-					    public void onClick(View v) {
-					    	//TODO va cambiata la scritta di ulteriori info :D
-					    	if(((WebView) findViewById(R.id.InfoAttivita)).getVisibility()==View.GONE){
-					    		((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.VISIBLE);
-					    		((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_up, 0);
-					    	}else{
-					    		((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.GONE);
-					    		((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_down, 0);
-					    	}
-					    }
+						public void onClick(View v) {
+							//va cambiata la scritta di ulteriori info :D
+							if(((WebView) findViewById(R.id.InfoAttivita)).getVisibility()==View.GONE){
+								((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.VISIBLE);
+								((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_up, 0);
+							}else{
+								((WebView) findViewById(R.id.InfoAttivita)).setVisibility(View.GONE);
+								((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_btn_round_more_disabled_down, 0);
+							}
+						}
 					});
 					Object obj=risposta.get("coordinate");
 					//Log.d(TAG+"coordinate", obj+"");
@@ -167,7 +166,7 @@ public class DisplayAttivita extends ActionBarActivity {
 						String tur_titolo=risposta.getString("nome");
 						String tur_start=(risposta.getJSONObject("inizio")).getString("date");
 						String tur_end=(risposta.getJSONObject("fine")).getString("date");
-						//TODO bisogna inserire la politica per la scelta del colore
+						// bisogna inserire la politica per la scelta del colore
 						String tur_color="#3135B0";//risposta.getString("color");
 						boolean tur_pieno=risposta.getBoolean("pieno");
 						boolean tur_futuro=risposta.getBoolean("futuro");
@@ -319,7 +318,7 @@ public class DisplayAttivita extends ActionBarActivity {
 			listView.setAdapter(arrayAdapter);
 		}
 	}
-	
+
 	private Turno getTurno(String id,int position){
 		for(int i=0;i<turni.size();i++){
 			if(id.equals(turni.get(i).getId())){
@@ -328,7 +327,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		}
 		return turni.get(position);
 	}
-	
+
 	private int getTurno(String id){
 		for(int i=0;i<turni.size();i++){
 			if(id.equals(turni.get(i).getId())){
@@ -372,7 +371,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					String result=risposta.getString("ok");
 					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					//Auto-generated catch block
 					e.printStackTrace();
 				}
 				//aggiorna tabella turni della view
