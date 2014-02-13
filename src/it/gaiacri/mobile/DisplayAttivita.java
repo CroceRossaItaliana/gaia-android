@@ -136,7 +136,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					((TextView) findViewById(R.id.LuogoAttivita)).setText(att_luogo);
 					((TextView)findViewById(R.id.LuogoAttivita)).setTextColor(Color.parseColor(getString(R.color.gaia_maps)));
 					((WebView) findViewById(R.id.InfoAttivita)).getSettings().setJavaScriptEnabled(true);
-					((WebView) findViewById(R.id.InfoAttivita)).loadDataWithBaseURL(null, html, mime, encoding, null);
+					((WebView) findViewById(R.id.InfoAttivita)).loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
 					((TextView) findViewById(R.id.UlterioriAttivita)).setCompoundDrawablesWithIntrinsicBounds( 0 , 0, R.drawable.ic_btn_round_more_disabled_down, 0);
 					((TextView) findViewById(R.id.UlterioriAttivita)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
