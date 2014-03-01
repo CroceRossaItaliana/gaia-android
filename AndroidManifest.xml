@@ -49,6 +49,11 @@
             android:label="@string/title_activity_display_attivita"
             android:configChanges="orientation|keyboardHidden|screenSize"  >
         </activity>
+        <activity
+            android:name=".PostaIngresso"
+            android:label="@string/title_activity_display_attivita"
+            android:configChanges="orientation|keyboardHidden|screenSize"  >
+        </activity>
     </application>
 
 </manifest>

@@ -6,7 +6,10 @@ import it.gaiacri.mobile.Utils.ErrorJson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -185,6 +188,7 @@ public class ElencoAttivita extends Fragment {
 					try{
 						JSONObject js=null;
 						a=new ArrayList<Attivita>();
+						JSONArray attivita=risposta.getJSONArray("turni");
 						for(int i=0;i<attivita.length();i++){
 							js=(JSONObject)attivita.get(i);
 

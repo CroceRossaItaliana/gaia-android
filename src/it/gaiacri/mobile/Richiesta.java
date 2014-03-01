@@ -13,7 +13,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,13 +27,12 @@ public class Richiesta extends AsyncTask<String, String, String> {
 
 	private static String sid = "";
 	public static String base = "https://gaia.cri.it/api.php";
-	//public static String base = "http://192.168.1.125/gaia/api.php";
+	//public static String base = "http://192.168.1.157/gaia/api.php";
 	public Context context;
 	public JSONObject risposta = null;
 	public JSONObject richiesta = null;
 	public JSONObject sessione = null;
 	public JSONObject utente   = null;
-	public JSONArray attivita= null;
 
 	/**
 	 * constructor
@@ -67,7 +65,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
 				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
-				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server gaia.cri.it
+				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server 
 				Iterator<String> ita = mData.keySet().iterator();
             	while (ita.hasNext()) {
                 	String key = ita.next();
@@ -123,15 +121,15 @@ public class Richiesta extends AsyncTask<String, String, String> {
 							utente	 = risposta.getJSONObject("sessione").optJSONObject("utente");
 							sessione=risposta.getJSONObject("sessione");
 							richiesta=risposta.getJSONObject("richiesta");
-							if(metodo().equals("attivita")){
-								attivita=risposta.getJSONArray("risposta");
-							}else{
-								risposta = risposta.getJSONObject("risposta");
-								if(risposta.has("errore")){
-									errore=7;
-									return "Errore "+risposta.getJSONObject("errore").getString("messaggio");
-								}
+							//if(metodo().equals("attivita")){
+							//	attivita=risposta.getJSONArray("risposta");
+							//}else{
+							risposta = risposta.getJSONObject("risposta");
+							if(risposta.has("errore")){
+								errore=7;
+								return "Errore "+risposta.getJSONObject("errore").getString("messaggio");
 							}
+							//}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

@@ -62,6 +62,8 @@
 	<string name="error_internet">Internet non attivo! L\'Applicazione necessita di internet per funzionare!!</string>
 	<string name="error_internet_si">Riprova</string>
 	<string name="error_internet_no">Esci</string>
+	<string name="error_turn_confirmed">Turno gia\' confermato. Contattare Referente per cancellarsi!</string>
+	
 	
 	<string name="drawer_open">Menu</string>
 	<string name="drawer_close">chiudi</string>
@@ -71,7 +73,7 @@
 	<string name="ns_menu_main_header_feedback">Feedback</string>
 	<string name="ns_menu_main_header_setting">Impostazioni</string>
 	
-	
+	<string name="ns_menu_home_page">Elenco Attivita</string>
 	<string name="ns_menu_attivita_elenco">Elenco Attivita</string>
     <string name="ns_menu_attivita_miei">Miei Turni</string>
     <string name="ns_menu_rubrica_delegati">Delegati</string>

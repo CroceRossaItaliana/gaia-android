@@ -282,16 +282,16 @@ public class DisplayAttivita extends ActionBarActivity {
 							public void onClick(View v) {
 								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
 								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
-								iscrivi_cancella(id);
+								iscrivi(id);
 							}
 						}); 
 						break;
 					case 1://caso in cui l'utente risulta gia essere iscritto
 						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 							public void onClick(View v) {
-								//String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
 								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
-								Toast.makeText(context, "rimuovi richiesta", Toast.LENGTH_SHORT).show();
+								cancella(id);
 							}
 						}); 
 						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_pieno)));
@@ -344,7 +344,7 @@ public class DisplayAttivita extends ActionBarActivity {
 			return ""+num;
 	}
 
-	public void iscrivi_cancella(String id){
+	public void iscrivi(String id){
 		pd=new ProgressDialog(this);
 		pd.setCancelable(false);
 		pd.setMessage("Iscrizione in corso");
@@ -352,6 +352,16 @@ public class DisplayAttivita extends ActionBarActivity {
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("id", id);
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
+		asd.execute();
+	}
+	public void cancella(String id){
+		pd=new ProgressDialog(this);
+		pd.setCancelable(false);
+		pd.setMessage("Cancellazione in corso");
+		pd.show();
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("id", id);
+		RichiestaCancellazione asd = new RichiestaCancellazione(data);
 		asd.execute();
 	}
 
@@ -369,6 +379,34 @@ public class DisplayAttivita extends ActionBarActivity {
 				try {
 					String id=richiesta.getJSONObject("parametri").getString("id");
 					String result=risposta.getString("ok");
+					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
+				} catch (JSONException e) {
+					//Auto-generated catch block
+					e.printStackTrace();
+				}
+				//aggiorna tabella turni della view
+				aggiornalist();
+			}
+
+		}
+	}
+	
+	class RichiestaCancellazione extends Richiesta {
+		public RichiestaCancellazione(HashMap<String, String> data) {
+			super(data,DisplayAttivita.this.context);
+		}
+		public String metodo() { return "partecipazione_ritirati"; }
+		protected void onPostExecute(String ris) {
+			pd.dismiss();
+			pd.cancel();
+			if(ErrorJson.Controllo(ris,DisplayAttivita.this,risposta)==0){
+				//modifica turni(con il tuo id) in base all'esito della chiamata
+				//controllo se iscritto cancella altrimnti iscrivi
+				try {
+					String id=richiesta.getJSONObject("parametri").getString("id");
+					String result=risposta.getString("ok");
+					if(Boolean.parseBoolean(result))
+						Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
 					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
 				} catch (JSONException e) {
 					//Auto-generated catch block

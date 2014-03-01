@@ -68,6 +68,9 @@ public class MainActivity extends ActionBarActivity {
 	private void _initMenu() {
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
 
+		//add Home Page
+		NsMenuItemModel homeitem = new NsMenuItemModel(R.string.ns_menu_home_page, R.drawable.ic_action_settings);
+		mAdapter.addItem(homeitem);
 		//Add Attivita
 		// Add Header
 		mAdapter.addHeader(R.string.ns_menu_main_header_attivita);
@@ -234,6 +237,11 @@ public class MainActivity extends ActionBarActivity {
 			// update selected item and title, then close the drawer			
 			Fragment test=null;
 			mDrawerList.setItemChecked(position, true);
+			//Home Page	
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_home_page))){
+				title=getString(R.string.ns_menu_home_page);
+				test = new PostaIngresso();
+			}
 			//Rubrica Delegati
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_delegati))){
 				title=getString(R.string.title_activity_rubrica_delegati);
