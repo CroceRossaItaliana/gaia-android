@@ -1,6 +1,5 @@
 package it.gaiacri.mobile;
 
-
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -13,41 +12,28 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.util.Log;
 
-public class Richiesta extends AsyncTask<String, String, String> {
-	protected HashMap<String, String> mData = null;// post data
-
-	protected static String sid = "";
-	public static String base = "https://gaia.cri.it/api.php";
-	//public static String base = "http://192.168.1.125/gaia/api.php";
-	public Context context;
-	public JSONObject risposta = null;
-	public JSONObject richiesta = null;
-	public JSONObject sessione = null;
-	public JSONObject utente   = null;
-
+public class RichiestaMultipla extends Richiesta {
+	private HashMap<String,HashMap<String,String>> mDataMulti = null;// post data
 	/**
 	 * constructor
 	 */
-	public Richiesta(HashMap<String, String> data,Context context) {
-		setmData(data);
+	public RichiestaMultipla(HashMap<String,HashMap<String,String>> data,Context context) {
+		super();
+		setmDataMulti(data);
 		this.context=context;
 	}
 
 
-	public Richiesta() {
-	}
-
-
-	public String metodo() { return "ciao"; }
+	public String metodo() { return "multi"; }
 
 	/**
 	 * background
@@ -64,17 +50,28 @@ public class Richiesta extends AsyncTask<String, String, String> {
 			HttpPost post = new HttpPost(base);
 			try {
 				// set up post data
-				
 				JSONObject object = new JSONObject();
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
-				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
-				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server 
-				Iterator<String> ita = mData.keySet().iterator();
-            	while (ita.hasNext()) {
-                	String key = ita.next();
-                	object.put(key, mData.get(key));
+				//object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3"); //server gaia.cri.it
+				object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server
+				JSONArray objectmulti= new JSONArray();
+				Iterator<String> ita = mDataMulti.keySet().iterator();			
+				while (ita.hasNext()) {
+					String key = ita.next();
+					mData=mDataMulti.get(key);
+					Iterator<String> ita1 = mData.keySet().iterator();
+					JSONObject objectsingle = new JSONObject();
+					objectsingle.put("metodo", "utente");
+					JSONObject parametri=new JSONObject();
+					while (ita1.hasNext()) {
+						String key1 = ita1.next();
+						parametri.put(key1, mData.get(key1));
+					}
+					objectsingle.put("parametri", parametri);
+					objectmulti.put(objectsingle);
                 }
+				object.put("richieste", objectmulti);
             	//Log.d("json", json);
 				StringEntity se = new StringEntity(object.toString());
 				//sets the post request as the resulting string
@@ -193,15 +190,13 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	}
 
 	public static void setSid(String sid) {
-		Richiesta.sid = sid;
+		RichiestaMultipla.sid = sid;
 	}
 
-	public HashMap<String, String> getmData() {
-		return mData;
+	public HashMap<String, HashMap<String, String>> getmDataMulti() {
+		return mDataMulti;
 	}
-
-
-	public void setmData(HashMap<String, String> mData) {
-		this.mData = mData;
+	public void setmDataMulti(HashMap<String, HashMap<String, String>> data) {
+		this.mDataMulti = data;
 	}
 }

@@ -5,8 +5,8 @@ import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -15,12 +15,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,13 +46,13 @@ public class MenuPrincipale extends Fragment {
 	private View mMenuView;
 
 
-	
-	
+
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		v= (RelativeLayout)inflater.inflate(R.layout.activity_menu_principale, container, false);
 		context=super.getActivity().getApplicationContext();
 		Log.d("screen", super.getActivity().getRequestedOrientation() +"");
-		
+
 		mSplashView=v.findViewById(R.id.splash);
 		mMenuView=v.findViewById(R.id.menu_principale);
 
@@ -64,10 +63,9 @@ public class MenuPrincipale extends Fragment {
 		activity=super.getActivity();
 		sharedPref = context.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 
-		Intent i=activity.getIntent();
-		Bundle b=i.getExtras();
+		Bundle b=this.getArguments();
+		//Log.d("prova", b+ "");
 		if(b!= null){
-			sid = b.getString("sid");
 			richiestaDati();
 		}else{
 			if(user_nome==null && user_comitato==null){
@@ -91,23 +89,7 @@ public class MenuPrincipale extends Fragment {
 			Log.i("sid", sid);
 		}
 		return v;
-		}	
-
-	/*private void _initMenu() {
-	       NsMenuAdapter mAdapter = new NsMenuAdapter(this);
-
-	        // Add Header
-	        mAdapter.addHeader(R.string.ns_menu_main_header);
-	        .....
-	        mAdapter.addItem(mItem);
-
-
-	        mDrawerList = (ListView) findViewById(R.id.drawer);
-	        if (mDrawerList != null)
-	            mDrawerList.setAdapter(mAdapter);
-
-	  }*/
-
+	}	
 
 	private void richiestaDati() {
 		//avviare download "io"
@@ -131,32 +113,7 @@ public class MenuPrincipale extends Fragment {
 		welcome.execute();
 	}
 
-	/*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode==50 && resultCode==100)
-			finish();
-		switch(requestCode) {
-		case IntentIntegrator.REQUEST_CODE: {
-			if (resultCode != RESULT_CANCELED) {
-				IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-				if (scanResult != null) {
-					String upc = scanResult.getContents();
-
-					//put whatever you want to do with the code here
-					Log.i("Barcode", upc);				
-					HashMap<String, String> scd = new HashMap<String, String>();
-					scd.put("code", upc);
-					RichiestaScansione rs = new RichiestaScansione(scd);
-					rs.execute();
-
-				}
-			}
-			break;
-		}
-		}
-	}*/
 /*
-
 	class RichiestaScansione extends Richiesta {
 		public RichiestaScansione(HashMap<String, String> data) {
 			super(data,MenuPrincipale_1.this.context);
@@ -191,20 +148,11 @@ public class MenuPrincipale extends Fragment {
 
 		}
 	}*/
-	
+
 	public void annulla(){
 		user_nome=null;
 		user_comitato=null;
 	}
-
-
-/*
-	@Override
-	public void onBackPressed() {
-		//se l'utente preme indietro automaticamente vengono invalidati i campi
-		annulla();
-		super.onBackPressed();
-	}*/
 
 	public class RichiestaWelcome extends Richiesta {
 
@@ -255,24 +203,36 @@ public class MenuPrincipale extends Fragment {
 			if(ErrorJson.Controllo(ris, activity,risposta)==0){
 				try {
 					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
-					nome.setText(user_nome);
-					user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
+					nome.setText("Ciao, "+user_nome);
+					JSONArray comitati=risposta.getJSONArray("appartenenze");
+					user_comitato="";
+					for(int i=0; i< comitati.length();i++){
+						user_comitato=user_comitato+"\n"+comitati.getJSONObject(i).getJSONObject("comitato").getString("nome");
+					}
+					//user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
 					comitato.setText(user_comitato);
 				} catch (JSONException e) {
 					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
 
 					user_comitato=getString(R.string.menu_no_comitato);
 					comitato.setText(user_comitato);
-					((Button)activity.findViewById(R.id.button3)).setEnabled(false);
+					//((Button)activity.findViewById(R.id.button3)).setEnabled(false);
 				}
 				mSplashView.setVisibility(View.GONE);
 				mMenuView.setVisibility(View.VISIBLE);
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 				MainActivity.enable();
+				AddPosta();
+
 			}
 		}
 	}
 
-
+	//potrebbe dare problemi...sicuramente dara problemi :P
+	public void AddPosta(){
+		FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
+		fragmentManager.beginTransaction()
+		.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+	}
 
 }

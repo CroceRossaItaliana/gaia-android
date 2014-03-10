@@ -115,6 +115,9 @@ public class Turno {
 		return 2;
 	}
 	
+	public String getPartecipazione(){
+		return partecipazione;
+	}
 	public boolean getPart(){
 		return this.partecipa;
 	}

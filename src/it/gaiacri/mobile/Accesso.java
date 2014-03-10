@@ -44,9 +44,9 @@ public class Accesso extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		//requestWindowFeature(Window.FEATURE_PROGRESS);
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        supportRequestWindowFeature(Window.FEATURE_PROGRESS);
+		super.onCreate(savedInstanceState);
+		supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		supportRequestWindowFeature(Window.FEATURE_PROGRESS);
 		sharedPref=this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
 		//setContentView(R.layout.activity_accesso);
 
@@ -77,10 +77,12 @@ public class Accesso extends ActionBarActivity {
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		if(webview.saveState(outState) == null)
-			Log.i("prova","Saving state FAILED!");
-		else
-			Log.i("prova", "Saving state succeeded.");      
+		if(webview!=null){
+			if(webview.saveState(outState) == null)
+				Log.i("prova","Saving state FAILED!");
+			else
+				Log.i("prova", "Saving state succeeded.");      
+		}
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class Accesso extends ActionBarActivity {
 		super.onPause();
 	}
 
-	@Override
+	/*@Override
 	protected void onStop() {
 		Log.d("prova","stop");
 		if(webview!=null){
@@ -104,7 +106,7 @@ public class Accesso extends ActionBarActivity {
 		Log.d("prova","restart");
 		loadWebView();
 		super.onRestart();
-	}
+	}*/
 
 
 
@@ -248,11 +250,13 @@ public class Accesso extends ActionBarActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			Log.i("down","back");
-			if(webview.canGoBack() == true){
-				webview.goBack();
-				return true;
-			}else{
-				webview=null;
+			if(webview!= null){
+				if(webview.canGoBack() == true){
+					webview.goBack();
+					return true;
+				}else{
+					webview=null;
+				}
 			}
 		}
 		return super.onKeyDown(keyCode, event);
