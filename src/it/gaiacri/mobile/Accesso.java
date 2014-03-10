@@ -77,10 +77,12 @@ public class Accesso extends ActionBarActivity {
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		if(webview.saveState(outState) == null)
-			Log.i("prova","Saving state FAILED!");
-		else
-			Log.i("prova", "Saving state succeeded.");      
+		if(webview!=null){
+			if(webview.saveState(outState) == null)
+				Log.i("prova","Saving state FAILED!");
+			else
+				Log.i("prova", "Saving state succeeded.");      
+		}
 	}
 
 	@Override

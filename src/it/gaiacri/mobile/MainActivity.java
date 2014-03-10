@@ -58,9 +58,13 @@ public class MainActivity extends ActionBarActivity {
 		mDrawerToggle.setDrawerIndicatorEnabled(false);
 
 
+		Intent i=this.getIntent();
+		Bundle b=i.getExtras();
+		Fragment t=new MenuPrincipale();
+		t.setArguments(b);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
-		.replace(R.id.content_frame, new MenuPrincipale()).commit();
+		.replace(R.id.content_frame, t).commit();
 		title=getString(R.string.title_activity_menu_principale);
 
 	}
@@ -237,10 +241,13 @@ public class MainActivity extends ActionBarActivity {
 			// update selected item and title, then close the drawer			
 			Fragment test=null;
 			mDrawerList.setItemChecked(position, true);
+			Bundle b=new Bundle();
+			b.putString("sid", "test");
 			//Home Page	
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_home_page))){
 				title=getString(R.string.ns_menu_home_page);
-				test = new PostaIngresso();
+				test = new MenuPrincipale();
+				test.setArguments(b);
 			}
 			//Rubrica Delegati
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_delegati))){

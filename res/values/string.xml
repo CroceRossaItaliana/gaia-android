@@ -28,6 +28,8 @@
 	<string name="turni_passati">Turni Passati</string>
 	<string name="turni_chiama">Chiama Referente</string>
 	<string name="turni_email">Email Referente</string>
+	<string name="turni_timeout">Tempo Scaduto</string>
+	
 	
 	<string name="display_info">Ulteriori Informazioni:</string>
 	
@@ -73,7 +75,7 @@
 	<string name="ns_menu_main_header_feedback">Feedback</string>
 	<string name="ns_menu_main_header_setting">Impostazioni</string>
 	
-	<string name="ns_menu_home_page">Elenco Attivita</string>
+	<string name="ns_menu_home_page">Home Page</string>
 	<string name="ns_menu_attivita_elenco">Elenco Attivita</string>
     <string name="ns_menu_attivita_miei">Miei Turni</string>
     <string name="ns_menu_rubrica_delegati">Delegati</string>

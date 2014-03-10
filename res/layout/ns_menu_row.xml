@@ -16,7 +16,7 @@
             android:layout_height="32dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher_" />
 
         <TextView
             android:id="@+id/menurow_title"

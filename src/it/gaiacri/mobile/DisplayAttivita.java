@@ -173,7 +173,14 @@ public class DisplayAttivita extends ActionBarActivity {
 						boolean tur_scoperto=risposta.getBoolean("scoperto");
 						boolean tur_puoRichiedere=risposta.getBoolean("puoRichiedere");
 						boolean tur_partecipa=risposta.getBoolean("partecipa");
-						String tur_partecipazione=risposta.getString("partecipazione");
+						
+						JSONObject partecipazione=risposta.optJSONObject("partecipazione");
+						String tur_partecipazione="";
+						if(partecipazione != null){
+							tur_partecipazione=partecipazione.optString("id");
+							//Log.d("tag",tur_partecipazione+" ");
+						}
+						
 						JSONObject tur_durata=risposta.getJSONObject("durata");
 						int tur_y=tur_durata.getInt("y");
 						int tur_m=tur_durata.getInt("m");
@@ -268,6 +275,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					//((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(t.getColor()));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
+					((Button)row.findViewById(R.id.buttonPartecipa)).setTag(id);
 
 					//Log.d("num elementi",turni.size() + " tot");
 					int num=t.getPartecipa();
@@ -277,7 +285,6 @@ public class DisplayAttivita extends ActionBarActivity {
 						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_vuoto)));
 						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
 						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setTag(t.getId());
 						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 							public void onClick(View v) {
 								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
@@ -289,9 +296,11 @@ public class DisplayAttivita extends ActionBarActivity {
 					case 1://caso in cui l'utente risulta gia essere iscritto
 						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 							public void onClick(View v) {
-								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								String id_tur=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								int pos=getTurno(id_tur);
+								String id_part=turni.get(pos).getPartecipazione();
 								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
-								cancella(id);
+								cancella(id_tur,id_part);
 							}
 						}); 
 						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_pieno)));
@@ -303,6 +312,7 @@ public class DisplayAttivita extends ActionBarActivity {
 						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					case 3:
+						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_timeout);
 						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					}
@@ -354,13 +364,14 @@ public class DisplayAttivita extends ActionBarActivity {
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
 		asd.execute();
 	}
-	public void cancella(String id){
+	public void cancella(String id_turno,String id_partecipazione){
 		pd=new ProgressDialog(this);
 		pd.setCancelable(false);
 		pd.setMessage("Cancellazione in corso");
 		pd.show();
 		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("id", id);
+		data.put("id", id_partecipazione);
+		data.put("id_tur", id_turno);
 		RichiestaCancellazione asd = new RichiestaCancellazione(data);
 		asd.execute();
 	}
@@ -403,17 +414,22 @@ public class DisplayAttivita extends ActionBarActivity {
 				//modifica turni(con il tuo id) in base all'esito della chiamata
 				//controllo se iscritto cancella altrimnti iscrivi
 				try {
-					String id=richiesta.getJSONObject("parametri").getString("id");
 					String result=risposta.getString("ok");
-					if(Boolean.parseBoolean(result))
+					if(!Boolean.parseBoolean(result))
 						Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
-					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
+					else
+					{
+						HashMap<String, String> data = new HashMap<String, String>();
+						data.put("id", DisplayAttivita.this.id);
+						RichiestaDettagli richiesta=new RichiestaDettagli(data);
+						richiesta.execute();
+					}
 				} catch (JSONException e) {
 					//Auto-generated catch block
 					e.printStackTrace();
 				}
 				//aggiorna tabella turni della view
-				aggiornalist();
+				//aggiornalist();
 			}
 
 		}
