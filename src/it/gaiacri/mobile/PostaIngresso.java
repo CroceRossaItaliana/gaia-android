@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PostaIngresso extends Fragment{
@@ -53,31 +52,31 @@ public class PostaIngresso extends Fragment{
 				//Toast.makeText(getApplicationContext(),"hiihih" + pos,Toast.LENGTH_SHORT).show();
 				//TextView v= (TextView) arg1.findViewById(R.id.posta_id);
 				//String id=v.getText().toString();
-				
+
 				AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
 
 				String html=posta.get(pos).getBody();
-				
+
 				WebView wv = new WebView(PostaIngresso.this.getActivity());
 				String mime = "text/html";
 				String encoding = "utf-8";
 				wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
-				
-				wv.setWebViewClient(new WebViewClient() {
-				    @Override
-				    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				        view.loadUrl(url);
 
-				        return true;
-				    }
+				wv.setWebViewClient(new WebViewClient() {
+					@Override
+					public boolean shouldOverrideUrlLoading(WebView view, String url) {
+						view.loadUrl(url);
+
+						return true;
+					}
 				});
 
 				alert.setView(wv);
 				alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int id) {
-				        dialog.dismiss();
-				    }
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
 				});
 				alert.show();
 			}
@@ -114,24 +113,33 @@ public class PostaIngresso extends Fragment{
 						JSONObject obj=res.getJSONObject(i);
 						String posta_id=obj.getString("id");
 						String posta_corpo=obj.getString("corpo");
-						String posta_mittente=obj.getJSONObject("mittente").getString("id");
-						mitt.add(posta_mittente);
+						JSONObject mittente=obj.optJSONObject("mittente");
+						String posta_mittente="";
+						if(!(mittente == null)){
+							posta_mittente=obj.getJSONObject("mittente").getString("id");
+							if(!mitt.contains(posta_mittente))
+								mitt.add(posta_mittente);
+						}
 						String posta_oggetto=obj.getString("oggetto");						
 						posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente));//Log.d("ciao", );
 					}
 
 
-					HashMap<String,HashMap<String,String>> date=new HashMap<String,HashMap<String,String>>();
+					if(mitt.size()== 0){
+						fixMittente();
+						aggiornalist();
+					}else{
+						HashMap<String,HashMap<String,String>> date=new HashMap<String,HashMap<String,String>>();
 
-					for(int i=0;i<mitt.size();i++){					
-						HashMap<String, String> data = new HashMap<String, String>();
-						data.put("metodo", "utente");
-						data.put("id",mitt.get(i));
-						date.put(""+i, data);	
+						for(int i=0;i<mitt.size();i++){					
+							HashMap<String, String> data = new HashMap<String, String>();
+							data.put("metodo", "utente");
+							data.put("id",mitt.get(i));
+							date.put(""+i, data);	
+						}
+						RichiestaMittenti richiesta=new RichiestaMittenti(date);
+						richiesta.execute();
 					}
-					RichiestaMittenti richiesta=new RichiestaMittenti(date);
-					richiesta.execute();
-
 
 
 					//String att_referente=risposta.getString("referente");
@@ -148,6 +156,13 @@ public class PostaIngresso extends Fragment{
 
 		}
 	}	
+	
+	public void fixMittente(){
+		for(int i=0;i<posta.size();i++){
+			if(posta.get(i).getMittente().equals(""))
+				posta.get(i).setNomeMittente(getString(R.string.posta_mittente_gaia));
+		}
+	}
 
 	class RichiestaMittenti extends RichiestaMultipla {
 		public RichiestaMittenti(HashMap<String, HashMap<String, String>> data) {
@@ -164,17 +179,23 @@ public class PostaIngresso extends Fragment{
 					JSONArray risultati = risposta.getJSONArray("risultato");
 					for(int i=0;i<risultati.length();i++){
 						JSONObject temp=risultati.getJSONObject(i);
+						String id=temp.getJSONObject("risposta").optString("id");
 						String nome=temp.getJSONObject("risposta").optString("nomeCompleto");
-						posta.get(i).setNomeMittente(nome);
+						for(int k=0;k<posta.size();k++){
+							if(posta.get(k).getMittente().equals(id)){
+								posta.get(k).setNomeMittente(nome);
+							}
+						}
 					}
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
+				fixMittente();
 				//da gestire la risposta
 				//in base a come viene ritornata
-				 aggiornalist();		
+				aggiornalist();		
 			}
 
 		}
@@ -215,11 +236,5 @@ public class PostaIngresso extends Fragment{
 			listView.setAdapter(arrayAdapter);
 		}
 	}
-
-
-
-
-
-
 
 }
