@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 	private String[] menuItems;
 	private Context context;
 	private static String title;
+	private static ActionBar actionbar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,9 @@ public class MainActivity extends ActionBarActivity {
 		this.context=this.getApplicationContext();
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+		actionbar=getSupportActionBar();
+		actionbar.setDisplayHomeAsUpEnabled(false);
+		actionbar.setHomeButtonEnabled(false);
 
 		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -318,6 +321,9 @@ public class MainActivity extends ActionBarActivity {
 	public static void enable(){
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
+		actionbar.setDisplayHomeAsUpEnabled(true);
+		actionbar.setHomeButtonEnabled(true);
+
 	}
 
 
