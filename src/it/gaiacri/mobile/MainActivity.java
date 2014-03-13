@@ -35,6 +35,8 @@ public class MainActivity extends ActionBarActivity {
 	private Context context;
 	private static String title;
 	private static ActionBar actionbar;
+	private NsMenuAdapter mAdapter;
+	private String[] menuItemsIcon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,97 +73,45 @@ public class MainActivity extends ActionBarActivity {
 		title=getString(R.string.title_activity_menu_principale);
 
 	}
-
-	private void _initMenu() {
-		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
-
-		//add Home Page
-		NsMenuItemModel homeitem = new NsMenuItemModel(R.string.ns_menu_home_page, R.drawable.ic_action_settings);
-		mAdapter.addItem(homeitem);
-		//Add Attivita
+	
+	private int addGroup(int header,int menuitems,int i){
 		// Add Header
-		mAdapter.addHeader(R.string.ns_menu_main_header_attivita);
+		mAdapter.addHeader(header);
 		// Add first bloc
 		menuItems = getResources().getStringArray(
-				R.array.ns_menu_items_attivita);
-		String[] menuItemsIcon = getResources().getStringArray(
-				R.array.ns_menu_items_icon);
+				menuitems);
 		//int res = 0;
 		for (String item : menuItems) {
 
 			int id_title = getResources().getIdentifier(item, "string",
 					this.getPackageName());
-			int id_icon = getResources().getIdentifier(menuItemsIcon[0],
-					"drawable", this.getPackageName());
-
+			int id_icon = getResources().getIdentifier(menuItemsIcon[i],
+					"string", this.getPackageName());
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			//	if (res==1) mItem.counter=12; //it is just an example...
-			//	if (res==3) mItem.counter=3; //it is just an example...
 			mAdapter.addItem(mItem);
-			//	res++;
+			i++;
 		}
+		return i;	
+	}
 
+	private void _initMenu() {
+		mAdapter = new NsMenuAdapter(this);
+		//add Home Page
+		int i=0;
+		menuItemsIcon = getResources().getStringArray(R.array.ns_menu_items_icon);
+		NsMenuItemModel homeitem = new NsMenuItemModel(R.string.ns_menu_home_page, getResources().getIdentifier(menuItemsIcon[i],
+				"string", this.getPackageName()));
+		mAdapter.addItem(homeitem);
+		i++;
+		//Add Attivita
+		i=addGroup(R.string.ns_menu_main_header_attivita,R.array.ns_menu_items_attivita,i);
 		//Add Rubrica
-		mAdapter.addHeader(R.string.ns_menu_main_header_rubrica);
-		// Add first bloc
-		menuItems = getResources().getStringArray(
-				R.array.ns_menu_items_rubrica);
-		menuItemsIcon = getResources().getStringArray(
-				R.array.ns_menu_items_icon);
-		//res = 0;
-		for (String item : menuItems) {
-
-			int id_title = getResources().getIdentifier(item, "string",
-					this.getPackageName());
-			int id_icon = getResources().getIdentifier(menuItemsIcon[0],
-					"drawable", this.getPackageName());
-
-			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			mAdapter.addItem(mItem);
-			//	res++;
-		}
-
+		i=addGroup(R.string.ns_menu_main_header_rubrica,R.array.ns_menu_items_rubrica,i);
 		//Add Feedback
-		mAdapter.addHeader(R.string.ns_menu_main_header_feedback);
-		// Add first bloc
-		menuItems = getResources().getStringArray(
-				R.array.ns_menu_items_feedback);
-		menuItemsIcon = getResources().getStringArray(
-				R.array.ns_menu_items_icon);
-		//res = 0;
-		for (String item : menuItems) {
-
-			int id_title = getResources().getIdentifier(item, "string",
-					this.getPackageName());
-			int id_icon = getResources().getIdentifier(menuItemsIcon[0],
-					"drawable", this.getPackageName());
-
-			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			mAdapter.addItem(mItem);
-			//	res++;
-		}
-
-
+		i=addGroup(R.string.ns_menu_main_header_feedback,R.array.ns_menu_items_feedback,i);
 		//Add Impostazioni
-		mAdapter.addHeader(R.string.ns_menu_main_header_setting);
-		// Add first bloc
-		menuItems = getResources().getStringArray(
-				R.array.ns_menu_items_setting);
-		menuItemsIcon = getResources().getStringArray(
-				R.array.ns_menu_items_icon);
-		//res = 0;
-		for (String item : menuItems) {
-
-			int id_title = getResources().getIdentifier(item, "string",
-					this.getPackageName());
-			int id_icon = getResources().getIdentifier(menuItemsIcon[0],
-					"drawable", this.getPackageName());
-
-			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			mAdapter.addItem(mItem);
-			//	res++;
-		}
-
+		i=addGroup(R.string.ns_menu_main_header_setting,R.array.ns_menu_items_setting,i);
+		
 		mDrawerList = (ListView) findViewById(R.id.drawer);
 		if (mDrawerList != null)
 			mDrawerList.setAdapter(mAdapter);

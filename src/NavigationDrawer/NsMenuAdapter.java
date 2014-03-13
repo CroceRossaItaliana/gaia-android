@@ -17,18 +17,17 @@ package NavigationDrawer;
  *******************************************************************************/
 
 import it.gaiacri.mobile.R;
-import it.gaiacri.mobile.R.id;
-import it.gaiacri.mobile.R.layout;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 
+	Typeface font;
 	/*
 	 * public NsMenuAdapter(Context context, int resource, int
 	 * textViewResourceId, String[] objects) { super(context,
@@ -37,6 +36,7 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 
 	public NsMenuAdapter(Context context) {
 		super(context, 0);
+		font= Typeface.createFromAsset( context.getAssets(), "fontawesome-webfont.ttf" );
 	}
 
 	public void addHeader(int title) {
@@ -68,10 +68,10 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 
 	public static class ViewHolder {
 		public final TextView textHolder;
-		public final ImageView imageHolder;
+		public final TextView imageHolder;
 		public final TextView textCounterHolder;
 
-		public ViewHolder(TextView text1, ImageView image1,TextView textcounter1) {
+		public ViewHolder(TextView text1, TextView image1,TextView textcounter1) {
 			this.textHolder = text1;
 			this.imageHolder = image1;
 			this.textCounterHolder=textcounter1;
@@ -90,9 +90,11 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 				layout = R.layout.ns_menu_row_header;
 
 			view = LayoutInflater.from(getContext()).inflate(layout, null);
-
 			TextView text1 = (TextView) view.findViewById(R.id.menurow_title);
-			ImageView image1 = (ImageView) view.findViewById(R.id.menurow_icon);
+			TextView image1 = (TextView) view.findViewById(R.id.menurow_icon);
+			if(font != null && layout != R.layout.ns_menu_row_header){
+				image1.setTypeface(font);
+			}
 			TextView textcounter1 = (TextView) view.findViewById(R.id.menurow_counter);
 			view.setTag(new ViewHolder(text1, image1,textcounter1));
 		}
@@ -105,6 +107,9 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 		
 	    if(item != null && holder != null)
 	    {
+	        if (holder.imageHolder != null) {
+	        	holder.imageHolder.setText(item.iconRes);
+			}
 	    	if (holder.textHolder != null)
 				holder.textHolder.setText(item.title);
 	    	
@@ -114,15 +119,6 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 	    			holder.textCounterHolder.setText(""+item.counter);
 	    		}else{
 	    			holder.textCounterHolder.setVisibility(View.GONE);
-				}
-			}
-	    	
-	        if (holder.imageHolder != null) {
-				if (item.iconRes > 0) {
-					holder.imageHolder.setVisibility(View.VISIBLE);
-					holder.imageHolder.setImageResource(item.iconRes);
-				} else {
-					holder.imageHolder.setVisibility(View.GONE);
 				}
 			}
 	    }

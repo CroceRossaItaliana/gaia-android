@@ -9,13 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="32dp" >
 
-        <ImageView
+        <TextView
             android:id="@+id/menurow_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:textSize="24sp"
             android:src="@drawable/ic_launcher_" />
 
         <TextView

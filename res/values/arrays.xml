@@ -18,13 +18,14 @@
     </string-array>
 
     <array name="ns_menu_items_icon">
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
-        <item>ic_action_settings</item>
+        <item>ns_menu_home_page_icon</item>
+        <item>ns_menu_attivita_elenco_icon</item>
+        <item>ns_menu_attivita_miei_icon</item>
+        <item>ns_menu_rubrica_delegati_icon</item>
+        <item>ns_menu_rubrica_volontari_icon</item>
+        <item>ns_menu_feedback_supporto_icon</item>
+        <item>ns_menu_feedback_giudizi_icon</item>
+        <item>ns_menu_setting_logout_icon</item>
     </array>
 
 </resources>

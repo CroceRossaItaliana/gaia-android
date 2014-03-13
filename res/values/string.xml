@@ -79,13 +79,23 @@
 	<string name="ns_menu_main_header_feedback">Feedback</string>
 	<string name="ns_menu_main_header_setting">Impostazioni</string>
 	
-	<string name="ns_menu_home_page">Home Page</string>
-	<string name="ns_menu_attivita_elenco">Elenco Attivita</string>
+	
+	<string name="ns_menu_home_page">Benvenuto</string>
+	<string name="ns_menu_attivita_elenco">Calendario</string>
     <string name="ns_menu_attivita_miei">Miei Turni</string>
     <string name="ns_menu_rubrica_delegati">Delegati</string>
     <string name="ns_menu_rubrica_volontari">Volontari</string>
     <string name="ns_menu_feedback_supporto">Supporto</string>
     <string name="ns_menu_feedback_giudizi">Giudizi</string>
     <string name="ns_menu_setting_logout">Logout</string>
+    
+    <string name="ns_menu_home_page_icon">&#xf0e7;</string>
+	<string name="ns_menu_attivita_elenco_icon">&#xf073;</string>
+    <string name="ns_menu_attivita_miei_icon">&#xf022;</string>
+    <string name="ns_menu_rubrica_delegati_icon">&#xf02d;</string>
+    <string name="ns_menu_rubrica_volontari_icon">&#xf02e;</string>
+    <string name="ns_menu_feedback_supporto_icon">&#xf0e0;</string>
+    <string name="ns_menu_feedback_giudizi_icon">&#xf003;</string>
+    <string name="ns_menu_setting_logout_icon">&#xf00d;</string> 
 	
 </resources>
