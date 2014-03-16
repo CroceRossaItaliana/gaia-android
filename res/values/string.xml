@@ -76,7 +76,7 @@
 	
 	<string name="ns_menu_main_header_attivita">Attivita</string>
 	<string name="ns_menu_main_header_rubrica">Rubrica</string>
-	<string name="ns_menu_main_header_feedback">Feedback</string>
+	<string name="ns_menu_main_header_feedback">Scrivici</string>
 	<string name="ns_menu_main_header_setting">Impostazioni</string>
 	
 	
@@ -86,7 +86,7 @@
     <string name="ns_menu_rubrica_delegati">Delegati</string>
     <string name="ns_menu_rubrica_volontari">Volontari</string>
     <string name="ns_menu_feedback_supporto">Supporto</string>
-    <string name="ns_menu_feedback_giudizi">Giudizi</string>
+    <string name="ns_menu_feedback_giudizi">Feedback</string>
     <string name="ns_menu_setting_logout">Logout</string>
     
     <string name="ns_menu_home_page_icon">&#xf0e7;</string>
