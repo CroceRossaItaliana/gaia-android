@@ -159,45 +159,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					turni=new ArrayList<Turno>();
 					JSONArray js=risposta.getJSONArray("turni");
 					for(int i=0;i<js.length();i++){
-						risposta=js.getJSONObject(i);
-						//manca descrizione e url
-						//descrizione mi interessa
-						String tur_id=risposta.getString("id");
-						String tur_titolo=risposta.getString("nome");
-						String tur_start=(risposta.getJSONObject("inizio")).getString("date");
-						String tur_end=(risposta.getJSONObject("fine")).getString("date");
-						// bisogna inserire la politica per la scelta del colore
-						String tur_color="#3135B0";//risposta.getString("color");
-						boolean tur_pieno=risposta.getBoolean("pieno");
-						boolean tur_futuro=risposta.getBoolean("futuro");
-						boolean tur_scoperto=risposta.getBoolean("scoperto");
-						boolean tur_puoRichiedere=risposta.getBoolean("puoRichiedere");
-						boolean tur_partecipa=risposta.getBoolean("partecipa");
-						
-						JSONObject partecipazione=risposta.optJSONObject("partecipazione");
-						String tur_partecipazione="";
-						if(partecipazione != null){
-							tur_partecipazione=partecipazione.optString("id");
-							//Log.d("tag",tur_partecipazione+" ");
-						}
-						
-						JSONObject tur_durata=risposta.getJSONObject("durata");
-						int tur_y=tur_durata.getInt("y");
-						int tur_m=tur_durata.getInt("m");
-						int tur_d=tur_durata.getInt("d");
-						int tur_h=tur_durata.getInt("h");
-						int tur_i=tur_durata.getInt("i");
-						//Log.d(TAG+"pieno",risposta.getBoolean("pieno")+"");
-						//Log.d(TAG+"futuro",risposta.getBoolean("futuro")+"");
-						//Log.d(TAG+"scoperto",risposta.getBoolean("scoperto")+"");
-						//Log.d(TAG+"puoRichiedere",risposta.getBoolean("puoRichiedere")+"");
-						//Log.d(TAG+"partecipa",risposta.getBoolean("partecipa")+"");
-						//Log.d(TAG+"partecipazione",risposta.getString("partecipazione")+"");
-						Turno t=new Turno(tur_titolo, tur_id, tur_start, tur_end, "",
-								tur_color, tur_pieno, tur_futuro,tur_scoperto,
-								tur_puoRichiedere, tur_partecipa, tur_partecipazione,
-								tur_y,tur_m,tur_d,tur_h,tur_i);		
-						turni.add(t);
+						turni.add(Turno.create(js.getJSONObject(i)));
 					}
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());

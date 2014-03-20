@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +46,7 @@ public class MenuPrincipale extends Fragment {
 
 	private View mSplashView;
 	private View mMenuView;
+	private Handler handler;
 
 
 
@@ -52,6 +55,7 @@ public class MenuPrincipale extends Fragment {
 		v= (RelativeLayout)inflater.inflate(R.layout.activity_menu_principale, container, false);
 		context=super.getActivity().getApplicationContext();
 		Log.d("screen", super.getActivity().getRequestedOrientation() +"");
+		handler= new MyHandler();
 
 		mSplashView=v.findViewById(R.id.splash);
 		mMenuView=v.findViewById(R.id.menu_principale);
@@ -165,7 +169,7 @@ public class MenuPrincipale extends Fragment {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(ErrorJson.Controllo(str, activity,risposta)==0){
+			if(ErrorJson.Controllo(str, activity,risposta,handler)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();
@@ -233,6 +237,18 @@ public class MenuPrincipale extends Fragment {
 		FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 		.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+	}
+	
+	
+	private class MyHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			Bundle bundle = msg.getData();
+			Log.d("refresh", "test");
+			/*if(bundle.containsKey("refresh")) {
+				Log.d("refresh", "test");
+			}*/
+		}
 	}
 
 }

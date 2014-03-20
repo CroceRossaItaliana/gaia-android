@@ -292,6 +292,5 @@ public class ElencoAttivita extends Fragment {
 				});
 			}
 		}
-	}
-	
+	}	
 }

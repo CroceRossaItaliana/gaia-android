@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
 	private static ActionBar actionbar;
 	private NsMenuAdapter mAdapter;
 	private String[] menuItemsIcon;
+	private Handler handler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
 
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		mDrawerToggle.setDrawerIndicatorEnabled(false);
-
+		handler = new MyHandler();
 
 		Intent i=this.getIntent();
 		Bundle b=i.getExtras();
@@ -71,9 +75,8 @@ public class MainActivity extends ActionBarActivity {
 		fragmentManager.beginTransaction()
 		.replace(R.id.content_frame, t).commit();
 		title=getString(R.string.title_activity_menu_principale);
-
 	}
-	
+
 	private int addGroup(int header,int menuitems,int i){
 		// Add Header
 		mAdapter.addHeader(header);
@@ -111,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
 		i=addGroup(R.string.ns_menu_main_header_feedback,R.array.ns_menu_items_feedback,i);
 		//Add Impostazioni
 		i=addGroup(R.string.ns_menu_main_header_setting,R.array.ns_menu_items_setting,i);
-		
+
 		mDrawerList = (ListView) findViewById(R.id.drawer);
 		if (mDrawerList != null)
 			mDrawerList.setAdapter(mAdapter);
@@ -212,6 +215,11 @@ public class MainActivity extends ActionBarActivity {
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_attivita_elenco))){
 				title=getString(R.string.title_activity_elenco_attivita);
 				test = new ElencoAttivita();
+			}			
+			//Miei Turni
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_attivita_miei))){
+				title=getString(R.string.title_activity_miei_turni);
+				test = new PartecipazioniAttivita();
 			}
 
 			//Logout
@@ -258,7 +266,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		public String metodo() { return "logout"; }
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,MainActivity.this,risposta)==0){
+			if(ErrorJson.Controllo(ris,MainActivity.this,risposta,handler)==0){
 				setResult(Activity.RESULT_OK);
 				//annulla();
 				Intent myIntent = new Intent(MainActivity.this, Accesso.class);
@@ -273,8 +281,29 @@ public class MainActivity extends ActionBarActivity {
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
 		actionbar.setDisplayHomeAsUpEnabled(true);
 		actionbar.setHomeButtonEnabled(true);
-
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if(resultCode == 100)
+		{
+			setResult(100);
+			this.finish();
+		}
+	}
+
+	private class MyHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			Bundle bundle = msg.getData();
+			Log.d("refresh", "test");
+			/*if(bundle.containsKey("refresh")) {
+				Log.d("refresh", "test");
+			}*/
+		}
+	}
 
 }

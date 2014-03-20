@@ -1,5 +1,7 @@
 package it.gaiacri.mobile.Object;
 
+import org.json.JSONObject;
+
 public class Turno {
 	private String desc;
 	private String id;
@@ -124,4 +126,40 @@ public class Turno {
 	public void setPart(boolean value){
 		this.partecipa=value;
 	}
+	public boolean isFuturo(){
+		return futuro;
+	}
+	
+	public static Turno create(JSONObject turno){
+		String tur_id=turno.optString("id");
+		String tur_titolo=turno.optString("nome");
+		String tur_start=(turno.optJSONObject("inizio")).optString("date");
+		String tur_end=(turno.optJSONObject("fine")).optString("date");
+		String tur_color="#3135B0";//turno.optString("color");
+		boolean tur_pieno=turno.optBoolean("pieno");
+		boolean tur_futuro=turno.optBoolean("futuro");
+		boolean tur_scoperto=turno.optBoolean("scoperto");
+		boolean tur_puoRichiedere=turno.optBoolean("puoRichiedere");
+		boolean tur_partecipa=turno.optBoolean("partecipa");
+		
+		JSONObject partecipazione=turno.optJSONObject("partecipazione");
+		String tur_partecipazione="";
+		if(partecipazione != null){
+			tur_partecipazione=partecipazione.optString("id");
+		}
+		
+		JSONObject tur_durata=turno.optJSONObject("durata");
+		int tur_y=tur_durata.optInt("y");
+		int tur_m=tur_durata.optInt("m");
+		int tur_d=tur_durata.optInt("d");
+		int tur_h=tur_durata.optInt("h");
+		int tur_i=tur_durata.optInt("i");
+		Turno t=new Turno(tur_titolo, tur_id, tur_start, tur_end, "",
+				tur_color, tur_pieno, tur_futuro,tur_scoperto,
+				tur_puoRichiedere, tur_partecipa, tur_partecipazione,
+				tur_y,tur_m,tur_d,tur_h,tur_i);		
+		return t;
+	}
+	
+	
 }
