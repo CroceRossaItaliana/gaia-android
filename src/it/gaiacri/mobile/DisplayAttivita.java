@@ -10,13 +10,14 @@ import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -42,6 +43,7 @@ public class DisplayAttivita extends ActionBarActivity {
 	public TextView comitato;
 
 	public String id;
+	public String id_partecipazione;
 
 	private static ListView listView ;
 	private Context context;
@@ -66,10 +68,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		context=this.getApplicationContext();
 		listView = (ListView)findViewById(R.id.listElenco);
 
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("id", id);
-		RichiestaDettagli richiesta=new RichiestaDettagli(data);
-		richiesta.execute();
+		richiestaDettagli();
 	}
 
 	@Override
@@ -169,7 +168,17 @@ public class DisplayAttivita extends ActionBarActivity {
 				//in base a come viene ritornata
 				aggiornalist();
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaDettagli();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}	
 
@@ -321,6 +330,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		pd.setCancelable(false);
 		pd.setMessage("Iscrizione in corso");
 		pd.show();
+		this.id=id;
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("id", id);
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
@@ -331,6 +341,8 @@ public class DisplayAttivita extends ActionBarActivity {
 		pd.setCancelable(false);
 		pd.setMessage("Cancellazione in corso");
 		pd.show();
+		this.id=id_turno;
+		this.id_partecipazione=id_partecipazione;		
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("id", id_partecipazione);
 		data.put("id_tur", id_turno);
@@ -360,7 +372,17 @@ public class DisplayAttivita extends ActionBarActivity {
 				//aggiorna tabella turni della view
 				aggiornalist();
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaIscrizione();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}
 	
@@ -393,7 +415,31 @@ public class DisplayAttivita extends ActionBarActivity {
 				//aggiorna tabella turni della view
 				//aggiornalist();
 			}
-
 		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaCancellazione();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
+	}
+	
+	public void richiestaDettagli(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("id", id);
+		RichiestaDettagli richiesta=new RichiestaDettagli(data);
+		richiesta.execute();
+	}
+	public void richiestaIscrizione(){
+		iscrivi(id);
+	}
+	public void richiestaCancellazione(){
+		cancella(id,id_partecipazione);
+		
 	}
 }

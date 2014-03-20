@@ -9,9 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -46,8 +46,6 @@ public class MenuPrincipale extends Fragment {
 
 	private View mSplashView;
 	private View mMenuView;
-	private Handler handler;
-
 
 
 
@@ -55,7 +53,6 @@ public class MenuPrincipale extends Fragment {
 		v= (RelativeLayout)inflater.inflate(R.layout.activity_menu_principale, container, false);
 		context=super.getActivity().getApplicationContext();
 		Log.d("screen", super.getActivity().getRequestedOrientation() +"");
-		handler= new MyHandler();
 
 		mSplashView=v.findViewById(R.id.splash);
 		mMenuView=v.findViewById(R.id.menu_principale);
@@ -101,6 +98,11 @@ public class MenuPrincipale extends Fragment {
 		RichiestaChiSono richiesta = new RichiestaChiSono(data);
 		richiesta.execute();
 	}
+	public void richiestaWelcome(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaWelcome welcome = new RichiestaWelcome(data);
+		welcome.execute();
+	}
 
 	private void startSplash() {
 
@@ -112,12 +114,10 @@ public class MenuPrincipale extends Fragment {
 		//avviare download "ciao"
 		//TODO
 		// Create and execute the background task.
-		HashMap<String, String> data = new HashMap<String, String>();
-		RichiestaWelcome welcome = new RichiestaWelcome(data);
-		welcome.execute();
+		richiestaWelcome();
 	}
 
-/*
+	/*
 	class RichiestaScansione extends Richiesta {
 		public RichiestaScansione(HashMap<String, String> data) {
 			super(data,MenuPrincipale_1.this.context);
@@ -169,7 +169,7 @@ public class MenuPrincipale extends Fragment {
 
 		@Override
 		protected void onPostExecute(String str) {
-			if(ErrorJson.Controllo(str, activity,risposta,handler)==0){
+			if(ErrorJson.Controllo(str, activity,risposta)==0){
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("sid", getSid());
 				editor.commit();
@@ -193,6 +193,17 @@ public class MenuPrincipale extends Fragment {
 					activity.finish();
 				}
 			}
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(MenuPrincipale.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaWelcome();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}
 
@@ -230,6 +241,18 @@ public class MenuPrincipale extends Fragment {
 
 			}
 		}
+
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(MenuPrincipale.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaDati();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
 	}
 
 	//potrebbe dare problemi...sicuramente dara problemi :P
@@ -237,18 +260,6 @@ public class MenuPrincipale extends Fragment {
 		FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 		.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
-	}
-	
-	
-	private class MyHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			Bundle bundle = msg.getData();
-			Log.d("refresh", "test");
-			/*if(bundle.containsKey("refresh")) {
-				Log.d("refresh", "test");
-			}*/
-		}
 	}
 
 }

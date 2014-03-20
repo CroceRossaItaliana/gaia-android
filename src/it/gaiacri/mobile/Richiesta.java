@@ -1,6 +1,5 @@
 package it.gaiacri.mobile;
 
-
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -49,9 +48,14 @@ public class Richiesta extends AsyncTask<String, String, String> {
 
 	public String metodo() { return "ciao"; }
 
+	@Override
+	protected void onProgressUpdate (String... values){
+		Log.d("update", "via");
+		restore();
+	}
 	/**
 	 * background
-	 */
+	 */	
 	@Override
 	protected String doInBackground(String... params) {
 		int errore=0;
@@ -75,7 +79,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
                 	String key = ita.next();
                 	object.put(key, mData.get(key));
                 }
-            	//Log.d("json", json);
+            	//Log.d("json", object.toString());
 				StringEntity se = new StringEntity(object.toString());
 				//sets the post request as the resulting string
     			post.setEntity(se);
@@ -92,7 +96,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 					errore=1;
 			}
 			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				errore=2;
 			}
 			catch (Exception e) {
@@ -116,7 +120,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						//e.printStackTrace();
 						errore=5;
 					}
 					if(errore==0){
@@ -136,7 +140,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 							//}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							//e.printStackTrace();
 							errore=6;
 						}
 					}
@@ -144,6 +148,9 @@ public class Richiesta extends AsyncTask<String, String, String> {
 			}
 		}else{
 			str="Errore Internet";
+			//ErrorJson.AssenzaInternet(context);
+			publishProgress("");
+			
 		}
 
 
@@ -187,6 +194,9 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	@Override
 	protected void onPostExecute(String result) {
 	}
+	
+	public void restore(){
+	}
 
 	public static String getSid() {
 		return sid;
@@ -199,7 +209,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	public HashMap<String, String> getmData() {
 		return mData;
 	}
-
 
 	public void setmData(HashMap<String, String> mData) {
 		this.mData = mData;

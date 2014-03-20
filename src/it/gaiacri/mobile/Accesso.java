@@ -1,6 +1,5 @@
 package it.gaiacri.mobile;
 
-
 import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.HashMap;
@@ -9,7 +8,9 @@ import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,16 +43,10 @@ public class Accesso extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		//requestWindowFeature(Window.FEATURE_PROGRESS);
 		super.onCreate(savedInstanceState);
 		supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		supportRequestWindowFeature(Window.FEATURE_PROGRESS);
 		sharedPref=this.getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
-		//setContentView(R.layout.activity_accesso);
-
-
-		// Check to see if it has been saved and restore it if true
 		if(savedInstanceState != null)
 		{
 			if (savedInstanceState.isEmpty())
@@ -67,12 +62,7 @@ public class Accesso extends ActionBarActivity {
 		}else{		
 			loadWebView();
 		}
-		// Let's display the progress in the activity title bar, like the
-		// browser app does.
-		//getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
 	}
-
 
 	@Override
 	public void onSaveInstanceState(Bundle outState)
@@ -133,32 +123,10 @@ public class Accesso extends ActionBarActivity {
 					Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
 				}
 				public void onPageFinished(WebView view, String url) {
-					HashMap<String, String> data = new HashMap<String, String>();
-					RichiestaWelcome hello=new RichiestaWelcome(data);
-					hello.execute();
-
-					/*if(url_test==null){
-						Log.d("1", "1");
-						url_test=webview.getUrl();
-					}else{
-						Log.d("2", "2");
-						if(!url_test.equals(webview.getUrl())){
-							url_test=webview.getUrl();
-							Log.d("3", "3");
-							Intent i= new Intent(Accesso.this,MenuPrincipale.class);
-							i.putExtra("sid", sid);		   
-							startActivity(i);
-							webview=null;
-							finish();
-						}
-					}*/
-
-
+					richistaLogin();
 				}
 			});
-			HashMap<String, String> data = new HashMap<String, String>();
-			login = new RichiestaLogin(data);
-			login.execute();
+
 			//setProgressBarIndeterminateVisibility(true);
 			//setProgressBarVisibility(true);
 		}
@@ -167,9 +135,16 @@ public class Accesso extends ActionBarActivity {
 		setSupportProgressBarIndeterminateVisibility(true);
 
 	}
-
-
-
+	public void richistaLogin(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		login = new RichiestaLogin(data);
+		login.execute();
+	}
+	public void richiestaWelcome(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaWelcome welcome = new RichiestaWelcome(data);
+		welcome.execute();
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -214,7 +189,17 @@ public class Accesso extends ActionBarActivity {
 				else
 					webview.loadUrl(url_login);
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(Accesso.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richistaLogin();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}
 
@@ -243,6 +228,17 @@ public class Accesso extends ActionBarActivity {
 					Accesso.this.finish();
 				}
 			}
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(Accesso.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaWelcome();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}
 

@@ -11,7 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,9 +43,7 @@ public class PartecipazioniAttivita extends Fragment{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View v=inflater.inflate(R.layout.activity_display_miei_turni, container, false);
-		HashMap<String, String> data = new HashMap<String, String>();
-		RichiestaPartecipazioni richiesta=new RichiestaPartecipazioni(data);
-		richiesta.execute();
+		richiestaPartecipazione();
 		listView = (ListView)v.findViewById(R.id.listTurni);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -124,6 +124,17 @@ public class PartecipazioniAttivita extends Fragment{
 			}
 
 		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(PartecipazioniAttivita.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaPartecipazione();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
 	}	
 
 	private void aggiornalist() {
@@ -163,6 +174,12 @@ public class PartecipazioniAttivita extends Fragment{
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_miei_turni, R.id.text_attivita,new String[]{"Caricamento.."});
 			listView.setAdapter(arrayAdapter);
 		}
+	}
+
+	public void richiestaPartecipazione(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaPartecipazioni richiesta=new RichiestaPartecipazioni(data);
+		richiesta.execute();
 	}
 
 }

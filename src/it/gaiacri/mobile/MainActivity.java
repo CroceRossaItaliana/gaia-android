@@ -7,13 +7,13 @@ import java.util.HashMap;
 import NavigationDrawer.NsMenuAdapter;
 import NavigationDrawer.NsMenuItemModel;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +21,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,6 @@ public class MainActivity extends ActionBarActivity {
 	private static ActionBar actionbar;
 	private NsMenuAdapter mAdapter;
 	private String[] menuItemsIcon;
-	private Handler handler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +63,6 @@ public class MainActivity extends ActionBarActivity {
 
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		mDrawerToggle.setDrawerIndicatorEnabled(false);
-		handler = new MyHandler();
 
 		Intent i=this.getIntent();
 		Bundle b=i.getExtras();
@@ -224,9 +221,7 @@ public class MainActivity extends ActionBarActivity {
 
 			//Logout
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_logout))){
-				HashMap<String, String> data = new HashMap<String, String>();
-				RichiestaLogout asd = new RichiestaLogout(data);
-				asd.execute();
+				richiestaLogout();
 			}
 			//Supporto
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_feedback_supporto))){
@@ -266,7 +261,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		public String metodo() { return "logout"; }
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,MainActivity.this,risposta,handler)==0){
+			if(ErrorJson.Controllo(ris,MainActivity.this,risposta)==0){
 				setResult(Activity.RESULT_OK);
 				//annulla();
 				Intent myIntent = new Intent(MainActivity.this, Accesso.class);
@@ -274,8 +269,24 @@ public class MainActivity extends ActionBarActivity {
 				finish();
 			}
 		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(MainActivity.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaLogout();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
 	}
 
+	public void richiestaLogout(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaLogout asd = new RichiestaLogout(data);
+		asd.execute();
+	}
 	public static void enable(){
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -292,17 +303,6 @@ public class MainActivity extends ActionBarActivity {
 		{
 			setResult(100);
 			this.finish();
-		}
-	}
-
-	private class MyHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			Bundle bundle = msg.getData();
-			Log.d("refresh", "test");
-			/*if(bundle.containsKey("refresh")) {
-				Log.d("refresh", "test");
-			}*/
 		}
 	}
 
