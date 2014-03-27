@@ -126,7 +126,7 @@ public class Accesso extends ActionBarActivity {
 					richistaLogin();
 				}
 			});
-
+			richistaLogin();
 			//setProgressBarIndeterminateVisibility(true);
 			//setProgressBarVisibility(true);
 		}
