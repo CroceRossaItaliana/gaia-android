@@ -123,7 +123,7 @@ public class Accesso extends ActionBarActivity {
 					Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
 				}
 				public void onPageFinished(WebView view, String url) {
-					richistaLogin();
+					richiestaWelcome();
 				}
 			});
 			richistaLogin();
