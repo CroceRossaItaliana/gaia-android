@@ -10,7 +10,9 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -133,30 +135,22 @@ public class ElencoAttivita extends Fragment {
 		}
 
 		public static final String ARG_SECTION_NUMBER = "section_number";
+		public Bundle args;
+		public ListView lv;
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			Bundle args = getArguments();  
-			ListView lv=new ListView(getActivity());
+			this.args=args;
+			lv=new ListView(getActivity());
 			//download turni e visualizzazione
 
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_attivita, R.id.textViewList,new String[]{"Caricamento.."});
 			lv.setAdapter(arrayAdapter);
 
 
-			HashMap<String, String> data1 = new HashMap<String, String>();
-			c.add(Calendar.DAY_OF_MONTH, args.getInt(ARG_SECTION_NUMBER)-giorni/2-1);
-
-			String date1=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"00:00:00.000Z";
-			Log.d("Date inizio:",date1);
-			String date2=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"23:59:00.000Z";
-			Log.d("Date fine:",date2);
-			c.add(Calendar.DAY_OF_MONTH, -(args.getInt(ARG_SECTION_NUMBER)-giorni/2-1));
-			data1.put("inizio", date1);
-			data1.put("fine", date2);
-			RichiestaAttivita hello1 = new RichiestaAttivita(lv,data1);
-			hello1.execute();
+			richiestaAttivita();
 			return lv;
 		}
 
@@ -291,7 +285,32 @@ public class ElencoAttivita extends Fragment {
 					}
 				});
 			}
+			@Override
+			public void restore(){
+				AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(getActivity());
+				miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {  
+						richiestaAttivita();
+					}
+				});
+				AlertDialog alert = miaAlert.create();
+				alert.show();		
+			}
+		}
+	
+		public void richiestaAttivita(){
+			HashMap<String, String> data1 = new HashMap<String, String>();
+			c.add(Calendar.DAY_OF_MONTH, args.getInt(ARG_SECTION_NUMBER)-giorni/2-1);
+
+			String date1=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"00:00:00.000Z";
+			Log.d("Date inizio:",date1);
+			String date2=c.get(Calendar.YEAR)+"-"+(Number(c.get(Calendar.MONTH)+1))+"-"+Number(c.get(Calendar.DAY_OF_MONTH))+"T"+"23:59:00.000Z";
+			Log.d("Date fine:",date2);
+			c.add(Calendar.DAY_OF_MONTH, -(args.getInt(ARG_SECTION_NUMBER)-giorni/2-1));
+			data1.put("inizio", date1);
+			data1.put("fine", date2);
+			RichiestaAttivita hello1 = new RichiestaAttivita(lv,data1);
+			hello1.execute();
 		}
 	}
-	
 }

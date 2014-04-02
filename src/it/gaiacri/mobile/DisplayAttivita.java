@@ -12,11 +12,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -28,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -41,7 +44,9 @@ public class DisplayAttivita extends ActionBarActivity {
 	public TextView nome;
 	public TextView comitato;
 
-	public String id;
+	public String id_dettagli;
+	public String id_turno;
+	public String id_partecipazione;
 
 	private static ListView listView ;
 	private Context context;
@@ -59,17 +64,14 @@ public class DisplayAttivita extends ActionBarActivity {
 
 
 
-		id= (String) this.getIntent().getExtras().get("id");
+		id_dettagli= (String) this.getIntent().getExtras().get("id");
 		nome = (TextView) findViewById(R.id.textView1);
 		comitato = (TextView) findViewById(R.id.textView2);
 
 		context=this.getApplicationContext();
 		listView = (ListView)findViewById(R.id.listElenco);
 
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("id", id);
-		RichiestaDettagli richiesta=new RichiestaDettagli(data);
-		richiesta.execute();
+		richiestaDettagli();
 	}
 
 	@Override
@@ -120,13 +122,14 @@ public class DisplayAttivita extends ActionBarActivity {
 					//String TAG="Risposta: ";
 					att_title=risposta.getString("nome");
 					att_luogo=risposta.getString("luogo");
-					//String att_info=risposta.getString("descrizione");
-					//String att_referente=risposta.getString("referente");
-					//String att_referentenum=risposta.getString("referentenum");
-					//String att_referenteemail=risposta.getString("referenteemail");
+					String att_info=risposta.getString("descrizione");
+					JSONObject ref=risposta.getJSONObject("referente");
+					String att_referente=ref.getString("nome");
+					String att_referentenum=ref.getString("numero");
+					String att_referenteemail=ref.getString("email");
 
-					//String html = "<html><body>Referente: "+att_referente+"<br>Num: "+att_referentenum+"<br>Email: email@example.it"+att_referenteemail+"<br>"+att_info+"</body></html>";
-					String html = "<html><body><b>Referente:</b> Mario Rossi<br>Telefono: <a href=\"tel:3474975206\">3414477852</a><br>Email: <A HREF=\"mailto:ciopper90@gmail.com\">email@example.it</a><br>desc</body></html>";
+					String html = "<html><body><b>Referente:</b> "+att_referente+"<br><b>Num:</b> <a href=\"tel:"+att_referentenum+"\">"+att_referentenum+"</a><br><b>Email:</b> <a href=\"mailto:"+att_referenteemail+"\">"+att_referenteemail+"</a><br>"+att_info+"</body></html>";
+					//String html = "<html><body><b>Referente:</b> Mario Rossi<br>Telefono: <a href=\"tel:3474975206\">3414477852</a><br>Email: <A HREF=\"mailto:ciopper90@gmail.com\">email@example.it</a><br>desc</body></html>";
 					String mime = "text/html";
 					String encoding = "utf-8";
 					//Log.d(TAG+"nome",att_title);
@@ -159,45 +162,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					turni=new ArrayList<Turno>();
 					JSONArray js=risposta.getJSONArray("turni");
 					for(int i=0;i<js.length();i++){
-						risposta=js.getJSONObject(i);
-						//manca descrizione e url
-						//descrizione mi interessa
-						String tur_id=risposta.getString("id");
-						String tur_titolo=risposta.getString("nome");
-						String tur_start=(risposta.getJSONObject("inizio")).getString("date");
-						String tur_end=(risposta.getJSONObject("fine")).getString("date");
-						// bisogna inserire la politica per la scelta del colore
-						String tur_color="#3135B0";//risposta.getString("color");
-						boolean tur_pieno=risposta.getBoolean("pieno");
-						boolean tur_futuro=risposta.getBoolean("futuro");
-						boolean tur_scoperto=risposta.getBoolean("scoperto");
-						boolean tur_puoRichiedere=risposta.getBoolean("puoRichiedere");
-						boolean tur_partecipa=risposta.getBoolean("partecipa");
-						
-						JSONObject partecipazione=risposta.optJSONObject("partecipazione");
-						String tur_partecipazione="";
-						if(partecipazione != null){
-							tur_partecipazione=partecipazione.optString("id");
-							//Log.d("tag",tur_partecipazione+" ");
-						}
-						
-						JSONObject tur_durata=risposta.getJSONObject("durata");
-						int tur_y=tur_durata.getInt("y");
-						int tur_m=tur_durata.getInt("m");
-						int tur_d=tur_durata.getInt("d");
-						int tur_h=tur_durata.getInt("h");
-						int tur_i=tur_durata.getInt("i");
-						//Log.d(TAG+"pieno",risposta.getBoolean("pieno")+"");
-						//Log.d(TAG+"futuro",risposta.getBoolean("futuro")+"");
-						//Log.d(TAG+"scoperto",risposta.getBoolean("scoperto")+"");
-						//Log.d(TAG+"puoRichiedere",risposta.getBoolean("puoRichiedere")+"");
-						//Log.d(TAG+"partecipa",risposta.getBoolean("partecipa")+"");
-						//Log.d(TAG+"partecipazione",risposta.getString("partecipazione")+"");
-						Turno t=new Turno(tur_titolo, tur_id, tur_start, tur_end, "",
-								tur_color, tur_pieno, tur_futuro,tur_scoperto,
-								tur_puoRichiedere, tur_partecipa, tur_partecipazione,
-								tur_y,tur_m,tur_d,tur_h,tur_i);		
-						turni.add(t);
+						turni.add(Turno.create(js.getJSONObject(i)));
 					}
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());
@@ -207,7 +172,17 @@ public class DisplayAttivita extends ActionBarActivity {
 				//in base a come viene ritornata
 				aggiornalist();
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaDettagli();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}	
 
@@ -226,7 +201,7 @@ public class DisplayAttivita extends ActionBarActivity {
 				tur=turni.get(i);
 
 				ServiceMap.put("turno_title", tur.getDesc());
-				String date=tur.getStart()+" (" +tur.getDurata()+")";
+				String date=tur.getDate()+" (" +tur.getDurata()+")";
 				ServiceMap.put("turno_data",date);
 				//TODO da aggiungere estrazione partecipanti
 				ServiceMap.put("turno_iscritti","");
@@ -275,7 +250,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					//((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(t.getColor()));
 					((TextView)row.findViewById(R.id.textViewData)).setTextColor(Color.parseColor("#000000"));
 					((TextView)row.findViewById(R.id.textViewIscritti)).setTextColor(Color.parseColor("#000000"));
-					((Button)row.findViewById(R.id.buttonPartecipa)).setTag(id);
+					((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setTag(id);
 
 					//Log.d("num elementi",turni.size() + " tot");
 					int num=t.getPartecipa();
@@ -283,38 +258,56 @@ public class DisplayAttivita extends ActionBarActivity {
 					switch(num){
 					case 0://caso in cui l'utente si puo iscrivere
 						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_vuoto)));
-						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_partecipa);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_partecipa));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setEnabled(true);
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("success");
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 							public void onClick(View v) {
-								String id=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
-								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
+								String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
+								((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
 								iscrivi(id);
 							}
 						}); 
 						break;
 					case 1://caso in cui l'utente risulta gia essere iscritto
-						((Button)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setOnClickListener(new View.OnClickListener() {
 							public void onClick(View v) {
-								String id_tur=(String)((Button)v.findViewById(R.id.buttonPartecipa)).getTag();
+								String id_tur=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 								int pos=getTurno(id_tur);
 								String id_part=turni.get(pos).getPartecipazione();
-								((Button)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
+								((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setOnClickListener(null);
 								cancella(id_tur,id_part);
 							}
 						}); 
 						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_pieno)));
-						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_cancella);
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_cancella));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("danger");
 						//((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					case 2://caso in cui il turno e pieno
-						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_pieno);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.BLACK);
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_pieno));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("info");
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
 					case 3:
-						((Button)row.findViewById(R.id.buttonPartecipa)).setText(R.string.turni_timeout);
-						((Button)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.BLACK);
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_timeout));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("default");
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
 						break;
+					case 4:
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.parseColor(getString(R.color.turno_pieno)));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_concessa));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("info");
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						break;
+					case 5:
+						((TextView)row.findViewById(R.id.textViewNome)).setTextColor(Color.BLACK);
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setText(getString(R.string.turni_negata));
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setBootstrapType("info");
+						((BootstrapButton)row.findViewById(R.id.buttonPartecipa)).setEnabled(false);
+						break;												
 					}
 					return row;
 
@@ -359,8 +352,9 @@ public class DisplayAttivita extends ActionBarActivity {
 		pd.setCancelable(false);
 		pd.setMessage("Iscrizione in corso");
 		pd.show();
+		this.id_turno=id;
 		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("id", id);
+		data.put("id", id_turno);
 		RichiestaIscrizione asd = new RichiestaIscrizione(data);
 		asd.execute();
 	}
@@ -369,6 +363,8 @@ public class DisplayAttivita extends ActionBarActivity {
 		pd.setCancelable(false);
 		pd.setMessage("Cancellazione in corso");
 		pd.show();
+		this.id_turno=id_turno;
+		this.id_partecipazione=id_partecipazione;		
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("id", id_partecipazione);
 		data.put("id_tur", id_turno);
@@ -390,7 +386,12 @@ public class DisplayAttivita extends ActionBarActivity {
 				try {
 					String id=richiesta.getJSONObject("parametri").getString("id");
 					String result=risposta.getString("ok");
-					turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
+					if(Boolean.parseBoolean(result)){
+						String partecipazione_id =risposta.getString("id");
+						turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
+						turni.get(getTurno(id)).ritirabile("true");
+						turni.get(getTurno(id)).setPartecipazione(partecipazione_id);
+					}
 				} catch (JSONException e) {
 					//Auto-generated catch block
 					e.printStackTrace();
@@ -398,7 +399,17 @@ public class DisplayAttivita extends ActionBarActivity {
 				//aggiorna tabella turni della view
 				aggiornalist();
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaIscrizione();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}
 	
@@ -419,19 +430,41 @@ public class DisplayAttivita extends ActionBarActivity {
 						Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
 					else
 					{
-						HashMap<String, String> data = new HashMap<String, String>();
-						data.put("id", DisplayAttivita.this.id);
-						RichiestaDettagli richiesta=new RichiestaDettagli(data);
-						richiesta.execute();
+						richiestaDettagli();
 					}
 				} catch (JSONException e) {
 					//Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d("tag",e.getMessage());
 				}
 				//aggiorna tabella turni della view
 				//aggiornalist();
 			}
-
 		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(DisplayAttivita.this);
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaCancellazione();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
+	}
+	
+	public void richiestaDettagli(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("id", id_dettagli);
+		RichiestaDettagli richiesta=new RichiestaDettagli(data);
+		richiesta.execute();
+	}
+	public void richiestaIscrizione(){
+		iscrivi(id_turno);
+	}
+	public void richiestaCancellazione(){
+		cancella(id_turno,id_partecipazione);
+		
 	}
 }

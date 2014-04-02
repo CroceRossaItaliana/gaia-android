@@ -25,13 +25,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PostaIngresso extends Fragment{
 
 	private ArrayList<Posta> posta;
-	private static ListView listView ;
+	private ArrayList<String> mitt;
+	private static ListView listView;
 	private Context context;
 
 	@Override
@@ -39,45 +39,32 @@ public class PostaIngresso extends Fragment{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View v=inflater.inflate(R.layout.activity_display_posta, container, false);
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("direzione", "ingresso");
-		data.put("pagina", "1");
-		data.put("perPagina", "5");
-		RichiestaNotifiche richiesta=new RichiestaNotifiche(data);
-		richiesta.execute();
+		richiestaNotifiche();
 		listView = (ListView)v.findViewById(R.id.listPosta);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
-				//Toast.makeText(getApplicationContext(),"hiihih" + pos,Toast.LENGTH_SHORT).show();
-				//TextView v= (TextView) arg1.findViewById(R.id.posta_id);
-				//String id=v.getText().toString();
-				
 				AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
-
 				String html=posta.get(pos).getBody();
-				
 				WebView wv = new WebView(PostaIngresso.this.getActivity());
 				String mime = "text/html";
 				String encoding = "utf-8";
 				wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
-				
 				wv.setWebViewClient(new WebViewClient() {
-				    @Override
-				    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				        view.loadUrl(url);
+					@Override
+					public boolean shouldOverrideUrlLoading(WebView view, String url) {
+						view.loadUrl(url);
 
-				        return true;
-				    }
+						return true;
+					}
 				});
-
 				alert.setView(wv);
 				alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int id) {
-				        dialog.dismiss();
-				    }
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
 				});
 				alert.show();
 			}
@@ -107,31 +94,31 @@ public class PostaIngresso extends Fragment{
 					//att_luogo=risposta.getString("luogo");
 					//int info_totale=risposta.getInt("totale");
 					JSONArray res=risposta.getJSONArray("risultati");
-					ArrayList<String> mitt=new ArrayList<String>(); 
+					mitt=new ArrayList<String>(); 
 
 					//recupera anche mittente da mostrare e salvare
 					for(int i=0;i<res.length();i++){
 						JSONObject obj=res.getJSONObject(i);
 						String posta_id=obj.getString("id");
 						String posta_corpo=obj.getString("corpo");
-						String posta_mittente=obj.getJSONObject("mittente").getString("id");
-						mitt.add(posta_mittente);
+						JSONObject mittente=obj.optJSONObject("mittente");
+						String posta_mittente="";
+						if(!(mittente == null)){
+							posta_mittente=obj.getJSONObject("mittente").getString("id");
+							if(!mitt.contains(posta_mittente))
+								mitt.add(posta_mittente);
+						}
 						String posta_oggetto=obj.getString("oggetto");						
 						posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente));//Log.d("ciao", );
 					}
 
 
-					HashMap<String,HashMap<String,String>> date=new HashMap<String,HashMap<String,String>>();
-
-					for(int i=0;i<mitt.size();i++){					
-						HashMap<String, String> data = new HashMap<String, String>();
-						data.put("metodo", "utente");
-						data.put("id",mitt.get(i));
-						date.put(""+i, data);	
+					if(mitt.size()== 0){
+						fixMittente();
+						aggiornalist();
+					}else{
+						richiestaMittenti();
 					}
-					RichiestaMittenti richiesta=new RichiestaMittenti(date);
-					richiesta.execute();
-
 
 
 					//String att_referente=risposta.getString("referente");
@@ -147,7 +134,25 @@ public class PostaIngresso extends Fragment{
 			}
 
 		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(PostaIngresso.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaNotifiche();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
 	}	
+	
+	public void fixMittente(){
+		for(int i=0;i<posta.size();i++){
+			if(posta.get(i).getMittente().equals(""))
+				posta.get(i).setNomeMittente(getString(R.string.posta_mittente_gaia));
+		}
+	}
 
 	class RichiestaMittenti extends RichiestaMultipla {
 		public RichiestaMittenti(HashMap<String, HashMap<String, String>> data) {
@@ -164,19 +169,35 @@ public class PostaIngresso extends Fragment{
 					JSONArray risultati = risposta.getJSONArray("risultato");
 					for(int i=0;i<risultati.length();i++){
 						JSONObject temp=risultati.getJSONObject(i);
+						String id=temp.getJSONObject("risposta").optString("id");
 						String nome=temp.getJSONObject("risposta").optString("nomeCompleto");
-						posta.get(i).setNomeMittente(nome);
+						for(int k=0;k<posta.size();k++){
+							if(posta.get(k).getMittente().equals(id)){
+								posta.get(k).setNomeMittente(nome);
+							}
+						}
 					}
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
+				fixMittente();
 				//da gestire la risposta
 				//in base a come viene ritornata
-				 aggiornalist();		
+				aggiornalist();		
 			}
-
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(PostaIngresso.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaMittenti();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
 		}
 	}	
 
@@ -216,10 +237,27 @@ public class PostaIngresso extends Fragment{
 		}
 	}
 
+	public void richiestaMittenti(){
+		HashMap<String,HashMap<String,String>> date=new HashMap<String,HashMap<String,String>>();
 
-
-
-
-
-
+		for(int i=0;i<mitt.size();i++){					
+			HashMap<String, String> data = new HashMap<String, String>();
+			data.put("metodo", "utente");
+			data.put("id",mitt.get(i));
+			date.put(""+i, data);	
+		}
+		RichiestaMittenti richiesta=new RichiestaMittenti(date);
+		richiesta.execute();
+		
+	}
+	
+	public void richiestaNotifiche(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("direzione", "ingresso");
+		data.put("pagina", "1");
+		data.put("perPagina", "5");
+		RichiestaNotifiche richiesta=new RichiestaNotifiche(data);
+		richiesta.execute();
+	}
+	
 }

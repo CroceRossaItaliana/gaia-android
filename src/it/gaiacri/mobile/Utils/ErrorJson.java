@@ -8,12 +8,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 
 public class ErrorJson {
 
 	public static int Controllo(String ris,Activity context,JSONObject json){
 		if(ris.equals("Errore Internet")){
-			AssenzaInternet(context);
+			//AssenzaInternet(context);
 			return 1;
 		}else{
 			if( ris.equals("Errore")){
@@ -28,8 +29,21 @@ public class ErrorJson {
 		}
 		return 0;
 	}
-
-	public static void AssenzaInternet(final Activity context){
+	
+	public static AlertDialog.Builder AssenzaInternet(final Activity context){
+		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
+		miaAlert.setMessage(R.string.error_internet);
+		miaAlert.setCancelable(false);
+		miaAlert.setNegativeButton(R.string.error_internet_no, new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int id) {
+				  context.setResult(100);
+				  context.finish();
+			  }
+			});
+		return miaAlert;
+	}
+	 
+	/*public static void AssenzaInternet(final Activity context){
 		//Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
 		miaAlert.setMessage(R.string.error_internet);
@@ -37,20 +51,15 @@ public class ErrorJson {
 
 		miaAlert.setCancelable(false);
 		miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int id) {
-		    
+		  public void onClick(DialogInterface dialog, int id) {  
 		  }
 		});
 		    	
-		miaAlert.setNegativeButton(R.string.error_internet_no, new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int id) {
-			  context.setResult(100);
-			  context.finish();
-		  }
-		});
+
 		AlertDialog alert = miaAlert.create();
 		alert.show();
-	}
+	}*/
+	
 	
 	public static void ProblemaApi(String errore,final Activity context,final JSONObject json){
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
@@ -79,7 +88,5 @@ public class ErrorJson {
 		AlertDialog alert = miaAlert.create();
 		alert.show();
 	}
-	
-	
 }
 
