@@ -1,7 +1,9 @@
 ## gaia-android (aka Gaia Mobile)
 
 Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad unire le capacità delle API di Gaia e le potenzialità dei dispositivi mobili Android.
-Per compilare il progetto e richiesto di importare anche [Android Support V7](https://developer.android.com/tools/support-library/setup.html)
+Per compilare il progetto e richiesto di importare le librerie:
+[Android Support V7](https://developer.android.com/tools/support-library/setup.html)
+[AndroidBootstrap](https://github.com/Bearded-Hen/Android-Bootstrap)
 
 
 ### Collaborare
@@ -18,10 +20,11 @@ Maggiori informazioni riguardo **il progetto Gaia di Croce Rossa Italiana** sono
 
 ## Stato attuale
 
-[Scarica app allo stato beta](https://github.com/CroceRossaItaliana/gaia-android/blob/master/GaiaAndroidV0.6.5.apk?raw=true)
+[Scarica app allo stato beta](https://github.com/CroceRossaItaliana/gaia-android/blob/master/GaiaAndroidV0.6.7.apk?raw=true)
 
 
 ### La licenza 
 
 Il codice è rilasciato con licenza [GPLv3](https://github.com/AlfioEmanueleFresta/gaia-android/LICENSE.txt).
+
 
