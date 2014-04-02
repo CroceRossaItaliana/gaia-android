@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -35,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DisplayAttivita extends ActionBarActivity {
 
@@ -427,11 +428,9 @@ public class DisplayAttivita extends ActionBarActivity {
 				try {
 					String result=risposta.getString("ok");
 					if(!Boolean.parseBoolean(result))
-						Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
-					else
-					{
-						richiestaDettagli();
-					}
+						Crouton.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Style.ALERT ).show();
+						//Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
+					richiestaDettagli();
 				} catch (JSONException e) {
 					//Auto-generated catch block
 					//e.printStackTrace();

@@ -1,9 +1,10 @@
 ## gaia-android (aka Gaia Mobile)
 
 Questo è il progetto per lo sviluppo di un'applicazione per Android che mira ad unire le capacità delle API di Gaia e le potenzialità dei dispositivi mobili Android.
-Per compilare il progetto e richiesto di importare le librerie:
-[Android Support V7](https://developer.android.com/tools/support-library/setup.html)
-[AndroidBootstrap](https://github.com/Bearded-Hen/Android-Bootstrap)
+Per compilare il progetto e richiesto di importare le librerie:<br>
+[Android Support V7](https://developer.android.com/tools/support-library/setup.html)<br>
+[AndroidBootstrap](https://github.com/Bearded-Hen/Android-Bootstrap)<br>
+[Crouton](https://github.com/keyboardsurfer/Crouton)
 
 
 ### Collaborare

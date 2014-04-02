@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import org.json.JSONException;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +24,6 @@ import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -120,7 +121,8 @@ public class Accesso extends ActionBarActivity {
 			});
 			webview.setWebViewClient(new WebViewClient() {
 				public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-					Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+					Crouton.makeText(Accesso.this, "Oh no! " + description, Style.ALERT).show();
+					//Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
 				}
 				public void onPageFinished(WebView view, String url) {
 					richiestaWelcome();

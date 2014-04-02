@@ -10,6 +10,9 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +40,7 @@ public class ElencoAttivita extends Fragment {
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	private static int giorni=120;
 	private static Context context;
+	private static Activity activity;
 	ArrayList<String> array;
 	static String IUrl;
 	static String URL;
@@ -47,7 +51,8 @@ public class ElencoAttivita extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewPager v= (ViewPager)inflater.inflate(R.layout.activity_view, container, false);
-		context=super.getActivity().getApplicationContext();
+		activity=super.getActivity();
+		context=activity.getApplicationContext();
 		mSectionsPagerAdapter = new SectionsPagerAdapter(super.getActivity().getSupportFragmentManager());
 		
 		// Set up the ViewPager with the sections adapter.
@@ -280,7 +285,8 @@ public class ElencoAttivita extends Fragment {
 							i.putExtra("id", id);
 							startActivityForResult(i, 0);
 						}else{
-							Toast.makeText(context, R.string.attivita_no_turni, Toast.LENGTH_SHORT).show();
+							Crouton.makeText(ElencoAttivita.activity, R.string.attivita_no_turni, Style.INFO ).show();
+							//Toast.makeText(context, R.string.attivita_no_turni, Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
