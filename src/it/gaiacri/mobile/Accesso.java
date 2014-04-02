@@ -170,18 +170,14 @@ public class Accesso extends ActionBarActivity {
 
 			if(ErrorJson.Controllo(ris,Accesso.this,risposta)==0){
 				if(risposta==null){
-					//TODO
 					finish();
 				}
-				//TODO elabora risposta
-				//TODO aggiorna tabella turni della view
 				String url_login="";
 				try {
 					url_login = risposta.getString("url");
 					sid= sessione.getString("id");
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.d("Errore", e.getMessage());//e.printStackTrace();
 				}
 				//per gestire errore crash
 				if(webview == null)

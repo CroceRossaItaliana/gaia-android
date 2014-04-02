@@ -1,5 +1,7 @@
 package it.gaiacri.mobile.Object;
 
+import org.json.JSONObject;
+
 public class Partecipazioni {
 	private String attivita_id;
 	private String attivita_name;
@@ -7,7 +9,7 @@ public class Partecipazioni {
 	private String stato_id;
 	private String stato_value;
 	private Turno turno;
-	
+
 	public Partecipazioni(String attivita_id,String attivita_name, String id, String stato_id,
 			String stato_value, Turno turno) {
 		super();
@@ -17,6 +19,12 @@ public class Partecipazioni {
 		this.stato_id = stato_id;
 		this.stato_value = stato_value;
 		this.turno = turno;
+	}
+
+	public Partecipazioni(String id2) {
+		//costruttore di default in caso di iscrizione
+		this.id=id2;
+		this.stato_value="In Attesa";
 	}
 
 	public String getAttivita_id() {
@@ -66,10 +74,24 @@ public class Partecipazioni {
 	public void setAttivita_name(String attivita_name) {
 		this.attivita_name = attivita_name;
 	}
-	
-		
-	
-	
 
-	
+
+	public static Partecipazioni createPartecipazioni(JSONObject obj){
+		if(obj != null){
+			JSONObject att=obj.optJSONObject("attivita");
+			String part_att_id=att.optString("id");
+			String part_att_name=att.optString("nome");
+			String part_id=obj.optString("id");
+			JSONObject part_stato=obj.optJSONObject("stato");
+			String part_stato_id=part_stato.optString("id");
+			String part_stato_value=part_stato.optString("nome");
+			JSONObject part_turno=obj.optJSONObject("turno");
+			return (new Partecipazioni(part_att_id,part_att_name,part_id,part_stato_id,part_stato_value,Turno.create(part_turno)));					
+		}
+		return null;
+
+	}
+
+
+
 }

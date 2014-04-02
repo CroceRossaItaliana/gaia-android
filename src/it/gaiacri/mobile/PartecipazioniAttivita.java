@@ -15,6 +15,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -53,7 +56,6 @@ public class PartecipazioniAttivita extends Fragment{
 				Intent i= new Intent(context,DisplayAttivita.class);
 				i.putExtra("id", tv.getText().toString());
 				startActivityForResult(i, 0);
-
 			}
 		});
 		setHasOptionsMenu(true);
@@ -98,29 +100,18 @@ public class PartecipazioniAttivita extends Fragment{
 
 				if(partecipazioni==null)
 					partecipazioni= new ArrayList<Partecipazioni>();
-
 				try {
-					//String TAG="Risposta: ";;
 					JSONArray res=risposta.getJSONArray("risultati");
 					//recupera anche mittente da mostrare e salvare
 					for(int i=0;i<res.length();i++){
 						JSONObject obj=res.getJSONObject(i);
-						String part_att_id=obj.getString("attivita");
-						String part_att_name=obj.getString("att_name");
-						String part_id=obj.getString("id");
-						JSONObject part_stato=obj.optJSONObject("stato");
-						String part_stato_id=part_stato.optString("id");
-						String part_stato_value=part_stato.optString("nome");
-						JSONObject part_turno=obj.optJSONObject("turno");
-						partecipazioni.add(new Partecipazioni(part_att_id,part_att_name,part_id,part_stato_id,part_stato_value,Turno.create(part_turno)));					
+						partecipazioni.add(Partecipazioni.createPartecipazioni(obj));					
 					}
 					aggiornalist();
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());
 					//e.printStackTrace();
 				}
-				//da gestire la risposta
-				//in base a come viene ritornata
 			}
 
 		}
@@ -154,7 +145,7 @@ public class PartecipazioniAttivita extends Fragment{
 					ServiceMap.put("miei_turno",pos.getTurno().getDesc());
 					ServiceMap.put("miei_turno_start",pos.getTurno().getStart());
 					ServiceMap.put("miei_id",pos.getAttivita_id());
-					ServiceMap.put("miei_stato",pos.getStato_value());
+					ServiceMap.put("miei_stato","  "+pos.getStato_value()+"  ");
 					data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 				}
 			}
@@ -167,13 +158,55 @@ public class PartecipazioniAttivita extends Fragment{
 					data,//sorgente dati
 					R.layout.riga_miei_turni, //layout contenente gli id di "to"
 					from,
-					to);
+					to){
+				
+				@SuppressWarnings("deprecation")
+				@Override
+				public View getView(int position, View convertView, ViewGroup parent) {
+					if (convertView==null){
+						LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						convertView=inflater.inflate(R.layout.riga_miei_turni, null);
+					}
+					View row = super.getView(position, convertView, parent);
+					if(partecipazioni!=null && partecipazioni.size()!=0){
+						TextView tv= (TextView) row.findViewById(R.id.text_stato);
+						//caricare backgroud rettangolare
+						GradientDrawable back= (GradientDrawable) getResources().getDrawable(R.drawable.rectanglesmussato);
+						//settare il colore in base al valore assunto
+						back.setColor(color(tv.getText().toString().trim()));
+						//settare il backgroud
+						tv.setBackgroundDrawable(back);
+						//settare il testo come BOLD
+						tv.setTypeface(null, Typeface.BOLD);
+						//tv.setBackgroundColor(color(tv.getText().toString()));
+						//oppure posso aggiungere uno sfondo quadrato alla parola concessa/in attesa/negata con il colore rispettivo usato in gaia
+						//settare backgroud che bisogna rendere piu chiaro perche ora troppo acceso
+						//oppure sento dagli altri che preferiscono fare
+						//row.setBackgroundColor(color(tv.getText().toString()));
+						//Drawable test=row.getBackground();
+						//test.setAlpha(95);
+						}
+					return row;
+
+				}
+			};
 			//utilizzo dell'adapter
 			listView.setAdapter(adapter);
 		}else{
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_miei_turni, R.id.text_attivita,new String[]{"Caricamento.."});
 			listView.setAdapter(arrayAdapter);
 		}
+	}
+
+	protected int color(String text) {
+		String c="#FFFFFF";
+		if(text.equals(getString(R.string.partecipa_confermata)))
+			c=getString(R.color.label_success);
+		if(text.equals(getString(R.string.partecipa_attesa)))
+			c=getString(R.color.label_warning);
+		if(text.equals(getString(R.string.partecipa_negata)))
+			c=getString(R.color.label_important);		
+		return Color.parseColor(c) ;
 	}
 
 	public void richiestaPartecipazione(){
