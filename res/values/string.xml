@@ -103,5 +103,9 @@
     <string name="ns_menu_feedback_supporto_icon">&#xf0e0;</string>
     <string name="ns_menu_feedback_giudizi_icon">&#xf003;</string>
     <string name="ns_menu_setting_logout_icon">&#xf00d;</string> 
+    
+    <string name="icon_phone">&#xf095;</string>
+    <string name="icon_email">&#xf0e0;</string>
+    
 	
 </resources>

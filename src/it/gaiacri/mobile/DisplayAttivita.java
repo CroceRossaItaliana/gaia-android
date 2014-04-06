@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +64,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		setContentView(R.layout.activity_display_attivita);
 		passati=false;
 
+		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 		id_dettagli= (String) this.getIntent().getExtras().get("id");
@@ -74,7 +76,7 @@ public class DisplayAttivita extends ActionBarActivity {
 
 		richiestaDettagli();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -87,6 +89,9 @@ public class DisplayAttivita extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			super.onBackPressed();
+	        return true;
 		case R.id.turni_maps:
 			if(lat!=0 && lon!=0){
 				String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", lat, lon);
@@ -390,7 +395,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					if(Boolean.parseBoolean(result)){
 						String partecipazione_id =risposta.getString("id");
 						turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
-						turni.get(getTurno(id)).ritirabile("true");
+						turni.get(getTurno(id)).ritirabile(true);
 						turni.get(getTurno(id)).setPartecipazione(partecipazione_id);
 					}
 				} catch (JSONException e) {
