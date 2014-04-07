@@ -208,6 +208,12 @@ public class MainActivity extends ActionBarActivity {
 				test = new RubricaDelegati();
 
 			}
+			//Rubrica Volontari
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_volontari))){
+				title=getString(R.string.title_activity_rubrica_volontari);
+				test = new RubricaVolontari();
+
+			}
 			//Elenco Attivita
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_attivita_elenco))){
 				title=getString(R.string.title_activity_elenco_attivita);
