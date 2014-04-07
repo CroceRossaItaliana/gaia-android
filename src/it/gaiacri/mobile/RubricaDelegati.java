@@ -5,6 +5,8 @@ import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
@@ -42,7 +44,6 @@ public class RubricaDelegati extends Fragment{
 	private ArrayList<Rubrica> rubrica;
 	private static ListView listView;
 	private Context context;
-	//Typeface font;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,17 +88,17 @@ public class RubricaDelegati extends Fragment{
 						String rubrica_cognome=obj.getString("cognome");
 						String rubrica_numero=obj.getString("numero");
 						String rubrica_email=obj.getString("email");
-						JSONObject mittente=obj.optJSONObject("deleghe");
+						//JSONObject mittente=obj.optJSONObject("deleghe");
 						/*String posta_mittente="";
 						if(!(mittente == null)){
 							posta_mittente=obj.getJSONObject("mittente").getString("id");
 							if(!mitt.contains(posta_mittente))
 								mitt.add(posta_mittente);
 						}*/						
-						rubrica.add(new Rubrica(rubrica_avatar,rubrica_nome,rubrica_cognome,rubrica_numero,rubrica_email,new ArrayList()));//Log.d("ciao", );
+						rubrica.add(new Rubrica(rubrica_avatar,rubrica_nome,rubrica_cognome,rubrica_numero,rubrica_email,new ArrayList<String>()));//Log.d("ciao", );
 					}
-					aggiornalist();
-					downloadImg();
+					
+					orderArray();
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());
 					//e.printStackTrace();
@@ -119,7 +120,19 @@ public class RubricaDelegati extends Fragment{
 			alert.show();		
 		}
 	}	
-	
+	private void orderArray(){
+		
+		Collections.sort(rubrica, new Comparator<Rubrica>() {
+		    @Override
+			public int compare(Rubrica arg0, Rubrica arg1) {
+				// TODO Auto-generated method stub
+		    	return (arg0.getCognome() + " "+ arg0.getNome()).compareTo(arg1.getCognome() + " "+ arg1.getNome());
+			}
+		});
+		
+		aggiornalist();
+		downloadImg();
+	}
 	private void aggiornalist() {
 
 		if(rubrica!=null){
@@ -159,6 +172,7 @@ public class RubricaDelegati extends Fragment{
 					//Log.d("avatar",""+rubrica.get(position).getAvatar());
 					ImageView iw=(ImageView) row.findViewById(R.id.rubrica_avatar);
 					iw.setImageBitmap(rubrica.get(position).getBitmap(context));
+					
 					//((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setTag(tag);
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setTag(rubrica.get(position).getEmail());
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setTag(rubrica.get(position).getNumero());
@@ -209,7 +223,6 @@ public class RubricaDelegati extends Fragment{
 		RichiestaDelegati richiesta=new RichiestaDelegati(data);
 		richiesta.execute();
 	}
-	
 	
 	private class ImageDownloaderProva extends AsyncTask<Object,Object,Object> {
        @Override

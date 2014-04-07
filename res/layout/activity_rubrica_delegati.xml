@@ -5,6 +5,7 @@
     tools:context=".RubricaDelegati" >
     <ListView
         android:id="@+id/listRubrica"
+        android:listSelector="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </ListView>
