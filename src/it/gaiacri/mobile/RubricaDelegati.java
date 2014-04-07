@@ -120,8 +120,8 @@ public class RubricaDelegati extends Fragment{
 			alert.show();		
 		}
 	}	
+	
 	private void orderArray(){
-		
 		Collections.sort(rubrica, new Comparator<Rubrica>() {
 		    @Override
 			public int compare(Rubrica arg0, Rubrica arg1) {

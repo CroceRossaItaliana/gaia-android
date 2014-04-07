@@ -15,6 +15,7 @@
     <string name="title_activity_login_user">Gaia Mobile</string>
     <string name="title_activity_rubrica_delegati">Rubrica Delegati</string>
     <string name="title_activity_miei_turni">Miei Turni</string>
+    <string name="title_activity_rubrica_volontari">Rubrica Volontari</string>
     
     <string name="partecipa_confermata">Concessa</string>
     <string name="partecipa_attesa">In attesa</string>
