@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class PostaIngresso extends Fragment{
 
@@ -45,28 +46,31 @@ public class PostaIngresso extends Fragment{
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
-				String html=posta.get(pos).getBody();
-				WebView wv = new WebView(PostaIngresso.this.getActivity());
-				String mime = "text/html";
-				String encoding = "utf-8";
-				wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
-				wv.setWebViewClient(new WebViewClient() {
-					@Override
-					public boolean shouldOverrideUrlLoading(WebView view, String url) {
-						view.loadUrl(url);
+				TextView tv=(TextView)arg1.findViewById(R.id.posta_id);
+				if(!"".equals(tv.getText().toString())){
+					AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
+					String html=posta.get(pos).getBody();
+					WebView wv = new WebView(PostaIngresso.this.getActivity());
+					String mime = "text/html";
+					String encoding = "utf-8";
+					wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
+					wv.setWebViewClient(new WebViewClient() {
+						@Override
+						public boolean shouldOverrideUrlLoading(WebView view, String url) {
+							view.loadUrl(url);
 
-						return true;
-					}
-				});
-				alert.setView(wv);
-				alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-				alert.show();
+							return true;
+						}
+					});
+					alert.setView(wv);
+					alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
+					alert.show();
+				}
 			}
 		});
 		context= this.getActivity();
@@ -146,7 +150,7 @@ public class PostaIngresso extends Fragment{
 			alert.show();		
 		}
 	}	
-	
+
 	public void fixMittente(){
 		for(int i=0;i<posta.size();i++){
 			if(posta.get(i).getMittente().equals(""))
@@ -219,6 +223,13 @@ public class PostaIngresso extends Fragment{
 				ServiceMap.put("posta_id",pos.getId());
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
+			if(data.size() == 0){
+				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
+				ServiceMap.put("posta_object", "Nessuna Comunicazione");
+				ServiceMap.put("posta_mittente","");
+				ServiceMap.put("posta_id","");
+				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
+			}
 			String[] from={"posta_object","posta_mittente","posta_id"}; //dai valori contenuti in queste chiavi
 			int[] to={R.id.posta_oggetto,R.id.posta_mittente,R.id.posta_id};//agli id delle view
 
@@ -248,9 +259,9 @@ public class PostaIngresso extends Fragment{
 		}
 		RichiestaMittenti richiesta=new RichiestaMittenti(date);
 		richiesta.execute();
-		
+
 	}
-	
+
 	public void richiestaNotifiche(){
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("direzione", "ingresso");
@@ -259,5 +270,5 @@ public class PostaIngresso extends Fragment{
 		RichiestaNotifiche richiesta=new RichiestaNotifiche(data);
 		richiesta.execute();
 	}
-	
+
 }

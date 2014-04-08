@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/venti2"
 				android:gravity="center"
-                android:text="Caricamento in corso."
+                android:text="@string/menu_comunicazioni"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#CC0000" />
 

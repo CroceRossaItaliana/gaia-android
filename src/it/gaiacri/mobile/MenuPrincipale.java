@@ -31,10 +31,9 @@ public class MenuPrincipale extends Fragment {
 	public String sid = "";
 
 	public TextView nome;
-	public TextView comitato;
+	//public TextView comitato;
 
 	public String user_nome;
-	public String user_comitato;
 
 	private Context context;
 	public SharedPreferences sharedPref;
@@ -58,7 +57,6 @@ public class MenuPrincipale extends Fragment {
 		mMenuView=v.findViewById(R.id.menu_principale);
 
 		nome = (TextView) v.findViewById(R.id.tv_nome);
-		comitato = (TextView) v.findViewById(R.id.tv_comitato);
 
 		context=super.getActivity();
 		activity=super.getActivity();
@@ -69,7 +67,7 @@ public class MenuPrincipale extends Fragment {
 		if(b!= null){
 			richiestaDati();
 		}else{
-			if(user_nome==null && user_comitato==null){
+			if(user_nome==null){
 				//splash
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				startSplash();
@@ -155,7 +153,6 @@ public class MenuPrincipale extends Fragment {
 
 	public void annulla(){
 		user_nome=null;
-		user_comitato=null;
 	}
 
 	public class RichiestaWelcome extends Richiesta {
@@ -217,20 +214,11 @@ public class MenuPrincipale extends Fragment {
 		protected void onPostExecute(String ris) {
 			if(ErrorJson.Controllo(ris, activity,risposta)==0){
 				try {
-					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
+					user_nome=risposta.getJSONObject("anagrafica").getString("nome") ;//+ " " + risposta.getJSONObject("anagrafica").getString("cognome");
 					nome.setText("Ciao, "+user_nome);
-					JSONArray comitati=risposta.getJSONArray("appartenenze");
-					user_comitato="";
-					for(int i=0; i< comitati.length();i++){
-						user_comitato=user_comitato+"\n"+comitati.getJSONObject(i).getJSONObject("comitato").getString("nome");
-					}
-					//user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
-					comitato.setText(user_comitato);
 				} catch (JSONException e) {
 					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
 
-					user_comitato=getString(R.string.menu_no_comitato);
-					comitato.setText(user_comitato);
 					//((Button)activity.findViewById(R.id.button3)).setEnabled(false);
 				}
 				mSplashView.setVisibility(View.GONE);
