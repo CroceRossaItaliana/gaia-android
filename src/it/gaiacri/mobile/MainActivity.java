@@ -224,6 +224,12 @@ public class MainActivity extends ActionBarActivity {
 				title=getString(R.string.title_activity_miei_turni);
 				test = new PartecipazioniAttivita();
 			}
+			//About
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_about))){
+				title=getString(R.string.title_activity_setting_about);
+				test = new AboutAttivita();
+			}
+
 
 			//Logout
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_logout))){

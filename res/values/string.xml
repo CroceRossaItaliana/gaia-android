@@ -6,6 +6,7 @@
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
     <string name="menu_comunicazioni">Ultime Comunicazioni:</string>
+    <string name="prova">Sviluppata da Copelli Alberto&lt;br&gt; &lt;a href="https://gaia.cri.it"&gt;Info GAIA&lt;/a&gt;</string>
     
     <string name="posta_mittente_gaia">Notifica Gaia</string>
     <string name="posta_destinatario_supporto">Supporto Gaia</string>
@@ -17,6 +18,7 @@
     <string name="title_activity_rubrica_delegati">Rubrica Delegati</string>
     <string name="title_activity_miei_turni">Miei Turni</string>
     <string name="title_activity_rubrica_volontari">Rubrica Volontari</string>
+    <string name="title_activity_setting_about">About</string>
     
     <string name="partecipa_confermata">Concessa</string>
     <string name="partecipa_attesa">In attesa</string>
@@ -96,6 +98,7 @@
     <string name="ns_menu_feedback_supporto">Supporto</string>
     <string name="ns_menu_feedback_giudizi">Feedback</string>
     <string name="ns_menu_setting_logout">Logout</string>
+    <string name="ns_menu_setting_about">About</string>
     
     <string name="ns_menu_home_page_icon">&#xf0e7;</string>
 	<string name="ns_menu_attivita_elenco_icon">&#xf073;</string>
@@ -105,6 +108,7 @@
     <string name="ns_menu_feedback_supporto_icon">&#xf0e0;</string>
     <string name="ns_menu_feedback_giudizi_icon">&#xf003;</string>
     <string name="ns_menu_setting_logout_icon">&#xf00d;</string> 
+    <string name="ns_menu_setting_about_icon">&#xf129;</string> 
     
     <string name="icon_phone">&#xf095;</string>
     <string name="icon_email">&#xf0e0;</string>
