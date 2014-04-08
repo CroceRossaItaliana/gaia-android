@@ -252,7 +252,7 @@ public class RubricaVolontari extends Fragment{
         protected void onPostExecute(Bitmap result) {
             Log.i("Async-Example", "onPostExecute Called");
             rubrica.get(i).setBitmap(result);
-            aggiornalist();
+            //aggiornalist();
             //image.setImageBitmap(result);
             //downloadedImg.setImageBitmap(result);
  
