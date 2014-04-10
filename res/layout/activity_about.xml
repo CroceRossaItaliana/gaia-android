@@ -1,11 +1,61 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".AboutAttivita" >
-    <ListView
-        android:id="@+id/listInfo"
+     <TextView
+        android:id="@+id/about_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </ListView>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:textColor="@color/gaia_red"
+        android:textStyle="bold"
+        android:layout_margin="5dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+     <TextView
+         android:id="@+id/textView1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge" />
+     <TextView
+         android:id="@+id/about_licenza"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+     <TextView
+         android:id="@+id/textView1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge" />
+     <TextView
+         android:id="@+id/textView1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge" />
+     <TextView
+         android:id="@+id/about_portale_gaia"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+     <TextView
+         android:id="@+id/about_gaia"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+     <TextView
+         android:id="@+id/about_gaia_mobile"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+     <TextView
+         android:id="@+id/about_gaia_privacy"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>
