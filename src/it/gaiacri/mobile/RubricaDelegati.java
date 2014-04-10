@@ -2,6 +2,7 @@ package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Rubrica;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.RubricaUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -177,16 +178,19 @@ public class RubricaDelegati extends Fragment{
 					//((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setTag(tag);
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setTag(rubrica.get(position).getEmail());
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setTag(rubrica.get(position).getNumero());
+					if(!RubricaUtils.isTelephonyEnabled(context))
+						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setVisibility(View.GONE);;
+					
 					//settare azioni
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag());
+							RubricaUtils.sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag(),context);
 							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag());
+							RubricaUtils.sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag(),context);
 							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
@@ -201,19 +205,7 @@ public class RubricaDelegati extends Fragment{
 			listView.setAdapter(arrayAdapter);
 		}
 	}
-	
-	private void sendMail(String destinatario) {
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-				"mailto",destinatario, null));
-		startActivity(Intent.createChooser(emailIntent, "Send email..."));
-	}
-	private void sendCall(String numero) {
-		 String uri = "tel:" + numero.trim() ;
-		 Intent intent = new Intent(Intent.ACTION_DIAL);
-		 intent.setData(Uri.parse(uri));
-		 startActivity(intent);		
-	}
-	
+		
 	public void downloadImg(){
 		ImageDownloaderProva im=new ImageDownloaderProva();
 		im.execute();

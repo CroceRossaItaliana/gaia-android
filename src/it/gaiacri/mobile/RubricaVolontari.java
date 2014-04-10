@@ -2,6 +2,7 @@ package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Rubrica;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.RubricaUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +42,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 public class RubricaVolontari extends Fragment{
-	
+
 	private ArrayList<Rubrica> rubrica;
 	private static ListView listView;
 	private Context context;
@@ -58,7 +60,7 @@ public class RubricaVolontari extends Fragment{
 	}
 
 	class RichiestaDelegati extends Richiesta {
-		
+
 		public RichiestaDelegati(HashMap<String, String> data) {
 			super(data,RubricaVolontari.this.getActivity().getApplicationContext());
 		}
@@ -98,7 +100,7 @@ public class RubricaVolontari extends Fragment{
 						}*/						
 						rubrica.add(new Rubrica(rubrica_avatar,rubrica_nome,rubrica_cognome,rubrica_numero,rubrica_email,new ArrayList<String>()));//Log.d("ciao", );
 					}
-					
+
 					orderArray();
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());
@@ -121,16 +123,16 @@ public class RubricaVolontari extends Fragment{
 			alert.show();		
 		}
 	}	
-	
+
 	private void orderArray(){
 		Collections.sort(rubrica, new Comparator<Rubrica>() {
-		    @Override
+			@Override
 			public int compare(Rubrica arg0, Rubrica arg1) {
 				// TODO Auto-generated method stub
-		    	return (arg0.getCognome() + " "+ arg0.getNome()).compareTo(arg1.getCognome() + " "+ arg1.getNome());
+				return (arg0.getCognome() + " "+ arg0.getNome()).compareTo(arg1.getCognome() + " "+ arg1.getNome());
 			}
 		});
-		
+
 		aggiornalist();
 		downloadImg();
 	}
@@ -168,29 +170,31 @@ public class RubricaVolontari extends Fragment{
 						convertView=inflater.inflate(R.layout.riga_delegati, null);
 					}
 					View row = super.getView(position, convertView, parent);
-					
+
 					//set Avatar
 					//Log.d("avatar",""+rubrica.get(position).getAvatar());
 					ImageView iw=(ImageView) row.findViewById(R.id.rubrica_avatar);
 					iw.setImageBitmap(rubrica.get(position).getBitmap(context));
-					
+
 					//((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setTag(tag);
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setTag(rubrica.get(position).getEmail());
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setTag(rubrica.get(position).getNumero());
+					if(!RubricaUtils.isTelephonyEnabled(context))
+						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setVisibility(View.GONE);;
 					//settare azioni
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag());
+							RubricaUtils.sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag(),context);
 							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag());
+							RubricaUtils.sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag(),context);
 							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
-					
+
 					return row;
 				}
 			};
@@ -201,19 +205,7 @@ public class RubricaVolontari extends Fragment{
 			listView.setAdapter(arrayAdapter);
 		}
 	}
-	
-	private void sendMail(String destinatario) {
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-				"mailto",destinatario, null));
-		startActivity(Intent.createChooser(emailIntent, "Send email..."));
-	}
-	private void sendCall(String numero) {
-		 String uri = "tel:" + numero.trim() ;
-		 Intent intent = new Intent(Intent.ACTION_DIAL);
-		 intent.setData(Uri.parse(uri));
-		 startActivity(intent);		
-	}
-	
+
 	public void downloadImg(){
 		ImageDownloaderProva im=new ImageDownloaderProva();
 		im.execute();
@@ -224,86 +216,86 @@ public class RubricaVolontari extends Fragment{
 		RichiestaDelegati richiesta=new RichiestaDelegati(data);
 		richiesta.execute();
 	}
-	
+
 	private class ImageDownloaderProva extends AsyncTask<Object,Object,Object> {
-       @Override
-       protected Object doInBackground(Object... param) {
-           // TODO Auto-generated method stub
-    	   for(int i=0;i<rubrica.size();i++){
-    		   if(!rubrica.get(i).getAvatar().equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
-    			   Log.i("download", "image"+rubrica.get(i).getAvatar());
-    			   ImageDownloader im=new ImageDownloader();
-    			   im.execute(rubrica.get(i).getAvatar(),i);
-    		   }
-    	   }
-		return null;
-       }      
+		@Override
+		protected Object doInBackground(Object... param) {
+			// TODO Auto-generated method stub
+			for(int i=0;i<rubrica.size();i++){
+				if(!rubrica.get(i).getAvatar().equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
+					Log.i("download", "image"+rubrica.get(i).getAvatar());
+					ImageDownloader im=new ImageDownloader();
+					im.execute(rubrica.get(i).getAvatar(),i);
+				}
+			}
+			return null;
+		}      
 	}
-	
+
 	private class ImageDownloader extends AsyncTask<Object,Bitmap,Bitmap> {
-		 private int i;
-        @Override
-        protected Bitmap doInBackground(Object... param) {
-            // TODO Auto-generated method stub
-        	i = (Integer) param[1];
-            return downloadBitmap((String)param[0]);
-        }
- 
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            Log.i("Async-Example", "onPostExecute Called");
-            rubrica.get(i).setBitmap(result);
-            //aggiornalist();
-            //image.setImageBitmap(result);
-            //downloadedImg.setImageBitmap(result);
- 
-        }
- 
-        private Bitmap downloadBitmap(String url) {
-            // initilize the default HTTP client object
-            final DefaultHttpClient client = new DefaultHttpClient();
- 
-            //forming a HttoGet request
-            final HttpGet getRequest = new HttpGet(url);
-            try {
- 
-                HttpResponse response = client.execute(getRequest);
- 
-                //check 200 OK for success
-                final int statusCode = response.getStatusLine().getStatusCode();
- 
-                if (statusCode != HttpStatus.SC_OK) {
-                    Log.w("ImageDownloader", "Error " + statusCode +
-                            " while retrieving bitmap from " + url);
-                    return null;
-                }
-                final HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    InputStream inputStream = null;
-                    try {
-                        // getting contents from the stream
-                        inputStream = entity.getContent();
- 
-                        // decoding stream data back into image Bitmap that android understands
-                        final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
- 
-                        return bitmap;
-                    } finally {
-                        if (inputStream != null) {
-                            inputStream.close();
-                        }
-                        entity.consumeContent();
-                    }
-                }
-            } catch (Exception e) {
-                // You Could provide a more explicit error message for IOException
-                getRequest.abort();
-                Log.e("ImageDownloader", "Something went wrong while" +
-                        " retrieving bitmap from " + url + e.toString());
-            }
-            return null;
-        }
-    }
-	
-	
+		private int i;
+		@Override
+		protected Bitmap doInBackground(Object... param) {
+			// TODO Auto-generated method stub
+			i = (Integer) param[1];
+			return downloadBitmap((String)param[0]);
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			Log.i("Async-Example", "onPostExecute Called");
+			rubrica.get(i).setBitmap(result);
+			//aggiornalist();
+			//image.setImageBitmap(result);
+			//downloadedImg.setImageBitmap(result);
+
+		}
+
+		private Bitmap downloadBitmap(String url) {
+			// initilize the default HTTP client object
+			final DefaultHttpClient client = new DefaultHttpClient();
+
+			//forming a HttoGet request
+			final HttpGet getRequest = new HttpGet(url);
+			try {
+
+				HttpResponse response = client.execute(getRequest);
+
+				//check 200 OK for success
+				final int statusCode = response.getStatusLine().getStatusCode();
+
+				if (statusCode != HttpStatus.SC_OK) {
+					Log.w("ImageDownloader", "Error " + statusCode +
+							" while retrieving bitmap from " + url);
+					return null;
+				}
+				final HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					InputStream inputStream = null;
+					try {
+						// getting contents from the stream
+						inputStream = entity.getContent();
+
+						// decoding stream data back into image Bitmap that android understands
+						final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+						return bitmap;
+					} finally {
+						if (inputStream != null) {
+							inputStream.close();
+						}
+						entity.consumeContent();
+					}
+				}
+			} catch (Exception e) {
+				// You Could provide a more explicit error message for IOException
+				getRequest.abort();
+				Log.e("ImageDownloader", "Something went wrong while" +
+						" retrieving bitmap from " + url + e.toString());
+			}
+			return null;
+		}
+	}
+
+
 }
