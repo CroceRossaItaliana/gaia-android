@@ -61,7 +61,7 @@ public class Rubrica {
 	}
 
 	public String getAvatar() {
-		return "https://gaia.cri.it/"+avatar;
+		return avatar;
 	}
 	
 	public Bitmap getBitmap(Context context) {

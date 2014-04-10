@@ -83,7 +83,8 @@ public class RubricaDelegati extends Fragment{
 					//recupera anche mittente da mostrare e salvare
 					for(int i=0;i<res.length();i++){
 						JSONObject obj=res.getJSONObject(i);
-						String rubrica_avatar=obj.getString("avatar");
+						JSONObject avatar=obj.getJSONObject("avatar");
+						String rubrica_avatar=avatar.getString("10");
 						String rubrica_nome=obj.getString("nome");
 						String rubrica_cognome=obj.getString("cognome");
 						String rubrica_numero=obj.getString("numero");
