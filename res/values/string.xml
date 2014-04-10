@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Gaia Mobile</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_version">0.6.10</string>
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
     <string name="menu_comunicazioni">Ultime Comunicazioni:</string>
