@@ -1,10 +1,14 @@
 package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Attivita;
+import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -95,40 +99,9 @@ public class ElencoAttivita extends Fragment {
 		public CharSequence getPageTitle(int position) {
 			c.add(Calendar.DAY_OF_MONTH, position-giorni/2);
 			//"Ven 17 Gen"
-			String date1=DayWeek(c.get(Calendar.DAY_OF_WEEK))+" "+c.get(Calendar.DAY_OF_MONTH)+ " "+ Month(c.get(Calendar.MONTH));
+			String date1=DateUtils.DayWeek(c.get(Calendar.DAY_OF_WEEK),context)+" "+c.get(Calendar.DAY_OF_MONTH)+ " "+ DateUtils.Month(c.get(Calendar.MONTH),context);
 			c.add(Calendar.DAY_OF_MONTH, -(position-giorni/2));
 			return date1;
-		}
-
-		private String Month(int i) {
-			switch(i){
-			case 0: return getString(R.string.month_jan);
-			case 1: return getString(R.string.month_feb);
-			case 2: return getString(R.string.month_mar);
-			case 3: return getString(R.string.month_apr);
-			case 4: return getString(R.string.month_may);
-			case 5: return getString(R.string.month_jun);
-			case 6: return getString(R.string.month_jul);
-			case 7: return getString(R.string.month_aug);
-			case 8: return getString(R.string.month_sep);
-			case 9: return getString(R.string.month_opt);
-			case 10: return getString(R.string.month_nov);
-			case 11: return getString(R.string.month_dec);
-			}
-			return "";
-		}
-
-		private String DayWeek(int i) {
-			switch(i){
-			case 1: return getString(R.string.day_sunday);
-			case 2: return getString(R.string.day_monday);
-			case 3: return getString(R.string.day_tuesday);
-			case 4: return getString(R.string.day_wednesday);
-			case 5: return getString(R.string.day_thursday);
-			case 6: return getString(R.string.day_friday);
-			case 7: return getString(R.string.day_saturday);
-			}
-			return "";
 		}
 	}
 
@@ -198,14 +171,15 @@ public class ElencoAttivita extends Fragment {
 							//String tur_url=js.getString("url");
 							//String tur_id=js.getString("id");
 							String att_organizzatore=js.getJSONObject("organizzatore").getString("nome");
-							//String tur_start=js.getString("start");
+							String tur_start=js.getString("inizio");
+							
 							//String tur_end=js.getString("end");
 							String tur_color=js.getString("colore");
 							//se a contiene l'attivita allora aggiunto un turno
 							//altrimenti creo una nuova attivita e gli aggiunto il turno
 							//int indice=contiene(att_id);
 							//if(indice==-1){
-							a.add(new Attivita(att_title+ ", "+tur_title,att_id,att_organizzatore,tur_color));
+							a.add(new Attivita(att_title+ ", "+tur_title,att_id,att_organizzatore,tur_color,tur_start));
 							//indice=a.size()-1;
 							//}
 							//a.get(indice).addTurno(new Turno(tur_desc,tur_id,tur_start,tur_end,tur_url,tur_color));
@@ -235,13 +209,14 @@ public class ElencoAttivita extends Fragment {
 						ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
 						att=a.get(i);
 						ServiceMap.put("attivita_title", att.getTitle());
+						ServiceMap.put("attivita_data", att.getOraStart(context));
 						ServiceMap.put("attivita_url", att.getOrganizzatore());
 						data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 					}
 
 
-					String[] from={"attivita_title","attivita_url"}; //dai valori contenuti in queste chiavi
-					int[] to={R.id.textViewList,R.id.textViewListUrl};//agli id delle view
+					String[] from={"attivita_title","attivita_data","attivita_url"}; //dai valori contenuti in queste chiavi
+					int[] to={R.id.textViewList,R.id.textViewListData,R.id.textViewListUrl};//agli id delle view
 
 					//costruzione dell adapter
 					SimpleAdapter adapter=new SimpleAdapter(

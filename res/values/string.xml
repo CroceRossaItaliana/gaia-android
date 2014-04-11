@@ -2,20 +2,19 @@
 <resources>
 
     <string name="app_name">Gaia Mobile</string>
-    <string name="app_version">0.6.11</string>
+    <string name="app_version">0.6.12</string>
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
-    <string name="menu_comunicazioni">Ultime Comunicazioni:</string>
-    <string name="prova">Sviluppata da Copelli Alberto&lt;br&gt; &lt;a href="https://gaia.cri.it"&gt;Info GAIA&lt;/a&gt;</string>
+    <string name="menu_comunicazioni">Ultime 20 Comunicazioni:</string>
     
     <string name="posta_mittente_gaia">Notifica Gaia</string>
     <string name="posta_destinatario_supporto">Supporto Gaia</string>
     
     <string name="title_activity_menu_principale">Benvenuto</string>
     <string name="title_activity_elenco_attivita">Calendario</string>
-    <string name="title_activity_display_attivita">Visualizzazione Turni</string>
+    <string name="title_activity_display_attivita">Dettagli attivita\'</string>
     <string name="title_activity_login_user">Gaia Mobile</string>
-    <string name="title_activity_rubrica_delegati">Rubrica Delegati</string>
+    <string name="title_activity_rubrica_delegati">Rubrica Referenti</string>
     <string name="title_activity_miei_turni">Miei Turni</string>
     <string name="title_activity_rubrica_volontari">Rubrica Volontari</string>
     <string name="title_activity_setting_about">About</string>
@@ -30,8 +29,7 @@
 	<string name="attivita_comitato">Comitato di </string>
 	
 	
-	<string name="login_sessione">Controllo Sessione</string>
-	<string name="login_download_dati">Caricamento Dati</string>
+	<string name="login_connessione">Connessione a Gaia..</string>
 	
 	<string name="turni_navigazione">Navigazione con Maps</string>
 	<string name="turni_partecipa">Partecipa</string>

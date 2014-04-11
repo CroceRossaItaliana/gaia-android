@@ -38,7 +38,7 @@ public class AboutAttivita extends Fragment {
 					}
 				});
 				alert.setView(wv);
-				alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+				alert.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();

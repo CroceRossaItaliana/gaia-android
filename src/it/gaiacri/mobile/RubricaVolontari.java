@@ -1,6 +1,7 @@
 package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Rubrica;
+import it.gaiacri.mobile.Utils.Cache;
 import it.gaiacri.mobile.Utils.ErrorJson;
 import it.gaiacri.mobile.Utils.RubricaUtils;
 
@@ -24,14 +25,11 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +44,7 @@ public class RubricaVolontari extends Fragment{
 	private ArrayList<Rubrica> rubrica;
 	private static ListView listView;
 	private Context context;
+	private Cache cache;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +53,7 @@ public class RubricaVolontari extends Fragment{
 		View v=inflater.inflate(R.layout.activity_rubrica_delegati, container, false);
 		richiestaDelegati();
 		context= this.getActivity();
+		cache=new Cache(this.getActivity());
 		listView = (ListView)v.findViewById(R.id.listRubrica);
 		aggiornalist();
 		return v;
@@ -194,7 +194,6 @@ public class RubricaVolontari extends Fragment{
 							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
-
 					return row;
 				}
 			};
@@ -220,12 +219,20 @@ public class RubricaVolontari extends Fragment{
 	private class ImageDownloaderProva extends AsyncTask<Object,Object,Object> {
 		@Override
 		protected Object doInBackground(Object... param) {
+			String url="";
 			// TODO Auto-generated method stub
 			for(int i=0;i<rubrica.size();i++){
-				if(!rubrica.get(i).getAvatar().equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
-					Log.i("download", "image"+rubrica.get(i).getAvatar());
-					ImageDownloader im=new ImageDownloader();
-					im.execute(rubrica.get(i).getAvatar(),i);
+				url=rubrica.get(i).getAvatar();
+				if(!url.equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
+					//e in cache??
+					if(cache.contains(url)){
+						//Log.i("cache", "image"+rubrica.get(i).getAvatar());
+						rubrica.get(i).setBitmap(cache.get(url));
+					}else{
+						//Log.i("download", "image"+rubrica.get(i).getAvatar());
+						ImageDownloader im=new ImageDownloader();
+						im.execute(url,i);
+					}
 				}
 			}
 			return null;
@@ -243,12 +250,7 @@ public class RubricaVolontari extends Fragment{
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			Log.i("Async-Example", "onPostExecute Called");
 			rubrica.get(i).setBitmap(result);
-			//aggiornalist();
-			//image.setImageBitmap(result);
-			//downloadedImg.setImageBitmap(result);
-
 		}
 
 		private Bitmap downloadBitmap(String url) {
@@ -278,7 +280,7 @@ public class RubricaVolontari extends Fragment{
 
 						// decoding stream data back into image Bitmap that android understands
 						final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
+						cache.put(url,bitmap);
 						return bitmap;
 					} finally {
 						if (inputStream != null) {

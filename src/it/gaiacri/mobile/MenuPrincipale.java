@@ -108,7 +108,7 @@ public class MenuPrincipale extends Fragment {
 		mSplashView.setVisibility(View.VISIBLE);
 		mMenuView.setVisibility(View.GONE);
 		TextView t=((TextView) v.findViewById(R.id.Loading));
-		t.setText(this.getString(R.string.login_sessione));
+		t.setText(this.getString(R.string.login_connessione));
 		//avviare download "ciao"
 		//TODO
 		// Create and execute the background task.
@@ -176,7 +176,7 @@ public class MenuPrincipale extends Fragment {
 
 					//mCallbacks.onPostUpdate();
 					//aggiorna scritta su display
-					((TextView) activity.findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
+					//((TextView) activity.findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
 					richiestaDati();
 
 
