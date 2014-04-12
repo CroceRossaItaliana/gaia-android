@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
 
 public class ErrorJson {
 
@@ -30,6 +29,11 @@ public class ErrorJson {
 		return 0;
 	}
 	
+	/**
+	 * 
+	 * @param context Utilizzato per generare il Dialog
+	 * @return AlertDialog.Builder Oggetto che poi viene adattato alle esigenze
+	 */
 	public static AlertDialog.Builder AssenzaInternet(final Activity context){
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
 		miaAlert.setMessage(R.string.error_internet);
@@ -42,24 +46,13 @@ public class ErrorJson {
 			});
 		return miaAlert;
 	}
-	 
-	/*public static void AssenzaInternet(final Activity context){
-		//Toast.makeText(context, R.string.error_internet,Toast.LENGTH_LONG).show();
-		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
-		miaAlert.setMessage(R.string.error_internet);
-		//miaAlert.setTitle("AlertDialog di MrWebMaster");
-
-		miaAlert.setCancelable(false);
-		miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int id) {  
-		  }
-		});
-		    	
-
-		AlertDialog alert = miaAlert.create();
-		alert.show();
-	}*/
 	
+	/**
+	 * 
+	 * @param errore Stringa che indica il tipo di errore che poi verra mostrato all'utente
+	 * @param context Utilizzato per creare il Dialog
+	 * @param json Contiene la risposta ritornata all'utente e viene eventualmente usata per segnalare tramite email il problema allo sviluppatore
+	 */
 	
 	public static void ProblemaApi(String errore,final Activity context,final JSONObject json){
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
