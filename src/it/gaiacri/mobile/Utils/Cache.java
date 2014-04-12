@@ -2,7 +2,6 @@ package it.gaiacri.mobile.Utils;
 
 import java.io.File;
 
-import com.jakewharton.disklrucache.DiskLruCache;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -25,7 +24,9 @@ public class Cache {
         cacheLocation.mkdirs();
 
         BitmapLruCache.Builder builder = new BitmapLruCache.Builder(context);
+        //abilita il cache su ram
         builder.setMemoryCacheEnabled(true).setMemoryCacheMaxSizeUsingHeapSize();
+        //abilita il cache su disco
         builder.setDiskCacheEnabled(true).setDiskCacheLocation(cacheLocation);
         
         mCache = builder.build();
