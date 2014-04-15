@@ -25,7 +25,7 @@ public class Cache {
 
         BitmapLruCache.Builder builder = new BitmapLruCache.Builder(context);
         //abilita il cache su ram
-        builder.setMemoryCacheEnabled(true).setMemoryCacheMaxSizeUsingHeapSize();
+        //builder.setMemoryCacheEnabled(true).setMemoryCacheMaxSizeUsingHeapSize();
         //abilita il cache su disco
         builder.setDiskCacheEnabled(true).setDiskCacheLocation(cacheLocation);
         
