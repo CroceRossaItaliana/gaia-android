@@ -189,9 +189,7 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			// Highlight the selected item, update the title, and close the drawer
-			// update selected item and title, then close the drawer			
+				long id) {	
 			Fragment test=null;
 			mDrawerList.setItemChecked(position, true);
 			Bundle b=new Bundle();
@@ -245,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
 			//Giudizi
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_feedback_giudizi))){
 				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-						"mailto","giudizi.android@gaia.cri.it", null));
+						"mailto","feedback@gaia.cri.it", null));
 				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Giudizi Gaia Android");
 				startActivity(Intent.createChooser(emailIntent, "Send email..."));
 			}
