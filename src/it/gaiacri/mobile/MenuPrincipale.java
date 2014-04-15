@@ -30,7 +30,6 @@ public class MenuPrincipale extends Fragment {
 	public String sid = "";
 
 	public TextView nome;
-	//public TextView comitato;
 
 	public String user_nome;
 
@@ -102,15 +101,10 @@ public class MenuPrincipale extends Fragment {
 	}
 
 	private void startSplash() {
-
-
 		mSplashView.setVisibility(View.VISIBLE);
 		mMenuView.setVisibility(View.GONE);
 		TextView t=((TextView) v.findViewById(R.id.Loading));
 		t.setText(this.getString(R.string.login_connessione));
-		//avviare download "ciao"
-		//TODO
-		// Create and execute the background task.
 		richiestaWelcome();
 	}
 
@@ -172,19 +166,10 @@ public class MenuPrincipale extends Fragment {
 
 				if ( utente != null ) {
 					Log.e("Login", "Gia Identificato");
-
-					//mCallbacks.onPostUpdate();
-					//aggiorna scritta su display
-					//((TextView) activity.findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
 					richiestaDati();
-
-
-					//mHandler.sendEmptyMessage(FINISH_LOAD);
 				} else {
 					Log.e("Login", "Non gia Identificato");
-					//mHandler.sendEmptyMessage(FINISH_LOAD);
 					Intent myIntent = new Intent(context, Accesso.class);
-					//myIntent.putExtra("sid", getSid());
 					startActivity(myIntent);
 					activity.finish();
 				}
@@ -217,8 +202,6 @@ public class MenuPrincipale extends Fragment {
 					nome.setText("Ciao, "+user_nome);
 				} catch (JSONException e) {
 					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
-
-					//((Button)activity.findViewById(R.id.button3)).setEnabled(false);
 				}
 				mSplashView.setVisibility(View.GONE);
 				mMenuView.setVisibility(View.VISIBLE);

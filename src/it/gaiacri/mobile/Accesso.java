@@ -9,7 +9,6 @@ import org.json.JSONException;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,7 +37,6 @@ public class Accesso extends ActionBarActivity {
 	public Context context;
 	public static WebView webview;
 	private static RichiestaLogin login;
-	private String sid ="";
 	public SharedPreferences sharedPref;
 
 
@@ -109,7 +107,6 @@ public class Accesso extends ActionBarActivity {
 			webview = new WebView(this);
 			webview.getSettings().setJavaScriptEnabled(true);
 
-			final Activity activity = this;
 			webview.setWebChromeClient(new WebChromeClient() {
 				public void onProgressChanged(WebView view, int progress) {
 					setSupportProgress(progress * 100);
