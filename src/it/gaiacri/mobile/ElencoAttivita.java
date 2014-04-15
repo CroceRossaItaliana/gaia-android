@@ -4,11 +4,8 @@ import it.gaiacri.mobile.Object.Attivita;
 import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -36,7 +33,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ElencoAttivita extends Fragment {

@@ -5,7 +5,6 @@ import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.HashMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.os.Bundle;
@@ -245,9 +244,12 @@ public class MenuPrincipale extends Fragment {
 
 	//potrebbe dare problemi...sicuramente dara problemi :P
 	public void AddPosta(){
-		FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
-		fragmentManager.beginTransaction()
-		.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+		FragmentActivity activity=this.getActivity();
+		if(activity!= null){
+			FragmentManager fragmentManager = activity.getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+		}
 	}
 
 }
