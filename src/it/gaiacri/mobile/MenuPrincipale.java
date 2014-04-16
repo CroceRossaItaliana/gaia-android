@@ -1,6 +1,7 @@
 package it.gaiacri.mobile;
 
 
+import it.gaiacri.mobile.MainActivity.RichiestaLogout;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,10 +33,8 @@ public class MenuPrincipale extends Fragment {
 	public String sid = "";
 
 	public TextView nome;
-	public TextView comitato;
 
 	public String user_nome;
-	public String user_comitato;
 
 	private Context context;
 	public SharedPreferences sharedPref;
@@ -58,7 +58,6 @@ public class MenuPrincipale extends Fragment {
 		mMenuView=v.findViewById(R.id.menu_principale);
 
 		nome = (TextView) v.findViewById(R.id.tv_nome);
-		comitato = (TextView) v.findViewById(R.id.tv_comitato);
 
 		context=super.getActivity();
 		activity=super.getActivity();
@@ -69,7 +68,7 @@ public class MenuPrincipale extends Fragment {
 		if(b!= null){
 			richiestaDati();
 		}else{
-			if(user_nome==null && user_comitato==null){
+			if(user_nome==null){
 				//splash
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				startSplash();
@@ -105,15 +104,10 @@ public class MenuPrincipale extends Fragment {
 	}
 
 	private void startSplash() {
-
-
 		mSplashView.setVisibility(View.VISIBLE);
 		mMenuView.setVisibility(View.GONE);
 		TextView t=((TextView) v.findViewById(R.id.Loading));
-		t.setText(this.getString(R.string.login_sessione));
-		//avviare download "ciao"
-		//TODO
-		// Create and execute the background task.
+		t.setText(this.getString(R.string.login_connessione));
 		richiestaWelcome();
 	}
 
@@ -155,7 +149,6 @@ public class MenuPrincipale extends Fragment {
 
 	public void annulla(){
 		user_nome=null;
-		user_comitato=null;
 	}
 
 	public class RichiestaWelcome extends Richiesta {
@@ -176,19 +169,10 @@ public class MenuPrincipale extends Fragment {
 
 				if ( utente != null ) {
 					Log.e("Login", "Gia Identificato");
-
-					//mCallbacks.onPostUpdate();
-					//aggiorna scritta su display
-					((TextView) activity.findViewById(R.id.Loading)).setText(getString(R.string.login_download_dati));	
 					richiestaDati();
-
-
-					//mHandler.sendEmptyMessage(FINISH_LOAD);
 				} else {
 					Log.e("Login", "Non gia Identificato");
-					//mHandler.sendEmptyMessage(FINISH_LOAD);
 					Intent myIntent = new Intent(context, Accesso.class);
-					//myIntent.putExtra("sid", getSid());
 					startActivity(myIntent);
 					activity.finish();
 				}
@@ -217,21 +201,14 @@ public class MenuPrincipale extends Fragment {
 		protected void onPostExecute(String ris) {
 			if(ErrorJson.Controllo(ris, activity,risposta)==0){
 				try {
-					user_nome=risposta.getJSONObject("anagrafica").getString("nome") + " " + risposta.getJSONObject("anagrafica").getString("cognome");
+					user_nome=risposta.getJSONObject("anagrafica").getString("nome") ;//+ " " + risposta.getJSONObject("anagrafica").getString("cognome");
 					nome.setText("Ciao, "+user_nome);
-					JSONArray comitati=risposta.getJSONArray("appartenenze");
-					user_comitato="";
-					for(int i=0; i< comitati.length();i++){
-						user_comitato=user_comitato+"\n"+comitati.getJSONObject(i).getJSONObject("comitato").getString("nome");
+					JSONArray user_comitato=risposta.getJSONArray("appartenenze");//+ " " + risposta.getJSONObject("anagrafica").getString("cognome");
+					if(user_comitato.length()==0) {
+						utenteSenzaComitato();
 					}
-					//user_comitato=((JSONObject) risposta.getJSONArray("appartenenze").get(0)).getJSONObject("comitato").getString("nome");
-					comitato.setText(user_comitato);
 				} catch (JSONException e) {
 					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
-
-					user_comitato=getString(R.string.menu_no_comitato);
-					comitato.setText(user_comitato);
-					//((Button)activity.findViewById(R.id.button3)).setEnabled(false);
 				}
 				mSplashView.setVisibility(View.GONE);
 				mMenuView.setVisibility(View.VISIBLE);
@@ -255,11 +232,69 @@ public class MenuPrincipale extends Fragment {
 		}
 	}
 
+	public void utenteSenzaComitato(){
+		AlertDialog.Builder miaAlert = new AlertDialog.Builder(this.getActivity());
+		miaAlert.setMessage("Ciao, "+user_nome+", "+getString(R.string.error_comitato));
+		miaAlert.setCancelable(false);
+		miaAlert.setNegativeButton(R.string.error_internet_no, new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int id) {
+				  getActivity().setResult(100);
+				  getActivity().finish();
+			  }
+			});
+		miaAlert.setPositiveButton(R.string.ns_menu_setting_logout, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {  
+				richiestaLogout();
+			}
+		});
+		
+		AlertDialog alert = miaAlert.create();
+		alert.show();		
+		
+	}
+	
+	class RichiestaLogout extends Richiesta {
+		public RichiestaLogout(HashMap<String, String> data) {
+			super(data,MenuPrincipale.this.context);
+		}
+		public String metodo() { return "logout"; }
+		protected void onPostExecute(String ris) {
+			if(ErrorJson.Controllo(ris,MenuPrincipale.this.getActivity(),risposta)==0){
+				getActivity().setResult(Activity.RESULT_OK);
+				//annulla();
+				Intent myIntent = new Intent(MenuPrincipale.this.getActivity(), Accesso.class);
+				startActivity(myIntent);
+				getActivity().finish();
+			}
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(MenuPrincipale.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaLogout();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
+	}
+
+	public void richiestaLogout(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaLogout asd = new RichiestaLogout(data);
+		asd.execute();
+	}
+	
+	
 	//potrebbe dare problemi...sicuramente dara problemi :P
 	public void AddPosta(){
-		FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
-		fragmentManager.beginTransaction()
-		.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+		FragmentActivity activity=this.getActivity();
+		if(activity!= null){
+			FragmentManager fragmentManager = activity.getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.posta_frame, new PostaIngresso()).commit(); //
+		}
 	}
 
 }

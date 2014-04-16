@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -35,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DisplayAttivita extends ActionBarActivity {
 
@@ -62,6 +63,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		setContentView(R.layout.activity_display_attivita);
 		passati=false;
 
+		this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 		id_dettagli= (String) this.getIntent().getExtras().get("id");
@@ -73,7 +75,7 @@ public class DisplayAttivita extends ActionBarActivity {
 
 		richiestaDettagli();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -86,6 +88,9 @@ public class DisplayAttivita extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			super.onBackPressed();
+	        return true;
 		case R.id.turni_maps:
 			if(lat!=0 && lon!=0){
 				String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", lat, lon);
@@ -389,7 +394,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					if(Boolean.parseBoolean(result)){
 						String partecipazione_id =risposta.getString("id");
 						turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
-						turni.get(getTurno(id)).ritirabile("true");
+						turni.get(getTurno(id)).ritirabile(true);
 						turni.get(getTurno(id)).setPartecipazione(partecipazione_id);
 					}
 				} catch (JSONException e) {
@@ -427,11 +432,9 @@ public class DisplayAttivita extends ActionBarActivity {
 				try {
 					String result=risposta.getString("ok");
 					if(!Boolean.parseBoolean(result))
-						Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
-					else
-					{
-						richiestaDettagli();
-					}
+						Crouton.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Style.ALERT ).show();
+						//Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
+					richiestaDettagli();
 				} catch (JSONException e) {
 					//Auto-generated catch block
 					//e.printStackTrace();

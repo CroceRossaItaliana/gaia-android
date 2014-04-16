@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
 		t.setArguments(b);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
-		.replace(R.id.content_frame, t).commit();
+		.replace(R.id.content_frame, t,"main").commit();
 		title=getString(R.string.title_activity_menu_principale);
 	}
 
@@ -189,10 +189,9 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			// Highlight the selected item, update the title, and close the drawer
-			// update selected item and title, then close the drawer			
+				long id) {	
 			Fragment test=null;
+			String tag="";
 			mDrawerList.setItemChecked(position, true);
 			Bundle b=new Bundle();
 			b.putString("sid", "test");
@@ -201,11 +200,18 @@ public class MainActivity extends ActionBarActivity {
 				title=getString(R.string.ns_menu_home_page);
 				test = new MenuPrincipale();
 				test.setArguments(b);
+				tag="main";
 			}
 			//Rubrica Delegati
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_delegati))){
 				title=getString(R.string.title_activity_rubrica_delegati);
 				test = new RubricaDelegati();
+
+			}
+			//Rubrica Volontari
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_rubrica_volontari))){
+				title=getString(R.string.title_activity_rubrica_volontari);
+				test = new RubricaVolontari();
 
 			}
 			//Elenco Attivita
@@ -218,6 +224,12 @@ public class MainActivity extends ActionBarActivity {
 				title=getString(R.string.title_activity_miei_turni);
 				test = new PartecipazioniAttivita();
 			}
+			//About
+			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_about))){
+				title=getString(R.string.title_activity_setting_about);
+				test = new AboutAttivita();
+			}
+
 
 			//Logout
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_setting_logout))){
@@ -233,22 +245,17 @@ public class MainActivity extends ActionBarActivity {
 			//Giudizi
 			if(((TextView)view.findViewById(R.id.menurow_title)).getText().toString().equals(getString(R.string.ns_menu_feedback_giudizi))){
 				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-						"mailto","giudizi.android@gaia.cri.it", null));
+						"mailto","feedback@gaia.cri.it", null));
 				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Giudizi Gaia Android");
 				startActivity(Intent.createChooser(emailIntent, "Send email..."));
 			}
 
-
-
-
-
 			if (test != null) {
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, test).commit(); //
+				.replace(R.id.content_frame, test,tag).commit(); //
 
 			}
-
 			//You should reset item counter
 			mDrawer.closeDrawer(mDrawerList);
 
@@ -306,4 +313,22 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		if(fragmentManager.findFragmentById(R.id.content_frame).getTag()!= "main"){
+			title=getString(R.string.ns_menu_home_page);
+			Fragment test = new MenuPrincipale();
+			Bundle b=new Bundle();
+			b.putString("sid", "prova");
+			test.setArguments(b);
+			fragmentManager.beginTransaction()
+			.replace(R.id.content_frame, test,"main").commit(); //
+		}else{
+			super.onBackPressed();
+		}
+	}
+
+	
+	
 }

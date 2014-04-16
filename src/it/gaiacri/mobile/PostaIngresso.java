@@ -1,6 +1,7 @@
 package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Posta;
+import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class PostaIngresso extends Fragment{
 
@@ -39,40 +41,49 @@ public class PostaIngresso extends Fragment{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View v=inflater.inflate(R.layout.activity_display_posta, container, false);
-		richiestaNotifiche();
 		listView = (ListView)v.findViewById(R.id.listPosta);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
-				String html=posta.get(pos).getBody();
-				WebView wv = new WebView(PostaIngresso.this.getActivity());
-				String mime = "text/html";
-				String encoding = "utf-8";
-				wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
-				wv.setWebViewClient(new WebViewClient() {
-					@Override
-					public boolean shouldOverrideUrlLoading(WebView view, String url) {
-						view.loadUrl(url);
+				TextView tv=(TextView)arg1.findViewById(R.id.posta_id);
+				if(!"".equals(tv.getText().toString())){
+					AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
+					Posta p=posta.get(pos);
+					String html=p.getBody();
+					html = "<b>Da:</b> "+p.getNomeMittente()
+							+"<br><b>Data e Ora:</b> "+ DateUtils.getDate(Long.parseLong(p.getTimestamp()), context)
+							+"<br><b>Oggetto:</b> "+p.getOggetto()
+							+"<br><br>"+html;
+					WebView wv = new WebView(PostaIngresso.this.getActivity());
+					String mime = "text/html";
+					String encoding = "utf-8";
+					wv.loadDataWithBaseURL(null, "<style type='text/css'>img {max-width: 100%;height:initial;}</style>"+html, mime, encoding, null);
+					wv.setWebViewClient(new WebViewClient() {
+						@Override
+						public boolean shouldOverrideUrlLoading(WebView view, String url) {
+							view.loadUrl(url);
 
-						return true;
-					}
-				});
-				alert.setView(wv);
-				alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-				alert.show();
+							return true;
+						}
+					});
+					alert.setView(wv);
+					alert.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
+					alert.show();
+				}
 			}
 		});
 		context= this.getActivity();
+		aggiornalist();
+		richiestaNotifiche();
 		return v;
 	}
-
+	
 	class RichiestaNotifiche extends Richiesta {
 		public RichiestaNotifiche(HashMap<String, String> data) {
 			super(data,PostaIngresso.this.getActivity().getApplicationContext());
@@ -101,6 +112,7 @@ public class PostaIngresso extends Fragment{
 						JSONObject obj=res.getJSONObject(i);
 						String posta_id=obj.getString("id");
 						String posta_corpo=obj.getString("corpo");
+						String posta_timestamp=obj.getString("timestamp");
 						JSONObject mittente=obj.optJSONObject("mittente");
 						String posta_mittente="";
 						if(!(mittente == null)){
@@ -109,7 +121,7 @@ public class PostaIngresso extends Fragment{
 								mitt.add(posta_mittente);
 						}
 						String posta_oggetto=obj.getString("oggetto");						
-						posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente));//Log.d("ciao", );
+						posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente,posta_timestamp));//Log.d("ciao", );
 					}
 
 
@@ -146,7 +158,7 @@ public class PostaIngresso extends Fragment{
 			alert.show();		
 		}
 	}	
-	
+
 	public void fixMittente(){
 		for(int i=0;i<posta.size();i++){
 			if(posta.get(i).getMittente().equals(""))
@@ -215,12 +227,21 @@ public class PostaIngresso extends Fragment{
 				pos=posta.get(i);
 
 				ServiceMap.put("posta_object", pos.getOggetto());
-				ServiceMap.put("posta_mittente",pos.getNomeMittente());
+				ServiceMap.put("posta_data", "Data: "+pos.getData(context));
+				ServiceMap.put("posta_mittente","Da: "+pos.getNomeMittente());
 				ServiceMap.put("posta_id",pos.getId());
 				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
 			}
-			String[] from={"posta_object","posta_mittente","posta_id"}; //dai valori contenuti in queste chiavi
-			int[] to={R.id.posta_oggetto,R.id.posta_mittente,R.id.posta_id};//agli id delle view
+			if(data.size() == 0){
+				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
+				ServiceMap.put("posta_object", "Nessuna Comunicazione");
+				ServiceMap.put("posta_data","");
+				ServiceMap.put("posta_mittente","");
+				ServiceMap.put("posta_id","");
+				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
+			}
+			String[] from={"posta_object","posta_data","posta_mittente","posta_id"}; //dai valori contenuti in queste chiavi
+			int[] to={R.id.posta_oggetto,R.id.posta_data,R.id.posta_mittente,R.id.posta_id};//agli id delle view
 
 			//costruzione dell adapter
 			SimpleAdapter adapter=new SimpleAdapter(
@@ -232,7 +253,7 @@ public class PostaIngresso extends Fragment{
 			//utilizzo dell'adapter
 			listView.setAdapter(adapter);
 		}else{
-			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_posta, R.id.posta_oggetto,new String[]{"Caricamento.."});
+			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_posta, R.id.posta_oggetto,new String[]{"Caricamento notifiche in corso.."});
 			listView.setAdapter(arrayAdapter);
 		}
 	}
@@ -248,16 +269,16 @@ public class PostaIngresso extends Fragment{
 		}
 		RichiestaMittenti richiesta=new RichiestaMittenti(date);
 		richiesta.execute();
-		
+
 	}
-	
+
 	public void richiestaNotifiche(){
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("direzione", "ingresso");
 		data.put("pagina", "1");
-		data.put("perPagina", "5");
+		data.put("perPagina", "20");
 		RichiestaNotifiche richiesta=new RichiestaNotifiche(data);
 		richiesta.execute();
 	}
-	
+
 }

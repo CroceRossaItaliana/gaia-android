@@ -39,12 +39,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class RubricaDelegati extends Fragment{
+public class RubricaVolontari extends Fragment{
 
 	private ArrayList<Rubrica> rubrica;
 	private static ListView listView;
-	private Cache cache;
 	private Context context;
+	private Cache cache;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,13 +62,13 @@ public class RubricaDelegati extends Fragment{
 	class RichiestaDelegati extends Richiesta {
 
 		public RichiestaDelegati(HashMap<String, String> data) {
-			super(data,RubricaDelegati.this.getActivity().getApplicationContext());
+			super(data,RubricaVolontari.this.getActivity().getApplicationContext());
 		}
 
-		public String metodo() { return "rubrica_delegati"; }
+		public String metodo() { return "rubrica"; }
 
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,RubricaDelegati.this.getActivity(),risposta)==0){
+			if(ErrorJson.Controllo(ris,RubricaVolontari.this.getActivity(),risposta)==0){
 				Log.d("Json",risposta.toString());
 
 				if(rubrica==null)
@@ -113,7 +113,7 @@ public class RubricaDelegati extends Fragment{
 		}
 		@Override
 		public void restore(){
-			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(RubricaDelegati.this.getActivity());
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(RubricaVolontari.this.getActivity());
 			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {  
 					richiestaDelegati();
@@ -181,22 +181,20 @@ public class RubricaDelegati extends Fragment{
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setTag(rubrica.get(position).getNumero());
 					if(!RubricaUtils.isTelephonyEnabled(context))
 						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setVisibility(View.GONE);;
-
-						//settare azioni
-						((BootstrapButton)row.findViewById(R.id.rubrica_email)).setOnClickListener(new View.OnClickListener() {
-							public void onClick(View v) {
-								RubricaUtils.sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag(),context);
-								//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
-							}
-						});
-						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setOnClickListener(new View.OnClickListener() {
-							public void onClick(View v) {
-								RubricaUtils.sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag(),context);
-								//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
-							}
-						});
-
-						return row;
+					//settare azioni
+					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							RubricaUtils.sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag(),context);
+							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
+						}
+					});
+					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							RubricaUtils.sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag(),context);
+							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
+						}
+					});
+					return row;
 				}
 			};
 			//utilizzo dell'adapter
@@ -220,25 +218,18 @@ public class RubricaDelegati extends Fragment{
 
 	private class ImageDownloaderProva extends AsyncTask<Object,Object,Object> {
 		@Override
-		protected void onProgressUpdate (Object... values){
-			Log.d("update", "via");
-			aggiornalist();
-		}
-		
-		@Override
 		protected Object doInBackground(Object... param) {
-			// TODO Auto-generated method stub
 			String url="";
+			// TODO Auto-generated method stub
 			for(int i=0;i<rubrica.size();i++){
 				url=rubrica.get(i).getAvatar();
 				if(!url.equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
 					//e in cache??
 					if(cache.contains(url)){
-						Log.i("cache", "image"+rubrica.get(i).getAvatar());
+						//Log.i("cache", "image"+rubrica.get(i).getAvatar());
 						rubrica.get(i).setBitmap(cache.get(url));
-						publishProgress("");
 					}else{
-						Log.i("download", "image"+rubrica.get(i).getAvatar());
+						//Log.i("download", "image"+rubrica.get(i).getAvatar());
 						ImageDownloader im=new ImageDownloader();
 						im.execute(url,i);
 					}
@@ -259,12 +250,7 @@ public class RubricaDelegati extends Fragment{
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			Log.i("Async-Example", "onPostExecute Called");
 			rubrica.get(i).setBitmap(result);
-			aggiornalist();
-			//image.setImageBitmap(result);
-			//downloadedImg.setImageBitmap(result);
-
 		}
 
 		private Bitmap downloadBitmap(String url) {

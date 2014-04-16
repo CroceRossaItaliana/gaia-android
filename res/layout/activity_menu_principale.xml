@@ -60,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/venti2"
+                android:paddingBottom="10dp"
                 android:text="Attendere..."
                 android:gravity="center"
                 android:textAlignment="center"
@@ -69,9 +70,8 @@
                 android:id="@+id/tv_comitato"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/venti2"
 				android:gravity="center"
-                android:text="Caricamento in corso."
+                android:text="@string/menu_comunicazioni"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#CC0000" />
 

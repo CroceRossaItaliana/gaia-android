@@ -1,7 +1,6 @@
 package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Partecipazioni;
-import it.gaiacri.mobile.Object.Turno;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.ArrayList;

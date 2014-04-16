@@ -9,15 +9,23 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dip"
+        android:layout_marginLeft="5dp"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/posta_mittente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dip"
+        android:layout_marginLeft="5dp"
         android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/posta_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"/>
+    
     <TextView
         android:id="@+id/posta_id"
         android:layout_width="wrap_content"

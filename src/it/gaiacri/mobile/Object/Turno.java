@@ -2,12 +2,13 @@ package it.gaiacri.mobile.Object;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class Turno {
 	private String desc;
 	private String id;
@@ -25,7 +26,7 @@ public class Turno {
 	private boolean puoPartecipare;
 	private boolean partecipa;
 	private String partecipazione;
-	private String ritirabile;
+	private boolean ritirabile;
 	private String confermata;
 	
 	
@@ -42,7 +43,7 @@ public class Turno {
 	
 	public Turno(String desc, String id, String start, String end, String url,
 			String color, boolean pieno, boolean futuro, boolean scoperto,
-			boolean puoPartecipare, boolean partecipa, String partecipazione,String ritirabile,String confermata,int y,int m,int d, int h, int i) {
+			boolean puoPartecipare, boolean partecipa, String partecipazione,boolean ritirabile,String confermata,int y,int m,int d, int h, int i) {
 		super();
 		this.desc = desc;
 		this.id = id;
@@ -111,7 +112,7 @@ public class Turno {
 			//puo iscriversi
 			return 0;
 		}else{
-			if((futuro == true) && (partecipa == true) && ("true".equals(ritirabile))){//&& (partecipazione == true)){
+			if((futuro == true) && (partecipa == true) && (ritirabile)){//&& (partecipazione == true)){
 				//puo cancellarsi
 				return 1;
 			}else{
@@ -119,7 +120,7 @@ public class Turno {
 					//turno pieno
 					return 2;
 				}else{
-					if(("false".equals(ritirabile)) && ( partecipa == true) && (!partecipazione.equals("") && ("30".equals(confermata)))){
+					if((!ritirabile) && ( partecipa == true) && (!partecipazione.equals("") && ("30".equals(confermata)))){
 						//concessa
 						return 4;
 					}else{
@@ -143,7 +144,7 @@ public class Turno {
 	public void setPartecipazione(String id){
 		partecipazione=id;
 	}
-	public void ritirabile(String stato){
+	public void ritirabile(boolean stato){
 		ritirabile=stato;
 	}
 	public boolean getPart(){
@@ -157,10 +158,13 @@ public class Turno {
 	}
 	public String getDate(){
 		String temp="";
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
+		//TODO da rifare questo frammento di codice perche non funziona un granche
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
 		try {
 			Date date = dt.parse(start);
-			temp=date.getDay() +"/" +(date.getMonth()+1) +"/" +(date.getYear()+1900)+ " "+ date.getHours() +":"+ date.getMinutes();
+			Calendar cal=Calendar.getInstance();
+			cal.setTime(date);
+			temp=cal.get(Calendar.DAY_OF_MONTH) +"/" +(cal.get(Calendar.MONTH)+1) +"/" +(cal.get(Calendar.YEAR))+ " "+ cal.get(Calendar.HOUR_OF_DAY) +":"+ Number(cal.get(Calendar.MINUTE));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			Log.e("date",e.getMessage());
@@ -181,13 +185,9 @@ public class Turno {
 		boolean tur_partecipa=turno.optBoolean("partecipa");
 
 		JSONObject partecipazione=turno.optJSONObject("partecipazione");
-		JSONObject partecipazioneStato=turno.optJSONObject("partecipazioneStato");
-		String tur_ritirabile=null;
-		String tur_confermata=null;
-		if(partecipazioneStato!= null){
-			tur_ritirabile=partecipazioneStato.optString("ritirabile");
-			tur_confermata=partecipazioneStato.optString("stato");
-		}
+		String partecipazioneStato=turno.optString("stato");
+		boolean partecipazioneRitirabile=turno.optBoolean("ritirabile");
+		
 		String tur_partecipazione="";
 		if(partecipazione != null){
 			tur_partecipazione=partecipazione.optString("id");
@@ -201,9 +201,16 @@ public class Turno {
 		int tur_i=tur_durata.optInt("i");
 		Turno t=new Turno(tur_titolo, tur_id, tur_start, tur_end, "",
 				tur_color, tur_pieno, tur_futuro,tur_scoperto,
-				tur_puoRichiedere, tur_partecipa, tur_partecipazione,tur_ritirabile,tur_confermata,
+				tur_puoRichiedere, tur_partecipa, tur_partecipazione,partecipazioneRitirabile,partecipazioneStato,
 				tur_y,tur_m,tur_d,tur_h,tur_i);		
 		return t;
+	}
+	
+	private String Number(int num){
+		if(num<10)
+			return "0"+num;
+		else
+			return ""+num;
 	}
 	
 	
