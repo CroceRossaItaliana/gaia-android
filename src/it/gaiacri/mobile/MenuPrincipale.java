@@ -1,13 +1,16 @@
 package it.gaiacri.mobile;
 
 
+import it.gaiacri.mobile.MainActivity.RichiestaLogout;
 import it.gaiacri.mobile.Utils.ErrorJson;
 
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -200,6 +203,10 @@ public class MenuPrincipale extends Fragment {
 				try {
 					user_nome=risposta.getJSONObject("anagrafica").getString("nome") ;//+ " " + risposta.getJSONObject("anagrafica").getString("cognome");
 					nome.setText("Ciao, "+user_nome);
+					JSONArray user_comitato=risposta.getJSONArray("appartenenze");//+ " " + risposta.getJSONObject("anagrafica").getString("cognome");
+					if(user_comitato.length()==0) {
+						utenteSenzaComitato();
+					}
 				} catch (JSONException e) {
 					//se passo qua e perche non c'e il comitato oppure non c'e l'anagrafica
 				}
@@ -225,6 +232,61 @@ public class MenuPrincipale extends Fragment {
 		}
 	}
 
+	public void utenteSenzaComitato(){
+		AlertDialog.Builder miaAlert = new AlertDialog.Builder(this.getActivity());
+		miaAlert.setMessage("Ciao, "+user_nome+", "+getString(R.string.error_comitato));
+		miaAlert.setCancelable(false);
+		miaAlert.setNegativeButton(R.string.error_internet_no, new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int id) {
+				  getActivity().setResult(100);
+				  getActivity().finish();
+			  }
+			});
+		miaAlert.setPositiveButton(R.string.ns_menu_setting_logout, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {  
+				richiestaLogout();
+			}
+		});
+		
+		AlertDialog alert = miaAlert.create();
+		alert.show();		
+		
+	}
+	
+	class RichiestaLogout extends Richiesta {
+		public RichiestaLogout(HashMap<String, String> data) {
+			super(data,MenuPrincipale.this.context);
+		}
+		public String metodo() { return "logout"; }
+		protected void onPostExecute(String ris) {
+			if(ErrorJson.Controllo(ris,MenuPrincipale.this.getActivity(),risposta)==0){
+				getActivity().setResult(Activity.RESULT_OK);
+				//annulla();
+				Intent myIntent = new Intent(MenuPrincipale.this.getActivity(), Accesso.class);
+				startActivity(myIntent);
+				getActivity().finish();
+			}
+		}
+		@Override
+		public void restore(){
+			AlertDialog.Builder miaAlert=ErrorJson.AssenzaInternet(MenuPrincipale.this.getActivity());
+			miaAlert.setPositiveButton(R.string.error_internet_si, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {  
+					richiestaLogout();
+				}
+			});
+			AlertDialog alert = miaAlert.create();
+			alert.show();		
+		}
+	}
+
+	public void richiestaLogout(){
+		HashMap<String, String> data = new HashMap<String, String>();
+		RichiestaLogout asd = new RichiestaLogout(data);
+		asd.execute();
+	}
+	
+	
 	//potrebbe dare problemi...sicuramente dara problemi :P
 	public void AddPosta(){
 		FragmentActivity activity=this.getActivity();

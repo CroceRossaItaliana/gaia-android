@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Gaia Mobile</string>
-    <string name="app_version">0.6.15</string>
+    <string name="app_version">1.0.0</string>
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
     <string name="menu_comunicazioni">Ultime 20 Comunicazioni:</string>
@@ -77,6 +77,7 @@
 	<string name="error_internet_si">Riprova</string>
 	<string name="error_internet_no">Esci</string>
 	<string name="error_turn_confirmed">Turno gia\' confermato. Contattare Referente per cancellarsi!</string>
+	<string name="error_comitato">ci risulta che non hai selezionato alcun Comitato di appartenenza. Fino a che non avrai scelto il comitato di cui fai parte (dal portale web) e non sarai stato approvato dal tuo presidente non potrai utilizzare le funzionalità di Gaia Mobile.</string>
 	
 	
 	<string name="drawer_open">Menu</string>
