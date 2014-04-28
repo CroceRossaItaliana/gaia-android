@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -33,21 +34,28 @@
         android:layout_below="@+id/textViewData"
         android:text="prova"
         android:textSize="16sp" />
+    <TextView
+        android:id="@+id/textViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textViewIscritti"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
         android:layout_alignTop="@+id/textViewNome" >
-
-        <Button
-            android:id="@+id/buttonPartecipa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:enabled="false"
-            android:text="Partecipa" />
+            
+        <com.beardedhen.androidbootstrap.BootstrapButton
+    		android:id="@+id/buttonPartecipa"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="Partecipa"
+    		android:layout_centerVertical="true"
+    		android:enabled="true"
+    		bootstrapbutton:bb_roundedCorners="true" />
 
     </RelativeLayout>
     

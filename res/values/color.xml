@@ -2,4 +2,10 @@
 <resources>
     <color name="text_succes">#468847</color>    
     <color name="gaia_red">#B20000</color>
+    <color name="gaia_maps">#3a87ad</color>
+    <color name="turno_vuoto">#B20000</color>
+    <color name="turno_pieno">#7E7AED</color>
+    <color name="label_important">#b94a48</color>
+    <color name="label_warning">#f89406</color>
+    <color name="label_success">#468847</color>
 </resources>

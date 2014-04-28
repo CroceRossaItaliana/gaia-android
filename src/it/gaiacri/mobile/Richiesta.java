@@ -1,6 +1,5 @@
 package it.gaiacri.mobile;
 
-
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,16 +22,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class Richiesta extends AsyncTask<String, String, String> {
-	private HashMap<String, String> mData = null;// post data
+	protected HashMap<String, String> mData = null;// post data
 
-	private static String sid = "";
-	//public static String base = "https://gaia.cri.it/api.php?a=";
+	protected static String sid = "";
 	public static String base = "https://gaia.cri.it/api.php";
+	//public static String base = "http://192.168.1.125/gaia/api.php";
+	//public static String base = "http://10.0.2.2/gaia/api.php";
 	public Context context;
 	public JSONObject risposta = null;
+	public JSONObject richiesta = null;
 	public JSONObject sessione = null;
 	public JSONObject utente   = null;
-	public JSONArray attivita= null;
 
 	/**
 	 * constructor
@@ -44,11 +43,20 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	}
 
 
+	public Richiesta() {
+	}
+
+
 	public String metodo() { return "ciao"; }
 
+	@Override
+	protected void onProgressUpdate (String... values){
+		Log.d("update", "via");
+		restore();
+	}
 	/**
 	 * background
-	 */
+	 */	
 	@Override
 	protected String doInBackground(String... params) {
 		int errore=0;
@@ -65,13 +73,14 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				JSONObject object = new JSONObject();
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
-				object.put("key", "eb88e6f401ff19d1ce9f0a07c28fddbf08e661d3");
+				object.put("key", "1aa50adbd038855c4c0f1e4953f2f98f18ccbd10"); //server gaia.cri.it
+				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server 
 				Iterator<String> ita = mData.keySet().iterator();
             	while (ita.hasNext()) {
                 	String key = ita.next();
                 	object.put(key, mData.get(key));
                 }
-            	//Log.d("json", json);
+            	//Log.d("json", object.toString());
 				StringEntity se = new StringEntity(object.toString());
 				//sets the post request as the resulting string
     			post.setEntity(se);
@@ -88,7 +97,7 @@ public class Richiesta extends AsyncTask<String, String, String> {
 					errore=1;
 			}
 			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				errore=2;
 			}
 			catch (Exception e) {
@@ -112,21 +121,27 @@ public class Richiesta extends AsyncTask<String, String, String> {
 
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						//e.printStackTrace();
 						errore=5;
 					}
 					if(errore==0){
-						Log.i("Gaia", str);
+						//Log.i("Gaia", str);
 						try {
 							utente	 = risposta.getJSONObject("sessione").optJSONObject("utente");
 							sessione=risposta.getJSONObject("sessione");
-							if(metodo().equals("attivita"))
-								attivita=risposta.getJSONArray("risposta");
-							else
-								risposta = risposta.getJSONObject("risposta");
+							richiesta=risposta.getJSONObject("richiesta");
+							//if(metodo().equals("attivita")){
+							//	attivita=risposta.getJSONArray("risposta");
+							//}else{
+							risposta = risposta.getJSONObject("risposta");
+							if(risposta.has("errore")){
+								errore=7;
+								return "Errore "+risposta.getJSONObject("errore").getString("messaggio");
+							}
+							//}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							//e.printStackTrace();
 							errore=6;
 						}
 					}
@@ -134,6 +149,9 @@ public class Richiesta extends AsyncTask<String, String, String> {
 			}
 		}else{
 			str="Errore Internet";
+			//ErrorJson.AssenzaInternet(context);
+			publishProgress("");
+			
 		}
 
 
@@ -177,6 +195,9 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	@Override
 	protected void onPostExecute(String result) {
 	}
+	
+	public void restore(){
+	}
 
 	public static String getSid() {
 		return sid;
@@ -186,11 +207,9 @@ public class Richiesta extends AsyncTask<String, String, String> {
 		Richiesta.sid = sid;
 	}
 
-
 	public HashMap<String, String> getmData() {
 		return mData;
 	}
-
 
 	public void setmData(HashMap<String, String> mData) {
 		this.mData = mData;

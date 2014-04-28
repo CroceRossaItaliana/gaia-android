@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="ns_menu_items_attivita">
+        <item>ns_menu_attivita_elenco</item>
+        <item>ns_menu_attivita_miei</item>
+    </string-array>
+        <string-array name="ns_menu_items_rubrica">
+        <item>ns_menu_rubrica_delegati</item>
+        <item>ns_menu_rubrica_volontari</item>
+    </string-array>
+        <string-array name="ns_menu_items_feedback">
+        <item>ns_menu_feedback_supporto</item>
+        <item>ns_menu_feedback_giudizi</item>
+    </string-array>       
+    <string-array name="ns_menu_items_setting">
+        <item>ns_menu_setting_logout</item>
+        <item>ns_menu_setting_about</item>
+    </string-array>
+
+    <array name="ns_menu_items_icon">
+        <item>ns_menu_home_page_icon</item>
+        <item>ns_menu_attivita_elenco_icon</item>
+        <item>ns_menu_attivita_miei_icon</item>
+        <item>ns_menu_rubrica_delegati_icon</item>
+        <item>ns_menu_rubrica_volontari_icon</item>
+        <item>ns_menu_feedback_supporto_icon</item>
+        <item>ns_menu_feedback_giudizi_icon</item>
+        <item>ns_menu_setting_logout_icon</item>
+        <item>ns_menu_setting_about_icon</item>
+    </array>
+
+</resources>
