@@ -233,9 +233,11 @@ public class ElencoAttivita extends Fragment {
 								//String col=a.get(position).getTurni().get(0).getColor();
 								//Log.d("Colore Elab:", col);
 								((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(a.get(position).getColor()));
+								((TextView)row.findViewById(R.id.textViewListData)).setTextColor(Color.DKGRAY);
+								((TextView)row.findViewById(R.id.textViewListUrl)).setTextColor(Color.DKGRAY);
+								
 							}
 							return row;
-
 						}
 					};
 
