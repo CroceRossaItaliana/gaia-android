@@ -2,12 +2,14 @@ package it.gaiacri.mobile.Utils;
 
 import org.json.JSONObject;
 
+import it.gaiacri.mobile.Accesso;
 import it.gaiacri.mobile.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 public class ErrorJson {
 
@@ -21,14 +23,23 @@ public class ErrorJson {
 				return 2;
 			}else{
 				if(ris.startsWith("Errore ")){
-					ProblemaApi(ris.substring(7),context,json);
-					return 3;
+					Log.d("Errore",json.optJSONObject("errore").optString("codice"));
+					Log.d("Errore", ""+ ("1010".equals(json.optJSONObject("errore").optString("codice"))));
+					if("1010".equals(json.optJSONObject("errore").optString("codice"))){
+						Log.d("si", "YEP");
+						Intent myIntent = new Intent(context, Accesso.class);
+						context.startActivity(myIntent);
+						context.finish(); 
+					}else{
+						ProblemaApi(ris.substring(7),context,json);
+						return 3;
+					}
 				}
 			}
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * 
 	 * @param context Utilizzato per generare il Dialog
@@ -39,21 +50,21 @@ public class ErrorJson {
 		miaAlert.setMessage(R.string.error_internet);
 		miaAlert.setCancelable(false);
 		miaAlert.setNegativeButton(R.string.error_internet_no, new DialogInterface.OnClickListener() {
-			  public void onClick(DialogInterface dialog, int id) {
-				  context.setResult(100);
-				  context.finish();
-			  }
-			});
+			public void onClick(DialogInterface dialog, int id) {
+				context.setResult(100);
+				context.finish();
+			}
+		});
 		return miaAlert;
 	}
-	
+
 	/**
 	 * 
 	 * @param errore Stringa che indica il tipo di errore che poi verra mostrato all'utente
 	 * @param context Utilizzato per creare il Dialog
 	 * @param json Contiene la risposta ritornata all'utente e viene eventualmente usata per segnalare tramite email il problema allo sviluppatore
 	 */
-	
+
 	public static void ProblemaApi(String errore,final Activity context,final JSONObject json){
 		AlertDialog.Builder miaAlert = new AlertDialog.Builder(context);
 		miaAlert.setTitle(R.string.api_error);
@@ -61,22 +72,22 @@ public class ErrorJson {
 
 		miaAlert.setCancelable(false);
 		miaAlert.setPositiveButton(R.string.api_email, new DialogInterface.OnClickListener() {
-			  public void onClick(DialogInterface dialog, int id) {
-				  //da aggiungere il codice per la mail
-				  Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-				            "mailto","android@gaia.cri.it", null));
-				  emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Errore Android Api");
-				  emailIntent.putExtra(Intent.EXTRA_TEXT, "Errore Generato \n"+json);
-				  context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
-				  context.setResult(100);
-				  context.finish();
-			  }
-			});
+			public void onClick(DialogInterface dialog, int id) {
+				//da aggiungere il codice per la mail
+				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+						"mailto","android@gaia.cri.it", null));
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Errore Android Api");
+				emailIntent.putExtra(Intent.EXTRA_TEXT, "Errore Generato \n"+json);
+				context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+				context.setResult(100);
+				context.finish();
+			}
+		});
 		miaAlert.setNegativeButton(R.string.api_close, new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int id) {
-			  context.setResult(100);
-			  context.finish();
-		  }
+			public void onClick(DialogInterface dialog, int id) {
+				context.setResult(100);
+				context.finish();
+			}
 		});
 		AlertDialog alert = miaAlert.create();
 		alert.show();

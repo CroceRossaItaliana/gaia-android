@@ -94,7 +94,6 @@ public class ElencoAttivita extends Fragment {
 		@Override
 		public CharSequence getPageTitle(int position) {
 			c.add(Calendar.DAY_OF_MONTH, position-giorni/2);
-			//"Ven 17 Gen"
 			String date1=DateUtils.DayWeek(c.get(Calendar.DAY_OF_WEEK),context)+" "+c.get(Calendar.DAY_OF_MONTH)+ " "+ DateUtils.Month(c.get(Calendar.MONTH),context);
 			c.add(Calendar.DAY_OF_MONTH, -(position-giorni/2));
 			return date1;
@@ -119,7 +118,6 @@ public class ElencoAttivita extends Fragment {
 			this.args=args;
 			lv=new ListView(getActivity());
 			//download turni e visualizzazione
-
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_attivita, R.id.textViewList,new String[]{"Caricamento.."});
 			lv.setAdapter(arrayAdapter);
 
@@ -162,23 +160,11 @@ public class ElencoAttivita extends Fragment {
 
 							String att_title=js.getJSONObject("attivita").getString("nome");//js.getString("title");
 							String tur_title=js.getJSONObject("turno").getString("nome");
-							//att_title=att_title.substring(0,att_title.indexOf(','));
 							String att_id=js.getJSONObject("attivita").getString("id");//js.getString("attivita");
-							//String tur_url=js.getString("url");
-							//String tur_id=js.getString("id");
 							String att_organizzatore=js.getJSONObject("organizzatore").getString("nome");
 							String tur_start=js.getString("inizio");
-							
-							//String tur_end=js.getString("end");
 							String tur_color=js.getString("colore");
-							//se a contiene l'attivita allora aggiunto un turno
-							//altrimenti creo una nuova attivita e gli aggiunto il turno
-							//int indice=contiene(att_id);
-							//if(indice==-1){
 							a.add(new Attivita(att_title+ ", "+tur_title,att_id,att_organizzatore,tur_color,tur_start));
-							//indice=a.size()-1;
-							//}
-							//a.get(indice).addTurno(new Turno(tur_desc,tur_id,tur_start,tur_end,tur_url,tur_color));
 						}
 						aggiornalist();
 					}catch(Exception e){}
@@ -195,8 +181,6 @@ public class ElencoAttivita extends Fragment {
 			private void aggiornalist() {
 
 				if(a!=null){
-					//Questa è la lista che rappresenta la sorgente dei dati della listview
-					//ogni elemento è una mappa(chiave->valore)
 					ArrayList<HashMap<String, Object>> data=new ArrayList<HashMap<String,Object>>();
 
 					HashMap<String,Object> ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
@@ -230,8 +214,6 @@ public class ElencoAttivita extends Fragment {
 							}
 							View row = super.getView(position, convertView, parent);
 							if(a!=null && a.size()!=0){
-								//String col=a.get(position).getTurni().get(0).getColor();
-								//Log.d("Colore Elab:", col);
 								((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(a.get(position).getColor()));
 								((TextView)row.findViewById(R.id.textViewListData)).setTextColor(Color.DKGRAY);
 								((TextView)row.findViewById(R.id.textViewListUrl)).setTextColor(Color.DKGRAY);
@@ -251,7 +233,6 @@ public class ElencoAttivita extends Fragment {
 
 					public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 							long arg3) {
-						//Toast.makeText(getApplicationContext(),"hiihih" + pos,Toast.LENGTH_SHORT).show();
 						String id=a.get(pos).getId();
 						if(!id.equals("no")){
 							Intent i= new Intent(ElencoAttivita.context,DisplayAttivita.class);
@@ -259,7 +240,6 @@ public class ElencoAttivita extends Fragment {
 							startActivityForResult(i, 0);
 						}else{
 							Crouton.makeText(ElencoAttivita.activity, R.string.attivita_no_turni, Style.INFO ).show();
-							//Toast.makeText(context, R.string.attivita_no_turni, Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
