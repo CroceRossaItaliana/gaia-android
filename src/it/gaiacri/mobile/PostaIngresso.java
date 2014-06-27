@@ -267,9 +267,10 @@ public class PostaIngresso extends Fragment{
 			data.put("id",mitt.get(i));
 			date.put(""+i, data);	
 		}
-		RichiestaMittenti richiesta=new RichiestaMittenti(date);
-		richiesta.execute();
-
+		if(!(PostaIngresso.this.getActivity() == null || PostaIngresso.this.getActivity().getApplicationContext()== null)){
+			RichiestaMittenti richiesta=new RichiestaMittenti(date);
+			richiesta.execute();
+		}
 	}
 
 	public void richiestaNotifiche(){
