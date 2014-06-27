@@ -20,8 +20,8 @@ Maggiori informazioni riguardo **il progetto Gaia di Croce Rossa Italiana** sono
 
 
 ## Stato attuale
-Sara' disponibile a breve sullo store android
-
+Disponibile sullo store Android
+<a href="https://play.google.com/store/apps/details?id=it.gaiacri.mobile"><img src="http://ciopper90.altervista.org/blog/wp-content/uploads/2013/07/it_generic_rgb_wo_45.png" /></a>
 
 ### La licenza 
 
