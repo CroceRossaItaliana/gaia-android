@@ -195,8 +195,6 @@ public class PostaIngresso extends Fragment{
 					//e.printStackTrace();
 				}
 				fixMittente();
-				//da gestire la risposta
-				//in base a come viene ritornata
 				aggiornalist();		
 			}
 		}

@@ -49,7 +49,6 @@ public class RubricaVolontari extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
 		View v=inflater.inflate(R.layout.activity_rubrica_delegati, container, false);
 		richiestaDelegati();
 		context= this.getActivity();
@@ -69,17 +68,12 @@ public class RubricaVolontari extends Fragment{
 
 		protected void onPostExecute(String ris) {
 			if(ErrorJson.Controllo(ris,RubricaVolontari.this.getActivity(),risposta)==0){
-				Log.d("Json",risposta.toString());
+				//Log.d("Json",risposta.toString());
 
 				if(rubrica==null)
 					rubrica= new ArrayList<Rubrica>();
 
 				try {
-					//	prin
-					//String TAG="Risposta: ";
-					//att_title=risposta.getString("nome");
-					//att_luogo=risposta.getString("luogo");
-					//int info_totale=risposta.getInt("totale");
 					JSONArray res=risposta.getJSONArray("risultati");
 
 					//recupera anche mittente da mostrare e salvare
@@ -91,25 +85,13 @@ public class RubricaVolontari extends Fragment{
 						String rubrica_cognome=obj.getString("cognome");
 						String rubrica_numero=obj.getString("numero");
 						String rubrica_email=obj.getString("email");
-						//JSONObject mittente=obj.optJSONObject("deleghe");
-						/*String posta_mittente="";
-						if(!(mittente == null)){
-							posta_mittente=obj.getJSONObject("mittente").getString("id");
-							if(!mitt.contains(posta_mittente))
-								mitt.add(posta_mittente);
-						}*/						
-						rubrica.add(new Rubrica(rubrica_avatar,rubrica_nome,rubrica_cognome,rubrica_numero,rubrica_email,new ArrayList<String>()));//Log.d("ciao", );
+						rubrica.add(new Rubrica(rubrica_avatar,rubrica_nome,rubrica_cognome,rubrica_numero,rubrica_email,new ArrayList<String>()));
 					}
-
 					orderArray();
 				} catch (JSONException e) {
 					Log.e("ERROR" ,e.getMessage());
-					//e.printStackTrace();
 				}
-				//da gestire la risposta
-				//in base a come viene ritornata
 			}
-
 		}
 		@Override
 		public void restore(){
@@ -128,7 +110,6 @@ public class RubricaVolontari extends Fragment{
 		Collections.sort(rubrica, new Comparator<Rubrica>() {
 			@Override
 			public int compare(Rubrica arg0, Rubrica arg1) {
-				// TODO Auto-generated method stub
 				return (arg0.getCognome() + " "+ arg0.getNome()).compareTo(arg1.getCognome() + " "+ arg1.getNome());
 			}
 		});
@@ -139,21 +120,20 @@ public class RubricaVolontari extends Fragment{
 	private void aggiornalist() {
 
 		if(rubrica!=null){
-			//Questa è la lista che rappresenta la sorgente dei dati della listview
-			//ogni elemento è una mappa(chiave->valore)
 			ArrayList<HashMap<String, Object>> data=new ArrayList<HashMap<String,Object>>();
-
-			HashMap<String,Object> ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
+			HashMap<String,Object> ServiceMap=new HashMap<String, Object>();
+			//creiamo una mappa di valori
 			Rubrica pos=null;
 			for(int i=0;i<rubrica.size();i++){
-				ServiceMap=new HashMap<String, Object>();//creiamo una mappa di valori
+				ServiceMap=new HashMap<String, Object>();
 				pos=rubrica.get(i);
 				ServiceMap.put("rubrica_nome", pos.getNome());
 				ServiceMap.put("rubrica_cognome",pos.getCognome());
-				data.add(ServiceMap);  //aggiungiamo la mappa di valori alla sorgente dati
-			}
-			String[] from={"rubrica_cognome","rubrica_nome"}; //dai valori contenuti in queste chiavi
-			int[] to={R.id.rubrica_nome,R.id.rubrica_ruoli};//agli id delle view
+				data.add(ServiceMap);
+				}
+			//binding dei dati con gui
+			String[] from={"rubrica_cognome","rubrica_nome"};
+			int[] to={R.id.rubrica_nome,R.id.rubrica_ruoli};
 
 			//costruzione dell adapter
 			SimpleAdapter adapter=new SimpleAdapter(
@@ -172,26 +152,23 @@ public class RubricaVolontari extends Fragment{
 					View row = super.getView(position, convertView, parent);
 
 					//set Avatar
-					//Log.d("avatar",""+rubrica.get(position).getAvatar());
 					ImageView iw=(ImageView) row.findViewById(R.id.rubrica_avatar);
 					iw.setImageBitmap(rubrica.get(position).getBitmap(context));
 
-					//((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).setTag(tag);
+					if(!RubricaUtils.isTelephonyEnabled(context))
+						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setVisibility(View.GONE);
+
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setTag(rubrica.get(position).getEmail());
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setTag(rubrica.get(position).getNumero());
-					if(!RubricaUtils.isTelephonyEnabled(context))
-						((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setVisibility(View.GONE);;
 					//settare azioni
 					((BootstrapButton)row.findViewById(R.id.rubrica_email)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							RubricaUtils.sendMail((String)((BootstrapButton)v.findViewById(R.id.rubrica_email)).getTag(),context);
-							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
 					((BootstrapButton)row.findViewById(R.id.rubrica_chiama)).setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							RubricaUtils.sendCall((String)((BootstrapButton)v.findViewById(R.id.rubrica_chiama)).getTag(),context);
-							//String id=(String)((BootstrapButton)v.findViewById(R.id.buttonPartecipa)).getTag();
 						}
 					});
 					return row;
@@ -200,6 +177,7 @@ public class RubricaVolontari extends Fragment{
 			//utilizzo dell'adapter
 			listView.setAdapter(adapter);
 		}else{
+			//durante il caricamento dei dati viene mostrato il messaggio "Caricamento"
 			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_attivita, R.id.textViewList,new String[]{"Caricamento.."});
 			listView.setAdapter(arrayAdapter);
 		}
@@ -220,16 +198,13 @@ public class RubricaVolontari extends Fragment{
 		@Override
 		protected Object doInBackground(Object... param) {
 			String url="";
-			// TODO Auto-generated method stub
 			for(int i=0;i<rubrica.size();i++){
 				url=rubrica.get(i).getAvatar();
 				if(!url.equals("https://gaia.cri.it/./upload/avatar/placeholder/10.jpg")){
 					//e in cache??
 					if(cache.contains(url)){
-						//Log.i("cache", "image"+rubrica.get(i).getAvatar());
 						rubrica.get(i).setBitmap(cache.get(url));
 					}else{
-						//Log.i("download", "image"+rubrica.get(i).getAvatar());
 						ImageDownloader im=new ImageDownloader();
 						im.execute(url,i);
 					}
@@ -243,7 +218,6 @@ public class RubricaVolontari extends Fragment{
 		private int i;
 		@Override
 		protected Bitmap doInBackground(Object... param) {
-			// TODO Auto-generated method stub
 			i = (Integer) param[1];
 			return downloadBitmap((String)param[0]);
 		}
