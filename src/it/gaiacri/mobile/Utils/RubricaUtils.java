@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 public class RubricaUtils {
 
 	public static void sendMail(String destinatario,Context context){
+		GaiaGoogleAnalytics.notifyEvent(context, "GaiaMobile", "Rubrica", "Email");
 		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
 				"mailto",destinatario, null));
 		context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
@@ -15,6 +16,7 @@ public class RubricaUtils {
 
 	public static void sendCall(String numero,Context context){
 		//if(isTelephonyEnabled(context)){
+		GaiaGoogleAnalytics.notifyEvent(context, "GaiaMobile", "Rubrica", "Call");
 		try{
 			String uri = "tel:" + numero.trim() ;
 			Intent intent = new Intent(Intent.ACTION_DIAL);

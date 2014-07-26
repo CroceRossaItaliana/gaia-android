@@ -1,6 +1,6 @@
 ## gaia-android (aka Gaia Mobile)
 
-Questo √® il progetto per lo sviluppo di un'applicazione per Android che mira ad unire le capacit√† delle API di Gaia e le potenzialit√† dei dispositivi mobili Android.
+Questo Ë il progetto per lo sviluppo di un'applicazione per Android che mira ad unire le capacit‡ delle API di Gaia e le potenzialit‡ dei dispositivi mobili Android.
 Per compilare il progetto e richiesto di importare le librerie:<br>
 [Android Support V7](https://developer.android.com/tools/support-library/setup.html)<br>
 [AndroidBootstrap](https://github.com/Bearded-Hen/Android-Bootstrap)<br>
@@ -9,7 +9,7 @@ Per compilare il progetto e richiesto di importare le librerie:<br>
 
 ### Collaborare
 
-**SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE √à BENVENUTA!**
+**SI CERCA COLLABORAZIONE - OGNI COLLABORAZIONE » BENVENUTA!**
 
 Contattaci a `android@gaia.cri.it`.
 
@@ -25,6 +25,4 @@ Disponibile sullo store Android
 
 ### La licenza 
 
-Il codice √® rilasciato con licenza [GPLv3](https://github.com/AlfioEmanueleFresta/gaia-android/LICENSE.txt).
-
-
+Il codice Ë rilasciato con licenza [GPLv3](https://github.com/AlfioEmanueleFresta/gaia-android/LICENSE.txt).

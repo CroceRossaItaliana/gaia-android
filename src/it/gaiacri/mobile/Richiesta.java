@@ -27,7 +27,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
 	protected static String sid = "";
 	public static String base = "https://gaia.cri.it/api.php";
 	//public static String base = "http://192.168.1.125/gaia/api.php";
-	//public static String base = "http://10.0.2.2/gaia/api.php";
 	public Context context;
 	public JSONObject risposta = null;
 	public JSONObject richiesta = null;
@@ -73,7 +72,6 @@ public class Richiesta extends AsyncTask<String, String, String> {
 				JSONObject object = new JSONObject();
 				object.put("metodo", metodo());
 				object.put("sid", getSid());
-				object.put("key", "1aa50adbd038855c4c0f1e4953f2f98f18ccbd10"); //server gaia.cri.it
 				//object.put("key", "bb2c08ff4da11f0b590a7ae884412e2bfd8ac28a"); //server 
 				Iterator<String> ita = mData.keySet().iterator();
             	while (ita.hasNext()) {

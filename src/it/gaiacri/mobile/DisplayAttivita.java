@@ -2,6 +2,7 @@ package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Turno;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,6 +72,7 @@ public class DisplayAttivita extends ActionBarActivity {
 		comitato = (TextView) findViewById(R.id.textView2);
 
 		context=this.getApplicationContext();
+		GaiaGoogleAnalytics.notifyScreen(getApplicationContext(), "DettagliAttivita");
 		listView = (ListView)findViewById(R.id.listElenco);
 
 		richiestaDettagli();
@@ -392,6 +394,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					String id=richiesta.getJSONObject("parametri").getString("id");
 					String result=risposta.getString("ok");
 					if(Boolean.parseBoolean(result)){
+						GaiaGoogleAnalytics.notifyEvent(context, "GaiaMobile", "Turni", "Iscrivi");
 						String partecipazione_id =risposta.getString("id");
 						turni.get(getTurno(id)).setPart(Boolean.parseBoolean(result));
 						turni.get(getTurno(id)).ritirabile(true);
@@ -434,6 +437,7 @@ public class DisplayAttivita extends ActionBarActivity {
 					if(!Boolean.parseBoolean(result))
 						Crouton.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Style.ALERT ).show();
 						//Toast.makeText(DisplayAttivita.this, R.string.error_turn_confirmed, Toast.LENGTH_LONG).show();
+					GaiaGoogleAnalytics.notifyEvent(context, "GaiaMobile", "Turni", "Cancella");
 					richiestaDettagli();
 				} catch (JSONException e) {
 					//Auto-generated catch block

@@ -1,11 +1,16 @@
 package it.gaiacri.mobile;
 
+import it.gaiacri.mobile.NavigationDrawe.NsMenuAdapter;
+import it.gaiacri.mobile.NavigationDrawe.NsMenuItemModel;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.HashMap;
 
-import NavigationDrawer.NsMenuAdapter;
-import NavigationDrawer.NsMenuItemModel;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,11 +39,22 @@ public class MainActivity extends ActionBarActivity {
 	private static DrawerLayout mDrawer;
 	private static CustomActionBarDrawerToggle mDrawerToggle;
 	private String[] menuItems;
-	private Context context;
+	private static Context context;
 	private static String title;
 	private static ActionBar actionbar;
 	private NsMenuAdapter mAdapter;
 	private String[] menuItemsIcon;
+
+	// The following line should be changed to include the correct property id.
+	private static final String PROPERTY_ID = "UA-XXXXXXXX-Y";
+
+	public static int GENERAL_TRACKER = 0;
+
+	public enum TrackerName {
+		APP_TRACKER, // Tracker used only in this app.
+	}
+
+	static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +88,11 @@ public class MainActivity extends ActionBarActivity {
 		fragmentManager.beginTransaction()
 		.replace(R.id.content_frame, t,"main").commit();
 		title=getString(R.string.title_activity_menu_principale);
+
+		GaiaGoogleAnalytics.notifyEvent(getApplicationContext(), "GaiaMobile", "Open", "Start");
+		//Tracker track =this.getTracker(TrackerName.APP_TRACKER);
+		//t.setScreenName("");
+		//t.send(new HitBuilders.AppViewBuilder().build());
 	}
 
 	private int addGroup(int header,int menuitems,int i){
@@ -294,6 +315,7 @@ public class MainActivity extends ActionBarActivity {
 		RichiestaLogout asd = new RichiestaLogout(data);
 		asd.execute();
 	}
+
 	public static void enable(){
 		mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -329,6 +351,20 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	
-	
+	public synchronized static Tracker getTracker(TrackerName trackerId) {
+		if( GaiaGoogleAnalytics.playServiceAvviable(context)){
+			if (!mTrackers.containsKey(trackerId)) {
+
+				GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+				analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+				Tracker t = analytics.newTracker(PROPERTY_ID);
+				t.enableAdvertisingIdCollection(true);
+				mTrackers.put(trackerId, t);
+			}
+			return mTrackers.get(trackerId);
+		}
+		return null;
+	}
+
+
 }

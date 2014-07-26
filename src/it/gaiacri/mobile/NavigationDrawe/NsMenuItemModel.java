@@ -1,4 +1,4 @@
-package NavigationDrawer;
+package it.gaiacri.mobile.NavigationDrawe;
 
 /*******************************************************************************
  * Copyright 2013 Gabriele Mariotti

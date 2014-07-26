@@ -1,5 +1,6 @@
 package it.gaiacri.mobile;
 
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,8 +23,10 @@ public class AboutAttivita extends Fragment {
 
 		((TextView)v.findViewById(R.id.about_title)).setText("Gaia Mobile v "+getString(R.string.app_version));
 
+		GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "About");
+		
 		//licenza
-		((TextView)v.findViewById(R.id.about_licenza)).setText(Html.fromHtml("Questa applicazione Ã¨ rilasciata con licenza <a href=\"\">GPL v3</a>"));
+		((TextView)v.findViewById(R.id.about_licenza)).setText(Html.fromHtml("Questa applicazione è rilasciata con licenza <a href=\"\">GPL v3</a>"));
 		((TextView)v.findViewById(R.id.about_licenza)).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(AboutAttivita.this.getActivity()); 

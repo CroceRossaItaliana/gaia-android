@@ -3,6 +3,7 @@ package it.gaiacri.mobile;
 import it.gaiacri.mobile.Object.Posta;
 import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class PostaIngresso extends Fragment{
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
+				GaiaGoogleAnalytics.notifyEvent(getActivity().getApplicationContext(),"GaiaMobile", "Posta", "Open");
 				TextView tv=(TextView)arg1.findViewById(R.id.posta_id);
 				if(!"".equals(tv.getText().toString())){
 					AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 

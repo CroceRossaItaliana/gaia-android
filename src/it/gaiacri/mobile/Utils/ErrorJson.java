@@ -26,7 +26,8 @@ public class ErrorJson {
 					Log.d("Errore",json.optJSONObject("errore").optString("codice"));
 					Log.d("Errore", ""+ ("1010".equals(json.optJSONObject("errore").optString("codice"))));
 					if("1010".equals(json.optJSONObject("errore").optString("codice"))){
-						Log.d("si", "YEP");
+						if(context == null)
+							return 2;
 						Intent myIntent = new Intent(context, Accesso.class);
 						context.startActivity(myIntent);
 						context.finish(); 

@@ -3,6 +3,7 @@ package it.gaiacri.mobile;
 import it.gaiacri.mobile.Object.Attivita;
 import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ public class ElencoAttivita extends Fragment {
 		activity=super.getActivity();
 		context=activity.getApplicationContext();
 		mSectionsPagerAdapter = new SectionsPagerAdapter(super.getActivity().getSupportFragmentManager());
-		
+		GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "ElencoAttivita");
 		// Set up the ViewPager with the sections adapter.
 		c=Calendar.getInstance();
 

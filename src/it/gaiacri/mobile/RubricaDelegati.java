@@ -3,6 +3,7 @@ package it.gaiacri.mobile;
 import it.gaiacri.mobile.Object.Rubrica;
 import it.gaiacri.mobile.Utils.Cache;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 import it.gaiacri.mobile.Utils.RubricaUtils;
 
 import java.io.InputStream;
@@ -54,6 +55,7 @@ public class RubricaDelegati extends Fragment{
 		context= this.getActivity();
 		cache=new Cache(this.getActivity());
 		listView = (ListView)v.findViewById(R.id.listRubrica);
+		GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "RubricaDelegati");
 		aggiornalist();
 		return v;
 	}

@@ -1,8 +1,7 @@
 package it.gaiacri.mobile;
 
-
-import it.gaiacri.mobile.MainActivity.RichiestaLogout;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.HashMap;
 
@@ -67,10 +66,12 @@ public class MenuPrincipale extends Fragment {
 		//Log.d("prova", b+ "");
 		if(b!= null){
 			richiestaDati();
+			GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "Home");
 		}else{
 			if(user_nome==null){
 				//splash
 				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "Login");
 				startSplash();
 			}else{
 				//in questo caso l'utente ha ruotato lo schemo oppure e arrivato da un activity successiva e io ricarico i dati scaricati precedentemente
@@ -110,42 +111,6 @@ public class MenuPrincipale extends Fragment {
 		t.setText(this.getString(R.string.login_connessione));
 		richiestaWelcome();
 	}
-
-	/*
-	class RichiestaScansione extends Richiesta {
-		public RichiestaScansione(HashMap<String, String> data) {
-			super(data,MenuPrincipale_1.this.context);
-		}
-		public String metodo() { return "scansione"; }
-		protected void onPostExecute(String ris) {
-
-			if(ErrorJson.Controllo(ris,MenuPrincipale_1.this,risposta)==0){
-				try {
-
-					AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipale_1.this);
-					builder.setMessage(risposta.getString("nomeCompleto")+ "\n" + risposta.getString("comitato"))
-					.setPositiveButton("Qualcosa", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// FIRE ZE MISSILES!
-						}
-					})
-					.setNegativeButton("Dell'altro", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User cancelled the dialog
-						}
-					});
-					// Create the AlertDialog object and return it
-					builder.create().show();
-
-
-				} catch (JSONException e) {
-					Toast.makeText(context, "Volontario non trovato!", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
-			}
-
-		}
-	}*/
 
 	public void annulla(){
 		user_nome=null;
