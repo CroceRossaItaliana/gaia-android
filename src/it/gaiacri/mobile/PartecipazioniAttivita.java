@@ -2,6 +2,7 @@ package it.gaiacri.mobile;
 
 import it.gaiacri.mobile.Object.Partecipazioni;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class PartecipazioniAttivita extends Fragment{
 		View v=inflater.inflate(R.layout.activity_display_miei_turni, container, false);
 		richiestaPartecipazione();
 		listView = (ListView)v.findViewById(R.id.listTurni);
+		GaiaGoogleAnalytics.notifyScreen(getActivity().getApplicationContext(), "MieiTurni");
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,

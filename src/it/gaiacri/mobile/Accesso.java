@@ -52,10 +52,12 @@ public class Accesso extends ActionBarActivity {
 				Log.i("prova", "Can't restore state because bundle is empty.");
 			else
 			{
-				if (webview.restoreState(savedInstanceState) == null)
-					Log.i("prova" , "Restoring state FAILED!");      
-				else
-					Log.i("prova", "Restoring state succeeded.");      
+				if(webview!= null) {
+					if (webview.restoreState(savedInstanceState) == null)
+						Log.i("prova" , "Restoring state FAILED!");      
+					else
+						Log.i("prova", "Restoring state succeeded.");
+				}
 			}
 
 		}else{		

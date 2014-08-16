@@ -3,6 +3,7 @@ package it.gaiacri.mobile;
 import it.gaiacri.mobile.Object.Posta;
 import it.gaiacri.mobile.Utils.DateUtils;
 import it.gaiacri.mobile.Utils.ErrorJson;
+import it.gaiacri.mobile.Utils.GaiaGoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class PostaIngresso extends Fragment{
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
+				GaiaGoogleAnalytics.notifyEvent(getActivity().getApplicationContext(),"GaiaMobile", "Posta", "Open");
 				TextView tv=(TextView)arg1.findViewById(R.id.posta_id);
 				if(!"".equals(tv.getText().toString())){
 					AlertDialog.Builder alert = new AlertDialog.Builder(PostaIngresso.this.getActivity()); 
@@ -195,8 +197,6 @@ public class PostaIngresso extends Fragment{
 					//e.printStackTrace();
 				}
 				fixMittente();
-				//da gestire la risposta
-				//in base a come viene ritornata
 				aggiornalist();		
 			}
 		}
@@ -267,9 +267,10 @@ public class PostaIngresso extends Fragment{
 			data.put("id",mitt.get(i));
 			date.put(""+i, data);	
 		}
-		RichiestaMittenti richiesta=new RichiestaMittenti(date);
-		richiesta.execute();
-
+		if(!(PostaIngresso.this.getActivity() == null || PostaIngresso.this.getActivity().getApplicationContext()== null)){
+			RichiestaMittenti richiesta=new RichiestaMittenti(date);
+			richiesta.execute();
+		}
 	}
 
 	public void richiestaNotifiche(){
