@@ -85,7 +85,7 @@ public class PostaIngresso extends Fragment{
 		richiestaNotifiche();
 		return v;
 	}
-	
+
 	class RichiestaNotifiche extends Richiesta {
 		public RichiestaNotifiche(HashMap<String, String> data) {
 			super(data,PostaIngresso.this.getActivity().getApplicationContext());
@@ -94,57 +94,59 @@ public class PostaIngresso extends Fragment{
 		public String metodo() { return "posta_cerca"; }
 
 		protected void onPostExecute(String ris) {
-			if(ErrorJson.Controllo(ris,PostaIngresso.this.getActivity(),risposta)==0){
-				Log.d("Json",risposta.toString());
+			if(PostaIngresso.this != null && PostaIngresso.this.getActivity()!=null){
+				if(ErrorJson.Controllo(ris,PostaIngresso.this.getActivity(),risposta)==0){
+					Log.d("Json",risposta.toString());
 
-				if(posta==null)
-					posta= new ArrayList<Posta>();
+					if(posta==null)
+						posta= new ArrayList<Posta>();
 
-				try {
-					//	prin
-					//String TAG="Risposta: ";
-					//att_title=risposta.getString("nome");
-					//att_luogo=risposta.getString("luogo");
-					//int info_totale=risposta.getInt("totale");
-					JSONArray res=risposta.getJSONArray("risultati");
-					mitt=new ArrayList<String>(); 
+					try {
+						//	prin
+						//String TAG="Risposta: ";
+						//att_title=risposta.getString("nome");
+						//att_luogo=risposta.getString("luogo");
+						//int info_totale=risposta.getInt("totale");
+						JSONArray res=risposta.getJSONArray("risultati");
+						mitt=new ArrayList<String>(); 
 
-					//recupera anche mittente da mostrare e salvare
-					for(int i=0;i<res.length();i++){
-						JSONObject obj=res.getJSONObject(i);
-						String posta_id=obj.getString("id");
-						String posta_corpo=obj.getString("corpo");
-						String posta_timestamp=obj.getString("timestamp");
-						JSONObject mittente=obj.optJSONObject("mittente");
-						String posta_mittente="";
-						if(!(mittente == null)){
-							posta_mittente=obj.getJSONObject("mittente").getString("id");
-							if(!mitt.contains(posta_mittente))
-								mitt.add(posta_mittente);
+						//recupera anche mittente da mostrare e salvare
+						for(int i=0;i<res.length();i++){
+							JSONObject obj=res.getJSONObject(i);
+							String posta_id=obj.getString("id");
+							String posta_corpo=obj.getString("corpo");
+							String posta_timestamp=obj.getString("timestamp");
+							JSONObject mittente=obj.optJSONObject("mittente");
+							String posta_mittente="";
+							if(!(mittente == null)){
+								posta_mittente=obj.getJSONObject("mittente").getString("id");
+								if(!mitt.contains(posta_mittente))
+									mitt.add(posta_mittente);
+							}
+							String posta_oggetto=obj.getString("oggetto");						
+							posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente,posta_timestamp));//Log.d("ciao", );
 						}
-						String posta_oggetto=obj.getString("oggetto");						
-						posta.add(new Posta(posta_id,posta_oggetto,posta_corpo,posta_mittente,posta_timestamp));//Log.d("ciao", );
+
+
+						if(mitt.size()== 0){
+							fixMittente();
+							aggiornalist();
+						}else{
+							richiestaMittenti();
+						}
+
+
+						//String att_referente=risposta.getString("referente");
+						//String att_referentenum=risposta.getString("referentenum");
+						//String att_referenteemail=risposta.getString("referenteemail");
+
+					} catch (JSONException e) {
+						Log.e("ERROR" ,e.getMessage());
+						//e.printStackTrace();
 					}
-
-
-					if(mitt.size()== 0){
-						fixMittente();
-						aggiornalist();
-					}else{
-						richiestaMittenti();
-					}
-
-
-					//String att_referente=risposta.getString("referente");
-					//String att_referentenum=risposta.getString("referentenum");
-					//String att_referenteemail=risposta.getString("referenteemail");
-
-				} catch (JSONException e) {
-					Log.e("ERROR" ,e.getMessage());
-					//e.printStackTrace();
+					//da gestire la risposta
+					//in base a come viene ritornata
 				}
-				//da gestire la risposta
-				//in base a come viene ritornata
 			}
 
 		}
