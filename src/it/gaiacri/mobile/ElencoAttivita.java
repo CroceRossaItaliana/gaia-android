@@ -63,9 +63,9 @@ public class ElencoAttivita extends Fragment {
 		mViewPager.setAdapter(mSectionsPagerAdapter);		
 		mViewPager.setCurrentItem(giorni/2);
 		return v;
-		
-		
-		}	
+
+
+	}	
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
@@ -119,11 +119,11 @@ public class ElencoAttivita extends Fragment {
 			this.args=args;
 			lv=new ListView(getActivity());
 			//download turni e visualizzazione
-			ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_attivita, R.id.textViewList,new String[]{"Caricamento.."});
-			lv.setAdapter(arrayAdapter);
-
-
-			richiestaAttivita();
+			if(context != null){
+				ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context, R.layout.riga_attivita, R.id.textViewList,new String[]{"Caricamento.."});
+				lv.setAdapter(arrayAdapter);
+				richiestaAttivita();
+			}
 			return lv;
 		}
 
@@ -150,7 +150,7 @@ public class ElencoAttivita extends Fragment {
 			@Override
 			protected void onPostExecute(String str) {
 				//Log.d("Log","Ciao");
-				
+
 				if(ErrorJson.Controllo(str,getActivity(),risposta)==0){
 					try{
 						JSONObject js=null;
@@ -218,7 +218,7 @@ public class ElencoAttivita extends Fragment {
 								((TextView)row.findViewById(R.id.textViewList)).setTextColor(Color.parseColor(a.get(position).getColor()));
 								((TextView)row.findViewById(R.id.textViewListData)).setTextColor(Color.DKGRAY);
 								((TextView)row.findViewById(R.id.textViewListUrl)).setTextColor(Color.DKGRAY);
-								
+
 							}
 							return row;
 						}
@@ -257,7 +257,7 @@ public class ElencoAttivita extends Fragment {
 				alert.show();		
 			}
 		}
-	
+
 		public void richiestaAttivita(){
 			HashMap<String, String> data1 = new HashMap<String, String>();
 			c.add(Calendar.DAY_OF_MONTH, args.getInt(ARG_SECTION_NUMBER)-giorni/2-1);

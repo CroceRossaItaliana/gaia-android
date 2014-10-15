@@ -5,7 +5,7 @@
     <string name="app_version">1.0.3</string>
     <string name="menu_settings">Settings</string>
     <string name="caricamento">Caricamento in corso</string>
-    <string name="menu_comunicazioni">Ultime 20 Comunicazioni:</string>
+    <string name="menu_comunicazioni">Ultime Comunicazioni:</string>
     
     <string name="posta_mittente_gaia">Notifica Gaia</string>
     <string name="posta_destinatario_supporto">Supporto Gaia</string>
