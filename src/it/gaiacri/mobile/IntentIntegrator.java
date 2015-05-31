@@ -82,7 +82,7 @@ public final class IntentIntegrator {
   public static final String DEFAULT_TITLE = "Installare lo scanner?";
   public static final String DEFAULT_MESSAGE =
       "Gaia Mobile deve installare lo scanner per i codici a barre, farlo ora?";
-  public static final String DEFAULT_YES = "Sí";
+  public static final String DEFAULT_YES = "SÃ¬";
   public static final String DEFAULT_NO = "No";
 
   // supported barcode formats
